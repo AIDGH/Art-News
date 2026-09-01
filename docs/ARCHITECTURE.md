@@ -1,0 +1,115 @@
+# Art News Architecture
+
+## Overview
+
+Art News یک modular monolith با frontend و backend جدا در یک monorepo است.
+
+```text
+User / Browser
+      ↓
+Next.js Web
+      ↓
+NestJS REST API
+      ↓
+Prisma
+      ↓
+PostgreSQL
+```
+
+Frontend هیچ‌گاه مستقیم به database متصل نمی‌شود.
+
+## Repository Structure
+
+```text
+Art-News/
+├── apps/
+│   ├── web/
+│   └── api/
+├── docs/
+├── packages/
+├── PROJECT_CONTEXT.md
+└── package.json
+```
+
+## Frontend
+
+مسئولیت‌ها:
+
+- rendering صفحات عمومی و پنل تحریریه؛
+- metadata، canonical و structured data؛
+- navigation و responsive layout؛
+- فراخوانی API؛
+- preview محتوای Draft برای کاربران مجاز.
+
+Frontend نباید شامل Prisma query، PostgreSQL access یا publication rule اصلی
+باشد.
+
+رابط فارسی از `Vazirmatn-Regular.woff2` به‌صورت self-hosted استفاده می‌کند.
+فونت با `@font-face` از `/fonts/Vazirmatn-Regular.woff2` بارگذاری می‌شود و
+fallbackهای سیستمی فقط برای حالت خطای asset باقی می‌مانند.
+
+## Backend
+
+مسئولیت‌ها:
+
+- REST API نسخه‌بندی‌شده؛
+- validation؛
+- authentication و authorization؛
+- editorial workflow؛
+- publication و scheduling rules؛
+- query و persistence از طریق Prisma.
+
+ماژول‌های پیاده‌سازی‌شده اولیه:
+
+```text
+HealthModule
+ArticlesModule
+CategoriesModule
+```
+
+ماژول‌های برنامه‌ریزی‌شده:
+
+```text
+AuthModule
+MediaModule
+EditorialModule
+HomepageModule
+```
+
+## Rendering Strategy
+
+- صفحات عمومی با Server Components رندر می‌شوند.
+- قالب اولیه از داده محلی typed استفاده می‌کند.
+- routeهای فعلی `/`، `/category/[slug]`، `/articles/[slug]` و `/search` هستند.
+- پس از اتصال API، homepage و category با cache کوتاه و on-demand
+  revalidation خوانده می‌شوند.
+- صفحه خبر metadata و JSON-LD اختصاصی تولید می‌کند.
+- استفاده سراسری از `force-dynamic` انجام نمی‌شود مگر route واقعاً به آن نیاز
+  داشته باشد.
+
+## Media
+
+- تصویرهای نمونه قالب به‌صورت WebP محلی در
+  `apps/web/public/images/articles/` نگهداری می‌شوند تا preview به سرویس remote
+  یا image proxy وابسته نباشد.
+- uploadهای runtime در Git نگهداری نمی‌شوند.
+- production به object storage/CDN نیاز دارد.
+- alt و credit بخشی از domain model رسانه هستند.
+- تصویرسازی تولیدشده با هوش مصنوعی باید در credit به‌صورت صریح مشخص شود و
+  نباید به‌عنوان عکس مستند یک رویداد واقعی ارائه شود.
+- کارت Open Graph برندشده در `apps/web/public/og.png` نگهداری می‌شود؛ صفحه
+  هر خبر از تصویر اصلی خودش برای preview استفاده می‌کند.
+
+## Production Direction
+
+نسخه اول می‌تواند روی یک VPS با Nginx، Next.js، NestJS و PostgreSQL اجرا شود.
+application port و database port نباید عمومی باشند. Domain، HTTPS، backup،
+monitoring و off-server media storage پیش از انتشار عمومی الزامی‌اند.
+
+## Principles
+
+1. Frontend و database از طریق API جدا می‌مانند.
+2. publication rule در backend اجرا می‌شود.
+3. UI عمومی بدون login قابل استفاده است.
+4. قابلیت‌های جدید فقط بر اساس workflow واقعی تحریریه اضافه می‌شوند.
+5. URLها پایدار، خوانا و SEO-friendly هستند.

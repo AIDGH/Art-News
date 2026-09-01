@@ -1,0 +1,22 @@
+{
+  "name": "art-news",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Persian art news platform with an editorial website and newsroom CMS.",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@11.18.0",
+  "scripts": {
+    "api:build": "pnpm --filter @art-news/api build",
+    "api:dev": "pnpm --filter @art-news/api start:dev",
+    "api:prisma:format": "pnpm --filter @art-news/api prisma:format",
+    "api:prisma:generate": "pnpm --filter @art-news/api prisma:generate",
+    "api:prisma:validate": "pnpm --filter @art-news/api prisma:validate",
+    "api:test": "pnpm --filter @art-news/api test",
+    "api:typecheck": "pnpm --filter @art-news/api typecheck",
+    "web:build": "pnpm --filter @art-news/web build",
+    "web:dev": "pnpm --filter @art-news/web dev",
+    "web:lint": "pnpm --filter @art-news/web lint",
+    "web:start": "pnpm --filter @art-news/web start",
+    "web:typecheck": "pnpm --filter @art-news/web typecheck"
+  }
+}
