@@ -55,3 +55,21 @@ alt، credit، caption، dimensions و focal point مستقل از URL فایل 
 رابط فارسی از فایل WOFF2 محلی Vazirmatn استفاده می‌کند تا typography در همه
 صفحات یکسان باشد، وابستگی runtime به font CDN وجود نداشته باشد و نمایش متن با
 `font-display: swap` کنترل شود.
+
+## 12. Use “سینما نمایش” as the Public Brand Name
+
+نام قابل‌نمایش در رابط، metadata، structured data و کارت اشتراک‌گذاری «سینما
+نمایش» است. برای جلوگیری از تغییر بی‌دلیل مسیرها و ابزارهای توسعه، نام فنی
+repository و packageها فعلاً `Art-News` باقی می‌ماند.
+
+## 13. Use a Shared Hamburger Navigation on Mobile and Desktop
+
+منوی اصلی در همه اندازه‌های صفحه به‌صورت همبرگری ارائه می‌شود تا ساختار
+Mobile-first یکسان بماند. زیرمنوی سینما شامل خبر، نقد و یادداشت، گفت‌وگو و
+نمایش است و drawer با کلیک بیرون، Escape و انتخاب لینک بسته می‌شود.
+
+## 14. Present Ecran News as a Promotional Placement
+
+«سینما نمایش» تنها برند هدر است. اکران نیوز به‌صورت بنر معرفی/تبلیغ مشترک در
+صفحه اصلی و صفحات محتوایی نمایش داده می‌شود تا با هویت رسمی سایت اشتباه نشود.
+تا زمان دریافت لوگو و URL رسمی، این بخش Placeholder باقی می‌ماند.

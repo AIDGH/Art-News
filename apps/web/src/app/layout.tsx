@@ -8,26 +8,26 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "هنرنامه | روایت هنر امروز",
-    template: "%s | هنرنامه",
+    default: "سینما نمایش | رسانه سینما و نمایش",
+    template: "%s | سینما نمایش",
   },
   description:
-    "خبر، گفت‌وگو و تحلیل هنرهای تجسمی، سینما، موسیقی، ادبیات، تئاتر و معماری.",
+    "خبر، نقد و گفت‌وگو درباره سینما، تئاتر، تلویزیون و شبکه نمایش خانگی.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "fa_IR",
-    siteName: "هنرنامه",
-    title: "هنرنامه | روایت هنر امروز",
+    siteName: "سینما نمایش",
+    title: "سینما نمایش | رسانه سینما و نمایش",
     description:
-      "خبر، گفت‌وگو و تحلیل جریان‌های تازه هنر در یک تجربه فارسی و خوانا.",
-    images: [{ url: "/og.png", width: 1792, height: 938, alt: "هنرنامه؛ روایت هنر امروز" }],
+      "خبر، نقد و گفت‌وگو از سینمای ایران و جهان در یک تجربه فارسی و سریع.",
+    images: [{ url: "/og.png", width: 1735, height: 907, alt: "سینما نمایش" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "هنرنامه | روایت هنر امروز",
+    title: "سینما نمایش | رسانه سینما و نمایش",
     description:
-      "خبر، گفت‌وگو و تحلیل جریان‌های تازه هنر در یک تجربه فارسی و خوانا.",
+      "خبر، نقد و گفت‌وگو از سینمای ایران و جهان در یک تجربه فارسی و سریع.",
     images: ["/og.png"],
   },
 };

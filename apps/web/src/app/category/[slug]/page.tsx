@@ -4,6 +4,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/article-card";
 import {
+  AdvertisementPlaceholder,
+  EcranNewsPromo,
+} from "@/components/promotion-blocks";
+import {
   categories,
   getCategory,
   getCategoryArticles,
@@ -87,6 +91,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {rest.map((article) => (
           <ArticleCard article={article} variant="horizontal" key={article.slug} />
         ))}
+      </section>
+
+      <section className="promotion-stack category-promotions">
+        <EcranNewsPromo />
+        <AdvertisementPlaceholder label="تبلیغات این بخش" />
       </section>
     </main>
   );

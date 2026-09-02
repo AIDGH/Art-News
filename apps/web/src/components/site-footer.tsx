@@ -6,10 +6,10 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="container footer-grid">
         <div>
-          <strong className="footer-brand">هنرنامه</strong>
+          <strong className="footer-brand">سینما نمایش</strong>
           <p>
-            رسانه‌ای مستقل برای خبر، گفت‌وگو و تحلیل هنر. تمام محتوای این نسخه
-            نمایشی است.
+            رسانه‌ای برای خبر، نقد و گفت‌وگو درباره سینما، تئاتر، تلویزیون و
+            شبکه نمایش خانگی. تمام محتوای این نسخه نمایشی است.
           </p>
         </div>
         <nav aria-label="دسته‌بندی‌های فوتر">
@@ -26,7 +26,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="container footer-bottom">
-        <span>© ۱۴۰۵ هنرنامه</span>
+        <span>© ۱۴۰۵ سینما نمایش</span>
         <span>قالب آزمایشی محصول</span>
       </div>
     </footer>

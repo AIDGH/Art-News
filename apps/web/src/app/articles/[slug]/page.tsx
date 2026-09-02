@@ -3,6 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/article-card";
+import {
+  AdvertisementPlaceholder,
+  EcranNewsPromo,
+} from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { articles, getArticle } from "@/lib/news";
 
@@ -67,7 +71,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     dateModified: article.publishedAt,
     image: [article.imageUrl],
     author: { "@type": "Person", name: article.author },
-    publisher: { "@type": "Organization", name: "هنرنامه" },
+    publisher: { "@type": "Organization", name: "سینما نمایش" },
     articleSection: article.category.title,
     inLanguage: "fa-IR",
   };
@@ -137,6 +141,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </aside>
         </div>
       </article>
+
+      <section className="container promotion-stack article-promotions">
+        <EcranNewsPromo />
+        <AdvertisementPlaceholder label="تبلیغات پس از خبر" />
+      </section>
 
       <section className="container home-section related-section">
         <SectionHeading eyebrow="ادامه مسیر" title="مطالب مرتبط" />

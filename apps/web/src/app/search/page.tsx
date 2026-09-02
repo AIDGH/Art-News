@@ -4,7 +4,7 @@ import { articles } from "@/lib/news";
 
 export const metadata: Metadata = {
   title: "جست‌وجو",
-  description: "جست‌وجو در خبرها و روایت‌های هنرنامه",
+  description: "جست‌وجو در خبرها و روایت‌های سینما نمایش",
   robots: { index: false, follow: true },
 };
 
@@ -35,9 +35,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <main className="search-page container">
       <header>
-        <span>آرشیو هنرنامه</span>
+        <span>آرشیو سینما نمایش</span>
         <h1>جست‌وجو</h1>
-        <p>نام هنرمند، موضوع، اثر یا بخشی از تیتر را بنویسید.</p>
+        <p>نام فیلم، سینماگر، موضوع یا بخشی از تیتر را بنویسید.</p>
       </header>
       <form className="search-form" action="/search" method="get">
         <label htmlFor="site-search">عبارت جست‌وجو</label>

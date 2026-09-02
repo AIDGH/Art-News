@@ -48,6 +48,11 @@ Frontend نباید شامل Prisma query، PostgreSQL access یا publication r
 فونت با `@font-face` از `/fonts/Vazirmatn-Regular.woff2` بارگذاری می‌شود و
 fallbackهای سیستمی فقط برای حالت خطای asset باقی می‌مانند.
 
+صفحات عمومی Server Component باقی می‌مانند. فقط منوی همبرگری به‌عنوان Client
+Component پیاده‌سازی شده تا مدیریت focus، قفل scroll و بسته‌شدن با کلیک بیرون،
+Escape یا انتخاب لینک را انجام دهد. بنر اکران نیوز و Placeholder تبلیغات
+Componentهای مشترک و بدون داده runtime هستند.
+
 ## Backend
 
 مسئولیت‌ها:
@@ -80,7 +85,8 @@ HomepageModule
 
 - صفحات عمومی با Server Components رندر می‌شوند.
 - قالب اولیه از داده محلی typed استفاده می‌کند.
-- routeهای فعلی `/`، `/category/[slug]`، `/articles/[slug]` و `/search` هستند.
+- routeهای فعلی `/`، `/category/[slug]`، `/articles/[slug]`، `/search`،
+  `/english` و `/about` هستند.
 - پس از اتصال API، homepage و category با cache کوتاه و on-demand
   revalidation خوانده می‌شوند.
 - صفحه خبر metadata و JSON-LD اختصاصی تولید می‌کند.
@@ -105,6 +111,8 @@ HomepageModule
 نسخه اول می‌تواند روی یک VPS با Nginx، Next.js، NestJS و PostgreSQL اجرا شود.
 application port و database port نباید عمومی باشند. Domain، HTTPS، backup،
 monitoring و off-server media storage پیش از انتشار عمومی الزامی‌اند.
+`cinemanamayesh.ir` دامنه canonical برنامه‌ریزی‌شده است و `ecrannews.ir` باید
+پس از تنظیم DNS و SSL با redirect دائمی `301` به آن منتقل شود.
 
 ## Principles
 

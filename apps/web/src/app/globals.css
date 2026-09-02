@@ -121,7 +121,7 @@ img {
 .header-main {
   display: grid;
   min-height: 92px;
-  grid-template-columns: minmax(170px, auto) 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 50px;
 }
@@ -217,6 +217,7 @@ img {
   display: flex;
   align-items: center;
   gap: 14px;
+  justify-self: end;
 }
 
 .search-link {
@@ -244,8 +245,183 @@ img {
   stroke-width: 1.7;
 }
 
-.mobile-menu {
-  display: none;
+.navigation-menu {
+  position: relative;
+}
+
+.menu-trigger {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid var(--line-dark);
+  border-radius: 50%;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.menu-trigger:hover,
+.menu-trigger[aria-expanded="true"] {
+  color: #fff;
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+.menu-trigger span {
+  width: 17px;
+  height: 1px;
+  background: currentColor;
+}
+
+.menu-backdrop {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  border: 0;
+  background: rgba(16, 15, 13, 0.48);
+  cursor: default;
+}
+
+.menu-panel {
+  position: fixed;
+  z-index: 80;
+  width: min(390px, calc(100vw - 24px));
+  height: 100dvh;
+  top: 0;
+  right: 0;
+  overflow-y: auto;
+  padding: 26px 28px 40px;
+  visibility: hidden;
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: -24px 0 70px rgba(16, 15, 13, 0.22);
+  pointer-events: none;
+  transform: translateX(104%);
+  transition:
+    transform 220ms ease,
+    visibility 220ms ease;
+}
+
+.menu-panel-open {
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.menu-panel-header {
+  display: flex;
+  padding-bottom: 22px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--ink);
+}
+
+.menu-panel-header > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-panel-header span {
+  color: var(--accent);
+  font-size: 0.68rem;
+}
+
+.menu-panel-header strong {
+  margin-top: 2px;
+  font-size: 1.55rem;
+}
+
+.menu-close {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid var(--line-dark);
+  border-radius: 50%;
+  color: var(--ink);
+  background: transparent;
+  font-size: 1.65rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-links > a,
+.menu-group-heading {
+  min-height: 54px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 800;
+}
+
+.menu-links > a {
+  display: flex;
+  align-items: center;
+}
+
+.menu-links > a:hover,
+.menu-group-heading > a:hover,
+.menu-submenu a:hover {
+  color: var(--accent);
+}
+
+.menu-group-heading {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.menu-group-heading > a {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+}
+
+.menu-group-heading button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.menu-group-heading button span {
+  display: block;
+  font-size: 1.2rem;
+  transform: rotate(0deg);
+  transition: transform 160ms ease;
+}
+
+.menu-group-heading button[aria-expanded="false"] span {
+  transform: rotate(90deg);
+}
+
+.menu-submenu {
+  display: grid;
+  padding: 10px 16px 14px 0;
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 16px;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.menu-submenu a {
+  padding-block: 7px;
 }
 
 .news-flash {
@@ -274,6 +450,108 @@ img {
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.promotion-stack {
+  display: grid;
+  padding-block: 12px 54px;
+  gap: 14px;
+}
+
+.ecran-promo {
+  display: grid;
+  min-height: 142px;
+  padding: 22px;
+  grid-template-columns: minmax(180px, 0.45fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 28px;
+  color: #f8f4eb;
+  background: var(--night);
+}
+
+.ecran-logo-placeholder {
+  display: flex;
+  min-height: 92px;
+  padding: 14px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #77736a;
+  text-align: center;
+}
+
+.ecran-logo-placeholder span {
+  color: #9e998f;
+  font-size: 0.62rem;
+}
+
+.ecran-logo-placeholder strong {
+  margin-top: 4px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+}
+
+.promo-kicker {
+  color: #f6a28e;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.ecran-promo h2 {
+  margin-top: 2px;
+  font-size: 1.55rem;
+}
+
+.ecran-promo p {
+  max-width: 600px;
+  margin-top: 3px;
+  color: #aaa59b;
+  font-size: 0.78rem;
+}
+
+.promo-link-placeholder {
+  padding: 9px 13px;
+  border: 1px solid #68645c;
+  color: #c5c0b7;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.advertisement-placeholder {
+  display: flex;
+  min-height: 98px;
+  padding: 18px 24px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--line-dark);
+  text-align: center;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+}
+
+.advertisement-placeholder > span {
+  color: var(--accent);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.advertisement-placeholder strong {
+  margin-top: 2px;
+  font-size: 0.9rem;
+}
+
+.advertisement-placeholder small {
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-size: 0.68rem;
+}
+
+.article-promotions,
+.category-promotions {
+  padding-top: 44px;
 }
 
 .lead-layout {
@@ -970,6 +1248,45 @@ img {
   text-align: center;
 }
 
+.simple-page {
+  min-height: 65vh;
+  padding-block: 82px 110px;
+}
+
+.simple-page > span {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.simple-page h1 {
+  margin-top: 8px;
+  font-size: clamp(2.8rem, 8vw, 5.8rem);
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+}
+
+.simple-page > p {
+  max-width: 650px;
+  margin-top: 25px;
+  color: var(--ink-soft);
+  font-size: 1.06rem;
+  line-height: 2;
+}
+
+.simple-page-note {
+  margin-top: 34px;
+  padding: 20px 22px;
+  border-inline-start: 4px solid var(--accent);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.simple-page-english {
+  text-align: left;
+}
+
 .not-found > span {
   color: var(--accent);
   font-family: "Vazirmatn", Tahoma, "Segoe UI", Arial, sans-serif;
@@ -1144,7 +1461,6 @@ img {
   }
 
   .edition-inner span:last-child,
-  .desktop-nav,
   .search-link {
     display: none;
   }
@@ -1176,53 +1492,19 @@ img {
     font-size: 1.42rem;
   }
 
-  .mobile-menu {
-    position: relative;
-    display: block;
+  .menu-panel {
+    width: min(360px, calc(100vw - 16px));
+    padding: 22px 22px 34px;
   }
 
-  .mobile-menu summary {
-    display: flex;
-    width: 42px;
-    height: 42px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    border: 1px solid var(--line-dark);
-    border-radius: 50%;
-    cursor: pointer;
-    list-style: none;
+  .ecran-promo {
+    grid-template-columns: minmax(130px, 0.4fr) minmax(0, 1fr);
+    gap: 18px;
   }
 
-  .mobile-menu summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .mobile-menu summary span {
-    width: 17px;
-    height: 1px;
-    background: currentColor;
-  }
-
-  .mobile-menu nav {
-    position: absolute;
-    width: min(310px, calc(100vw - 32px));
-    top: 52px;
-    left: 0;
-    display: flex;
-    padding: 13px 20px 20px;
-    flex-direction: column;
-    border: 1px solid var(--line-dark);
-    background: var(--surface);
-    box-shadow: 0 24px 70px rgba(40, 34, 26, 0.18);
-  }
-
-  .mobile-menu nav a {
-    padding-block: 11px;
-    border-bottom: 1px solid var(--line);
-    font-size: 0.86rem;
-    font-weight: 800;
+  .promo-link-placeholder {
+    width: fit-content;
+    grid-column: 1 / -1;
   }
 
   .lead-layout {
@@ -1381,6 +1663,19 @@ img {
 }
 
 @media (max-width: 520px) {
+  .ecran-promo {
+    padding: 18px;
+    grid-template-columns: 1fr;
+  }
+
+  .ecran-logo-placeholder {
+    min-height: 82px;
+  }
+
+  .promo-link-placeholder {
+    grid-column: auto;
+  }
+
   .news-flash-inner {
     gap: 10px;
   }

@@ -1,8 +1,11 @@
 # Art News
 
-پروژه یک رسانه خبری فارسی و RTL با تمرکز بر هنر است. این repository به‌صورت
-monorepo نگهداری می‌شود و در نسخه نهایی شامل Next.js frontend، NestJS API،
-PostgreSQL و Prisma خواهد بود.
+پروژه یک رسانه خبری فارسی و RTL با تمرکز بر سینما، تئاتر، تلویزیون و شبکه
+نمایش خانگی است. این repository به‌صورت monorepo نگهداری می‌شود و در نسخه
+نهایی شامل Next.js frontend، NestJS API، PostgreSQL و Prisma خواهد بود.
+
+نام فعلی برند عمومی سایت «سینما نمایش» است؛ نام فنی repository همچنان
+`Art-News` باقی می‌ماند.
 
 ## Current phase
 

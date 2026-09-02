@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArticleCard } from "@/components/article-card";
+import {
+  AdvertisementPlaceholder,
+  EcranNewsPromo,
+} from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { articles, categories, getCategoryArticles } from "@/lib/news";
 
@@ -8,11 +12,14 @@ export default function HomePage() {
   const [lead, ...latest] = articles;
   const spotlight = latest.slice(0, 2);
   const latestRail = latest.slice(2, 7);
-  const visualArts = getCategoryArticles("visual-arts").slice(1, 4);
+  const cinemaNews = [
+    ...getCategoryArticles("news"),
+    ...getCategoryArticles("world-cinema"),
+  ].slice(0, 3);
   const cultureMix = [
-    articles.find((article) => article.category.slug === "cinema"),
-    articles.find((article) => article.category.slug === "music"),
-    articles.find((article) => article.category.slug === "literature"),
+    articles.find((article) => article.category.slug === "reviews-notes"),
+    articles.find((article) => article.category.slug === "theater"),
+    articles.find((article) => article.category.slug === "television"),
   ].filter((article) => article !== undefined);
 
   return (
@@ -40,7 +47,7 @@ export default function HomePage() {
           </Link>
           <div className="lead-copy">
             <Link className="category-label" href={`/category/${lead.category.slug}`}>
-              پرونده ویژه · {lead.category.title}
+              خبر مهم · {lead.category.title}
             </Link>
             <h1>
               <Link href={`/articles/${lead.slug}`}>{lead.title}</Link>
@@ -78,12 +85,17 @@ export default function HomePage() {
         </aside>
       </section>
 
+      <section className="container promotion-stack">
+        <EcranNewsPromo />
+        <AdvertisementPlaceholder label="جایگاه تبلیغات صفحه اصلی" />
+      </section>
+
       <section className="editorial-note">
         <div className="container editorial-note-inner">
           <span>یادداشت روز</span>
           <p>
-            هنر فقط در موزه اتفاق نمی‌افتد؛ در خیابان، کتاب، صحنه و تصویرهای
-            روزمره هم ادامه دارد.
+            سینما فقط روی پرده اتفاق نمی‌افتد؛ پشت صحنه، گفت‌وگوها و تجربه
+            تماشاگران هم بخشی از روایت آن هستند.
           </p>
           <Link href={`/articles/${articles[6].slug}`}>ادامه یادداشت ←</Link>
         </div>
@@ -91,12 +103,12 @@ export default function HomePage() {
 
       <section className="container home-section">
         <SectionHeading
-          eyebrow="دیدن و کشف کردن"
-          title="هنرهای تجسمی"
-          href="/category/visual-arts"
+          eyebrow="از تحریریه"
+          title="خبرهای سینما"
+          href="/category/news"
         />
         <div className="three-card-grid">
-          {visualArts.map((article) => (
+          {cinemaNews.map((article) => (
             <ArticleCard article={article} key={article.slug} />
           ))}
         </div>
@@ -104,7 +116,7 @@ export default function HomePage() {
 
       <section className="home-section home-section-dark">
         <div className="container">
-          <SectionHeading eyebrow="پیشنهاد هنرنامه" title="این هفته بخوانید" />
+          <SectionHeading eyebrow="پیشنهاد سینما نمایش" title="این هفته بخوانید" />
           <div className="feature-row">
             <div className="feature-row-image">
               <Image
@@ -125,7 +137,7 @@ export default function HomePage() {
       </section>
 
       <section className="container home-section">
-        <SectionHeading eyebrow="از پرده تا کاغذ" title="فرهنگ و اجرا" />
+        <SectionHeading eyebrow="خواندنی‌ها" title="نقد، تئاتر و تلویزیون" />
         <div className="three-card-grid">
           {cultureMix.map((article) => (
             <ArticleCard article={article} key={article.slug} />
@@ -134,7 +146,7 @@ export default function HomePage() {
       </section>
 
       <section className="container category-directory">
-        <SectionHeading eyebrow="همه موضوع‌ها" title="در هنرنامه بچرخید" />
+        <SectionHeading eyebrow="همه موضوع‌ها" title="در سینما نمایش بچرخید" />
         <div className="category-links">
           {categories.map((category, index) => (
             <Link href={`/category/${category.slug}`} key={category.slug}>
