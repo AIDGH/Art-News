@@ -133,54 +133,12 @@ img {
   width: fit-content;
 }
 
-.brand-symbol {
-  position: relative;
+.brand-logo {
   display: block;
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--ink);
-  background: var(--accent);
-  transform: rotate(3deg);
-}
-
-.brand-symbol > span:first-child {
-  position: absolute;
-  width: 1px;
-  height: 58px;
-  right: 19px;
-  top: -9px;
-  background: var(--ink);
-  transform: rotate(42deg);
-}
-
-.brand-symbol > span:last-child {
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  right: 9px;
-  top: 9px;
-  border: 1px solid #fff8ed;
-  border-radius: 50%;
-}
-
-.brand-copy {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
-}
-
-.brand-copy strong {
-  font-family: "Vazirmatn", Tahoma, "Segoe UI", Arial, sans-serif;
-  font-size: 1.72rem;
-  font-weight: 900;
-  letter-spacing: -0.045em;
-}
-
-.brand-copy small {
-  margin-top: 6px;
-  color: var(--ink-soft);
-  font-size: 0.68rem;
-  letter-spacing: 0.02em;
+  width: 118px;
+  height: 82px;
+  background: url("/logo-cinema-namayesh.png") center / 165% auto no-repeat;
+  mix-blend-mode: multiply;
 }
 
 .desktop-nav {
@@ -978,6 +936,14 @@ img {
   font-size: 0.78rem;
 }
 
+.footer-note a:hover {
+  color: #f6a28e;
+}
+
+.footer-note [id^="div_eRasanehTrustseal_"] {
+  min-height: 0;
+}
+
 .footer-bottom {
   display: flex;
   min-height: 58px;
@@ -1470,26 +1436,9 @@ img {
     grid-template-columns: 1fr auto;
   }
 
-  .brand-symbol {
-    width: 36px;
-    height: 36px;
-  }
-
-  .brand-symbol > span:first-child {
-    height: 50px;
-    right: 17px;
-    top: -7px;
-  }
-
-  .brand-symbol > span:last-child {
-    width: 18px;
-    height: 18px;
-    right: 8px;
-    top: 8px;
-  }
-
-  .brand-copy strong {
-    font-size: 1.42rem;
+  .brand-logo {
+    width: 96px;
+    height: 67px;
   }
 
   .menu-panel {
