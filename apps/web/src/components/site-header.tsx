@@ -4,14 +4,7 @@ import { NavigationMenu } from "@/components/navigation-menu";
 function BrandMark() {
   return (
     <Link className="brand" href="/" aria-label="سینما نمایش، صفحه اصلی">
-      <span className="brand-symbol" aria-hidden="true">
-        <span />
-        <span />
-      </span>
-      <span className="brand-copy">
-        <strong>سینما نمایش</strong>
-        <small>رسانه سینما و نمایش</small>
-      </span>
+      <span className="brand-logo" aria-hidden="true" />
     </Link>
   );
 }
