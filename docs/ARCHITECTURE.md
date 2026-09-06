@@ -18,6 +18,14 @@ PostgreSQL
 
 Frontend هیچ‌گاه مستقیم به database متصل نمی‌شود.
 
+## Local Development Ports
+
+- Next.js frontend به‌صورت پیش‌فرض روی `http://localhost:3001` اجرا می‌شود.
+- NestJS API به‌صورت پیش‌فرض روی `http://localhost:4001` اجرا می‌شود.
+- frontend درخواست‌های `/api/v1/*` را در محیط توسعه به
+  `http://localhost:4001/api/v1/*` rewrite می‌کند.
+- CORS پیش‌فرض API فقط origin محلی `http://localhost:3001` را می‌پذیرد.
+
 ## Repository Structure
 
 ```text
@@ -48,10 +56,11 @@ Frontend نباید شامل Prisma query، PostgreSQL access یا publication r
 فونت با `@font-face` از `/fonts/Vazirmatn-Regular.woff2` بارگذاری می‌شود و
 fallbackهای سیستمی فقط برای حالت خطای asset باقی می‌مانند.
 
-صفحات عمومی Server Component باقی می‌مانند. فقط منوی همبرگری به‌عنوان Client
-Component پیاده‌سازی شده تا مدیریت focus، قفل scroll و بسته‌شدن با کلیک بیرون،
-Escape یا انتخاب لینک را انجام دهد. بنر اکران نیوز و Placeholder تبلیغات
-Componentهای مشترک و بدون داده runtime هستند.
+صفحات عمومی تا جای ممکن Server Component باقی می‌مانند. منوی همبرگری یک Client
+Component است تا مدیریت focus، قفل scroll و بسته‌شدن با کلیک بیرون، Escape یا
+انتخاب لینک را انجام دهد. مهر اعتماد رسانه نیز Client Component است چون script
+رسمی ارائه‌دهنده را پس از mount بارگذاری و initialize می‌کند. بنر اکران نیوز و
+Placeholder تبلیغات Componentهای مشترک و بدون داده runtime هستند.
 
 ## Backend
 
@@ -105,6 +114,18 @@ HomepageModule
   نباید به‌عنوان عکس مستند یک رویداد واقعی ارائه شود.
 - کارت Open Graph برندشده در `apps/web/public/og.png` نگهداری می‌شود؛ صفحه
   هر خبر از تصویر اصلی خودش برای preview استفاده می‌کند.
+- لوگوی رسمی هدر یک PNG محلی در
+  `apps/web/public/logo-cinema-namayesh.png` است و از CSS نمایش داده می‌شود.
+
+## External Trust Seal
+
+- لینک مستقیم مجوز به `https://e-rasaneh.ir/Certificate/101661` در فوتر وجود
+  دارد تا حتی در صورت مسدودشدن JavaScript، مقصد رسمی قابل دسترسی باشد.
+- `ERasanehTrustSeal` اسکریپت async رسمی
+  `https://trustseal.e-rasaneh.ir/trustseal.js` را فقط در مرورگر و حداکثر یک‌بار
+  بارگذاری می‌کند و شناسه گواهی `101661` را به آن می‌دهد.
+- تنظیم CSP در production باید دامنه اسکریپت و منابع لازم مهر رسمی را به‌صورت
+  محدود allowlist کند.
 
 ## Production Direction
 

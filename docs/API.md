@@ -8,6 +8,13 @@ Base path:
 /api/v1
 ```
 
+آدرس پیش‌فرض توسعه مستقیم و مسیر proxy فرانت:
+
+```text
+http://localhost:4001/api/v1
+http://localhost:3001/api/v1
+```
+
 ## Public Endpoints
 
 ```text
