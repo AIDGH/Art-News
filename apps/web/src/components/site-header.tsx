@@ -1,10 +1,18 @@
 import Link from "next/link";
+import { MobileSearch } from "@/components/mobile-search";
 import { NavigationMenu } from "@/components/navigation-menu";
 
 function BrandMark() {
   return (
-    <Link className="brand" href="/" aria-label="سینما نمایش، صفحه اصلی">
-      <span className="brand-logo" aria-hidden="true" />
+    <Link
+      href="/"
+      className="inline-flex items-center gap-3 transition-opacity hover:opacity-90"
+      aria-label="سینما نمایش، صفحه نخست"
+    >
+      <span
+        className="block w-24 h-14 md:w-28 md:h-16 bg-[url('/logo-cinema-namayesh.png')] bg-center bg-[length:165%_auto] bg-no-repeat mix-blend-multiply"
+        aria-hidden="true"
+      />
     </Link>
   );
 }
@@ -12,22 +20,25 @@ function BrandMark() {
 export function SiteHeader() {
   return (
     <>
-      <div className="edition-bar">
-        <div className="container edition-inner">
-          <span>نسخه نمایشی</span>
-          <span>یکشنبه ۹ شهریور ۱۴۰۵</span>
+      {/* Edition & Date Bar */}
+      <div className="bg-[var(--night)] text-[#f6efe5] text-xs py-1.5 border-b border-[var(--night-soft)]">
+        <div className="container flex items-center justify-between min-h-[26px]">
+          <span className="text-[#f6a28e] font-semibold text-[11px] md:text-xs">
+            پایگاه خبری سینما نمایش
+          </span>
+          <span className="text-stone-300 text-[11px] md:text-xs">
+            یکشنبه ۹ شهریور ۱۴۰۵
+          </span>
         </div>
       </div>
-      <header className="site-header">
-        <div className="container header-main">
+
+      {/* Main Header Bar */}
+      <header className="sticky top-0 z-40 bg-[var(--paper)]/95 backdrop-blur-md border-b border-[var(--line)] shadow-xs">
+        <div className="container min-h-[72px] md:min-h-[84px] flex items-center justify-between gap-4 py-2">
           <BrandMark />
-          <div className="header-actions">
-            <Link className="search-link" href="/search" aria-label="جست‌وجو">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="11" cy="11" r="6.5" />
-                <path d="m16 16 4 4" />
-              </svg>
-            </Link>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <MobileSearch />
             <NavigationMenu />
           </div>
         </div>

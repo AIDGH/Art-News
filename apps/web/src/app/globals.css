@@ -1,3 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-line-dark: var(--line-dark);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-night: var(--night);
+  --color-night-soft: var(--night-soft);
+}
+
 @font-face {
   font-family: "Vazirmatn";
   src: url("/fonts/Vazirmatn-Regular.woff2") format("woff2");
