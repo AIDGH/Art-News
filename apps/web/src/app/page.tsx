@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FeaturedNewsCarousel } from "@/components/featured-news-carousel";
+import { NewsTicker } from "@/components/news-ticker";
 import {
   AdvertisementPlaceholder,
   EcranNewsPromo,
@@ -25,13 +26,7 @@ export default function HomePage() {
 
   return (
     <main>
-      <section className="news-flash" aria-label="تازه‌ترین خبر">
-        <div className="container news-flash-inner">
-          <strong>تازه</strong>
-          <Link href={`/articles/${articles[1].slug}`}>{articles[1].title}</Link>
-          <span>←</span>
-        </div>
-      </section>
+      <NewsTicker />
 
       <FeaturedNewsCarousel articles={featuredArticles} />
 

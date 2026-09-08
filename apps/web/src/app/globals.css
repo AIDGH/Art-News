@@ -298,7 +298,7 @@ img {
   border-bottom: 2px solid var(--ink);
 }
 
-.menu-panel-header > div {
+.menu-panel-header>div {
   display: flex;
   flex-direction: column;
 }
@@ -332,20 +332,20 @@ img {
   flex-direction: column;
 }
 
-.menu-links > a,
+.menu-links>a,
 .menu-group-heading {
   min-height: 54px;
   border-bottom: 1px solid var(--line);
   font-weight: 800;
 }
 
-.menu-links > a {
+.menu-links>a {
   display: flex;
   align-items: center;
 }
 
-.menu-links > a:hover,
-.menu-group-heading > a:hover,
+.menu-links>a:hover,
+.menu-group-heading>a:hover,
 .menu-submenu a:hover {
   color: var(--accent);
 }
@@ -356,7 +356,7 @@ img {
   align-items: center;
 }
 
-.menu-group-heading > a {
+.menu-group-heading>a {
   display: flex;
   min-height: 54px;
   align-items: center;
@@ -398,6 +398,126 @@ img {
   padding-block: 7px;
 }
 
+/* ── News Ticker (نوار متحرک اخبار تازه) ─────────────────────────────── */
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(50%);
+  }
+}
+
+.news-ticker {
+  display: flex;
+  align-items: center;
+  /* label + track centred in the bar */
+  height: 34px;
+  /* compact, sleek fixed height */
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  background: var(--surface);
+  font-size: 0.84rem;
+}
+
+/* Static accent badge — pinned at the inline-start (right in RTL) */
+.news-ticker-label {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding-inline: 12px;
+  padding-block: 3px;
+  /* tight vertical — label hugs its text */
+  color: #fff;
+  background: var(--accent);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  border-inline-end: 2px solid var(--accent-dark);
+  /* Match bar height so the label fills edge-to-edge */
+  align-self: stretch;
+}
+
+/* The viewport clips the track. Inherits RTL from the page — the track anchors
+   to the right edge. translateX(+50%) pushes the track rightward each cycle,
+   sliding the left-side duplicate block into view so the start of each Persian
+   sentence (physically on the right of the text block) enters first. */
+.news-ticker-viewport {
+  flex: 1;
+  overflow: hidden;
+}
+
+.news-ticker-viewport:hover .news-ticker-track {
+  animation-play-state: paused;
+}
+
+/* The scrolling wrapper — contains TWO identical .news-ticker-content blocks.
+   Total track width = 2 × one content block.
+   translateX(+50%) therefore = exactly one content block → gapless RTL loop. */
+.news-ticker-track {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+  height: 100%;
+  /* fill the 34px bar so text centres in it */
+  animation: ticker-scroll 50s linear infinite;
+  will-change: transform;
+}
+
+/* Each of the two identical content blocks sits side-by-side in the track.
+   flex-shrink:0 prevents either block from collapsing. */
+.news-ticker-content {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  width: max-content;
+  height: 100%;
+  /* inherit bar height for consistent centring */
+}
+
+/* Stop animation entirely when the user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .news-ticker-track {
+    animation: none;
+  }
+}
+
+.news-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 2px;
+  white-space: nowrap;
+}
+
+/* Each headline link — full text, no truncation */
+.news-ticker-item a {
+  display: inline-block;
+  padding-inline: 10px;
+  color: var(--ink);
+  font-weight: 700;
+  /* RTL text inside LTR row */
+  direction: rtl;
+  transition: color 160ms ease;
+}
+
+.news-ticker-item a:hover {
+  color: var(--accent);
+}
+
+/* Diamond separator between items */
+.news-ticker-dot {
+  display: inline-block;
+  padding-inline: 4px;
+  color: var(--accent);
+  font-size: 0.5rem;
+  opacity: 0.65;
+}
+
+/* ── (legacy) single-headline flash bar — kept for reference ────────── */
 .news-flash {
   border-bottom: 1px solid var(--line);
   background: var(--surface);
@@ -653,7 +773,7 @@ img {
   color: var(--accent-dark);
 }
 
-.compact-news-item > div > span {
+.compact-news-item>div>span {
   display: block;
   margin-top: 7px;
   color: var(--ink-soft);
@@ -754,7 +874,7 @@ img {
   background: color-mix(in srgb, var(--surface) 60%, transparent);
 }
 
-.advertisement-placeholder > span {
+.advertisement-placeholder>span {
   color: var(--accent);
   font-size: 0.62rem;
   font-weight: 900;
@@ -844,7 +964,7 @@ img {
   color: var(--accent-dark);
 }
 
-.lead-copy > p {
+.lead-copy>p {
   max-width: 700px;
   margin-top: 12px;
   color: var(--ink-soft);
@@ -861,7 +981,7 @@ img {
   font-size: 0.72rem;
 }
 
-.article-meta span + span::before {
+.article-meta span+span::before {
   display: inline-block;
   width: 3px;
   height: 3px;
@@ -887,7 +1007,7 @@ img {
   aspect-ratio: 4 / 3;
 }
 
-.article-card-compact + .article-card-compact {
+.article-card-compact+.article-card-compact {
   padding-top: 28px;
   border-top: 1px solid var(--line);
 }
@@ -908,7 +1028,7 @@ img {
   font-size: clamp(1.1rem, 1.5vw, 1.32rem);
 }
 
-.article-card-content > p {
+.article-card-content>p {
   display: -webkit-box;
   overflow: hidden;
   margin-top: 8px;
@@ -932,7 +1052,7 @@ img {
   border-bottom: 2px solid var(--ink);
 }
 
-.rail-title > span {
+.rail-title>span {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -956,7 +1076,7 @@ img {
   border-bottom: 1px solid var(--line);
 }
 
-.latest-rail li > span {
+.latest-rail li>span {
   color: var(--accent);
   font-family: "Vazirmatn", Tahoma, "Segoe UI", Arial, sans-serif;
   font-size: 0.8rem;
@@ -989,7 +1109,7 @@ img {
   gap: 30px;
 }
 
-.editorial-note-inner > span {
+.editorial-note-inner>span {
   padding: 3px 10px;
   border: 1px solid rgba(255, 255, 255, 0.48);
   font-size: 0.7rem;
@@ -1035,13 +1155,13 @@ img {
   letter-spacing: -0.04em;
 }
 
-.section-heading > a {
+.section-heading>a {
   color: var(--ink-soft);
   font-size: 0.78rem;
   font-weight: 800;
 }
 
-.section-heading > a:hover {
+.section-heading>a:hover {
   color: var(--accent);
 }
 
@@ -1051,7 +1171,7 @@ img {
   gap: 28px;
 }
 
-.three-card-grid > * + * {
+.three-card-grid>*+* {
   padding-inline-start: 28px;
   border-inline-start: 1px solid var(--line);
 }
@@ -1083,7 +1203,7 @@ img {
   justify-content: center;
 }
 
-.feature-row-copy > span {
+.feature-row-copy>span {
   color: #e88873;
   font-size: 0.72rem;
   font-weight: 900;
@@ -1232,7 +1352,7 @@ img {
   border-bottom: 3px solid var(--ink);
 }
 
-.category-hero > span {
+.category-hero>span {
   color: var(--accent);
   font-size: 0.72rem;
   font-weight: 900;
@@ -1263,7 +1383,7 @@ img {
   min-height: 500px;
 }
 
-.category-lead > div {
+.category-lead>div {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1310,7 +1430,7 @@ img {
   font-size: 1.02rem;
 }
 
-.article-card-horizontal .article-card-content > p {
+.article-card-horizontal .article-card-content>p {
   -webkit-line-clamp: 2;
 }
 
@@ -1344,7 +1464,7 @@ img {
   font-size: 0.76rem;
 }
 
-.article-byline > div {
+.article-byline>div {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1354,7 +1474,7 @@ img {
   color: var(--ink);
 }
 
-.article-figure > div {
+.article-figure>div {
   position: relative;
   min-height: min(68vw, 720px);
   overflow: hidden;
@@ -1388,7 +1508,7 @@ img {
   gap: 10px;
 }
 
-.article-share > span {
+.article-share>span {
   color: var(--ink-soft);
   font-size: 0.65rem;
 }
@@ -1413,11 +1533,11 @@ img {
   line-height: 2.18;
 }
 
-.article-body > p + p {
+.article-body>p+p {
   margin-top: 27px;
 }
 
-.article-body > p:first-child::first-letter {
+.article-body>p:first-child::first-letter {
   float: right;
   margin: 9px 0 0 12px;
   color: var(--accent);
@@ -1484,7 +1604,7 @@ img {
   padding-block: 82px 110px;
 }
 
-.simple-page > span {
+.simple-page>span {
   color: var(--accent);
   font-size: 0.72rem;
   font-weight: 900;
@@ -1497,7 +1617,7 @@ img {
   line-height: 1.1;
 }
 
-.simple-page > p {
+.simple-page>p {
   max-width: 650px;
   margin-top: 25px;
   color: var(--ink-soft);
@@ -1518,7 +1638,7 @@ img {
   text-align: left;
 }
 
-.not-found > span {
+.not-found>span {
   color: var(--accent);
   font-family: "Vazirmatn", Tahoma, "Segoe UI", Arial, sans-serif;
   font-size: 1rem;
@@ -1547,13 +1667,13 @@ img {
   padding-block: 58px 100px;
 }
 
-.search-page > header {
+.search-page>header {
   max-width: 760px;
   padding-bottom: 28px;
   border-bottom: 3px solid var(--ink);
 }
 
-.search-page > header > span {
+.search-page>header>span {
   color: var(--accent);
   font-size: 0.72rem;
   font-weight: 900;
@@ -1566,7 +1686,7 @@ img {
   letter-spacing: -0.06em;
 }
 
-.search-page > header p {
+.search-page>header p {
   margin-top: 8px;
   color: var(--ink-soft);
 }
@@ -1583,7 +1703,7 @@ img {
   font-weight: 800;
 }
 
-.search-form > div {
+.search-form>div {
   display: grid;
   grid-template-columns: 1fr auto;
 }
@@ -1685,6 +1805,7 @@ img {
 }
 
 @media (max-width: 820px) {
+
   .container,
   .container-wide,
   .container-narrow {
@@ -1782,7 +1903,7 @@ img {
     border-top: 1px solid var(--line-dark);
   }
 
-  .article-card-compact + .article-card-compact {
+  .article-card-compact+.article-card-compact {
     padding-top: 0;
     padding-inline-start: 18px;
     border-top: 0;
@@ -1806,8 +1927,8 @@ img {
     gap: 11px;
   }
 
-  .editorial-note-inner > span,
-  .editorial-note-inner > a {
+  .editorial-note-inner>span,
+  .editorial-note-inner>a {
     width: fit-content;
   }
 
@@ -1820,7 +1941,7 @@ img {
     gap: 32px;
   }
 
-  .three-card-grid > * + * {
+  .three-card-grid>*+* {
     padding: 32px 0 0;
     border-top: 1px solid var(--line);
     border-inline-start: 0;
@@ -1882,7 +2003,7 @@ img {
     grid-template-columns: minmax(120px, 38vw) 1fr;
   }
 
-  .article-card-horizontal .article-card-content > p,
+  .article-card-horizontal .article-card-content>p,
   .article-card-horizontal .article-meta {
     display: none;
   }
@@ -1990,7 +2111,7 @@ img {
     aspect-ratio: 4 / 3;
   }
 
-  .lead-copy > p {
+  .lead-copy>p {
     font-size: 0.91rem;
   }
 
@@ -2004,7 +2125,7 @@ img {
     gap: 14px;
   }
 
-  .article-card-compact + .article-card-compact {
+  .article-card-compact+.article-card-compact {
     padding: 18px 0 0;
     border-top: 1px solid var(--line);
     border-inline-start: 0;
@@ -2022,7 +2143,7 @@ img {
     font-size: 1.55rem;
   }
 
-  .section-heading > a {
+  .section-heading>a {
     font-size: 0.7rem;
   }
 
@@ -2050,11 +2171,11 @@ img {
     font-size: 0.9rem;
   }
 
-  .article-figure > div {
+  .article-figure>div {
     min-height: 72vw;
   }
 
-  .search-form > div {
+  .search-form>div {
     grid-template-columns: 1fr;
     gap: 8px;
   }
@@ -2069,6 +2190,7 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

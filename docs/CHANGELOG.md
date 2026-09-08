@@ -1,6 +1,45 @@
 # Changelog
 
+## 2026-09-09 (tweak — ticker speed)
+
+- افزایش سرعت اسکرول نوار متحرک اخبار: مدت زمان انیمیشن `ticker-scroll` از `52s` به `35s` کاهش یافت تا حرکت متن سریع‌تر شود.
+
+## 2026-09-09 (UI polish — ticker height)
+
+- کاهش ارتفاع نوار خبر از `min-height: 44px` به `height: 34px` برای ظاهر sleek و Mobile-first.
+- تغییر `align-items: stretch` به `align-items: center` روی `.news-ticker` برای مرکزیابی عمودی صحیح.
+- `align-self: stretch` روی `.news-ticker-label` تا برچسب قرمز لبه‌به‌لبه بار را پر کند.
+- `padding-block` برچسب از `6px` به `3px` کاهش یافت؛ `padding-inline` از `14px` به `12px`.
+- افزودن `height: 100%` به `.news-ticker-track` و `.news-ticker-content` تا متن اسکرولی دقیقاً در وسط عمودی نوار بنشیند.
+
+
+
+- رفع باگ جهت اسکرول: متن فارسی از انتها وارد می‌شد (ابتدای جمله آخر نمایش داده می‌شد).
+- حذف `direction: ltr` از `.news-ticker-viewport` — viewport اکنون RTL بومی صفحه را به ارث می‌برد.
+- معکوس‌شدن کیفریم: از `translateX(-50%)` به `translateX(+50%)`؛ در flex RTL، track به لبه راست متصل است و translateX مثبت آن را به راست هل می‌دهد، بلوک کپی سمت چپ وارد صفحه می‌شود و ابتدای جمله فارسی (که فیزیکاً سمت راست متن است) اول وارد دید می‌گردد.
+- حذف کامنت منسوخ JSX که توضیح اشتباه درباره `direction:ltr` می‌داد.
+
+
+
+- رفع باگ حلقه بی‌درنگ نوار متحرک اخبار: ساختار کامپوننت از یک `<ul>` مسطح با آیتم‌های تکراری به دو بلوک مجزای `.news-ticker-content` بازنویسی شد.
+- اضافه‌شدن `direction: ltr` به `.news-ticker-viewport`: این تنظیم track را در صفحه RTL به لبه چپ متصل می‌کند و مانع شروع انیمیشن از بیرون صفحه می‌شود.
+- حذف `width: max-content` از `.news-ticker-track` و جایگزینی با دو فرزند `flex-shrink: 0`: عرض track دقیقاً ۲× عرض یک بلوک محتوا است و `translateX(-50%)` برابر با دقیقاً یک بلوک = حلقه بی‌درز.
+- بلوک دوم `.news-ticker-content` با `aria-hidden="true"` و `tabIndex={-1}` از دسترسی کمکی و فوکوس کیبورد حذف شده است.
+
+
+
+- پیاده‌سازی کامپوننت نوار متحرک اخبار تازه (`NewsTicker`) با اسکرول افقی پیوسته و بی‌درنگ.
+- انیمیشن اسکرول با `@keyframes ticker-scroll` و `animation-play-state` پیاده‌سازی شده؛ تکرار آیتم‌ها برای ایجاد حلقه یکپارچه.
+- توقف انیمیشن با hover روی viewport (بدون JavaScript، فقط CSS).
+- توقف کامل انیمیشن در صورت فعال‌بودن `prefers-reduced-motion` (media query).
+- عنوان خبرها بدون truncation و ellipsis نمایش داده می‌شوند.
+- این کامپوننت جایگزین نوار ثابت تک‌لینکی قبلی (`news-flash`) در ابتدای صفحه اصلی شد.
+- داده‌های نمایشی از `articles` موجود استفاده می‌کنند؛ بعداً با API جایگزین خواهند شد.
+- پشتیبانی RTL با `direction: rtl` روی لینک‌ها و `direction: ltr` روی track انیمیشن.
+- همه خواص مربوط به spacing از logical properties (`padding-inline`, `border-inline-end`) استفاده می‌کنند.
+
 ## 2026-09-08
+
 
 - اضافه‌شدن دو خبر نمونه درباره «شوتینگا» و «بُت» همراه با تصاویر محلی، صفحه
   جزئیات کامل و قرارگیری در ابتدای صفحه اصلی.
