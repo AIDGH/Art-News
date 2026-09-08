@@ -62,6 +62,11 @@ Component است تا مدیریت focus، قفل scroll و بسته‌شدن ب
 رسمی ارائه‌دهنده را پس از mount بارگذاری و initialize می‌کند. بنر اکران نیوز و
 Placeholder تبلیغات Componentهای مشترک و بدون داده runtime هستند.
 
+آیتم‌های منوی قالب فعلی در آرایه ثابت `menuItems` تعریف شده‌اند و هنوز از CMS
+دریافت نمی‌شوند. اسلایدر خبرهای مهم نیز Client Component است؛ داده Article را
+از صفحه Server Component می‌گیرد و فقط index جاری و swipe لمسی را در مرورگر
+مدیریت می‌کند.
+
 ## Backend
 
 مسئولیت‌ها:
@@ -116,6 +121,9 @@ HomepageModule
   هر خبر از تصویر اصلی خودش برای preview استفاده می‌کند.
 - لوگوی رسمی هدر یک PNG محلی در
   `apps/web/public/logo-cinema-namayesh.png` است و از CSS نمایش داده می‌شود.
+- دو تصویر خبری ارائه‌شده برای نمونه به‌ترتیب در
+  `shootinga-cast-return.jpg` و `bot-leila-hatami-first-look.jpg` نگهداری
+  می‌شوند؛ credit نهایی آن‌ها هنوز باید توسط تحریریه تکمیل شود.
 
 ## External Trust Seal
 
