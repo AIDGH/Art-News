@@ -115,8 +115,35 @@ img {
 }
 
 .mobile-menu-body {
-  padding-right: 42px;
+  padding-right: 20px;
   padding-left: 24px;
+}
+
+.mobile-menu-header {
+  padding: 20px 24px;
+}
+
+.menu-topic-icon,
+.menu-subtopic-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-family: "Arial Unicode MS", "Segoe UI Symbol", sans-serif;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.menu-topic-icon {
+  width: 38px;
+  font-size: 1.2rem;
+  letter-spacing: -0.1em;
+}
+
+.menu-subtopic-icon {
+  width: 22px;
+  font-size: 0.98rem;
 }
 
 .container {

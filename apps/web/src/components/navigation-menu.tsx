@@ -18,9 +18,9 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { href: "/", icon: "⌂︎", label: "صفحه نخست" },
+  { href: "/", icon: "⌂", label: "صفحه نخست" },
   {
-    icon: "◉",
+    icon: "◉◉",
     label: "سینما",
     href: "/category/cinema",
     subItems: [
@@ -31,12 +31,12 @@ const menuItems: MenuItem[] = [
     ],
   },
   { href: "/category/theater", icon: "╰╯", label: "تئاتر" },
-  { href: "/category/television", icon: "▣", label: "تلویزیون" },
-  { href: "/category/home-video", icon: "▷", label: "شبکه نمایش خانگی" },
-  { href: "/category/world-cinema", icon: "⊙", label: "سینمای جهان" },
+  { href: "/category/television", icon: "▣⌄", label: "تلویزیون" },
+  { href: "/category/home-video", icon: "⌂▷", label: "شبکه نمایش خانگی" },
+  { href: "/category/world-cinema", icon: "⊕◉", label: "سینمای جهان" },
   { href: "/category/photos", icon: "▧", label: "عکس" },
-  { href: "/category/videos", icon: "▸", label: "فیلم" },
-  { href: "/english", icon: "En", label: "English", lang: "en" },
+  { href: "/category/videos", icon: "▷│", label: "فیلم" },
+  { href: "/english", icon: "A", label: "English", lang: "en" },
   { href: "/about", icon: "ⓘ", label: "درباره ما" },
 ];
 
@@ -48,7 +48,7 @@ export function DesktopNavigation() {
       aria-label="دسته‌بندی‌های اصلی"
       className="hidden min-w-0 flex-1 lg:block"
     >
-      <ul className="flex list-none items-center justify-start gap-2 p-0 xl:gap-3">
+      <ul className="flex list-none items-center justify-start gap-3 p-0 xl:gap-4">
         {desktopItems.map((item) => (
           <li
             className={item.subItems ? "group relative" : "relative"}
@@ -177,7 +177,7 @@ export function NavigationMenu() {
         }`}
       >
         {/* Drawer Header */}
-        <div className="flex items-center justify-between px-5 py-5 sm:px-6 border-b-2 border-[var(--ink)] bg-[var(--surface)]">
+        <div className="mobile-menu-header flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--surface)]">
           <div className="flex flex-col">
             <span className="block text-xs font-bold tracking-wider text-[var(--accent)]">
               منوی اصلی
@@ -213,7 +213,7 @@ export function NavigationMenu() {
                         >
                           <span
                             aria-hidden="true"
-                            className="inline-flex w-7 shrink-0 items-center justify-center text-xl font-normal text-[var(--accent)] [font-family:Arial,sans-serif]"
+                            className="menu-topic-icon"
                           >
                             {item.icon}
                           </span>
@@ -248,7 +248,7 @@ export function NavigationMenu() {
                               >
                                 <span
                                   aria-hidden="true"
-                                  className="inline-flex w-5 shrink-0 items-center justify-center text-base font-normal text-[var(--accent)] [font-family:Arial,sans-serif]"
+                                  className="menu-subtopic-icon"
                                 >
                                   {sub.icon}
                                 </span>
@@ -272,7 +272,7 @@ export function NavigationMenu() {
                     >
                       <span
                         aria-hidden="true"
-                        className="inline-flex w-7 shrink-0 items-center justify-center text-xl font-normal text-[var(--accent)] [font-family:Arial,sans-serif]"
+                        className="menu-topic-icon"
                       >
                         {item.icon}
                       </span>
