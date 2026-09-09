@@ -56,16 +56,18 @@ Frontend نباید شامل Prisma query، PostgreSQL access یا publication r
 فونت با `@font-face` از `/fonts/Vazirmatn-Regular.woff2` بارگذاری می‌شود و
 fallbackهای سیستمی فقط برای حالت خطای asset باقی می‌مانند.
 
-صفحات عمومی تا جای ممکن Server Component باقی می‌مانند. منوی همبرگری یک Client
-Component است تا مدیریت focus، قفل scroll و بسته‌شدن با کلیک بیرون، Escape یا
-انتخاب لینک را انجام دهد. مهر اعتماد رسانه نیز Client Component است چون script
+صفحات عمومی تا جای ممکن Server Component باقی می‌مانند. ناوبری دسکتاپ به‌صورت
+افقی در هدر قرار دارد و Drawer همبرگری فقط در اندازه‌های موبایل نمایش داده
+می‌شود. کامپوننت ناوبری Client Component است تا مدیریت focus، قفل scroll و
+بسته‌شدن Drawer با کلیک بیرون، Escape یا انتخاب لینک را انجام دهد. مهر اعتماد
+رسانه نیز Client Component است چون script
 رسمی ارائه‌دهنده را پس از mount بارگذاری و initialize می‌کند. بنر اکران نیوز و
 Placeholder تبلیغات Componentهای مشترک و بدون داده runtime هستند.
 
 آیتم‌های منوی قالب فعلی در آرایه ثابت `menuItems` تعریف شده‌اند و هنوز از CMS
 دریافت نمی‌شوند. اسلایدر خبرهای مهم نیز Client Component است؛ داده Article را
-از صفحه Server Component می‌گیرد و فقط index جاری و swipe لمسی را در مرورگر
-مدیریت می‌کند.
+از صفحه Server Component می‌گیرد و index جاری، کنترل جهت‌دار و Drag افقی با
+Pointer Events را برای موس و لمس در مرورگر مدیریت می‌کند.
 
 ## Backend
 

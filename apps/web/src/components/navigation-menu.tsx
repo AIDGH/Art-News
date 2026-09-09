@@ -5,37 +5,83 @@ import { useEffect, useRef, useState } from "react";
 
 interface SubItem {
   href: string;
+  icon: string;
   label: string;
 }
 
 interface MenuItem {
   href?: string;
+  icon: string;
   label: string;
   lang?: string;
   subItems?: SubItem[];
 }
 
 const menuItems: MenuItem[] = [
-  { href: "/", label: "صفحه نخست" },
+  { href: "/", icon: "⌂︎", label: "صفحه نخست" },
   {
+    icon: "◉",
     label: "سینما",
     href: "/category/cinema",
     subItems: [
-      { href: "/category/news", label: "خبر" },
-      { href: "/category/reviews-notes", label: "نقد و یادداشت" },
-      { href: "/category/interviews", label: "گفت‌وگو" },
-      { href: "/category/screenings", label: "نمایش" },
+      { href: "/category/news", icon: "▤", label: "خبر" },
+      { href: "/category/reviews-notes", icon: "✎", label: "نقد و یادداشت" },
+      { href: "/category/interviews", icon: "❝", label: "گفت‌وگو" },
+      { href: "/category/screenings", icon: "◫", label: "نمایش" },
     ],
   },
-  { href: "/category/theater", label: "تئاتر" },
-  { href: "/category/television", label: "تلویزیون" },
-  { href: "/category/home-video", label: "شبکه نمایش خانگی" },
-  { href: "/category/world-cinema", label: "سینمای جهان" },
-  { href: "/category/photos", label: "عکس" },
-  { href: "/category/videos", label: "فیلم" },
-  { href: "/english", label: "English", lang: "en" },
-  { href: "/about", label: "درباره ما" },
+  { href: "/category/theater", icon: "╰╯", label: "تئاتر" },
+  { href: "/category/television", icon: "▣", label: "تلویزیون" },
+  { href: "/category/home-video", icon: "▷", label: "شبکه نمایش خانگی" },
+  { href: "/category/world-cinema", icon: "⊙", label: "سینمای جهان" },
+  { href: "/category/photos", icon: "▧", label: "عکس" },
+  { href: "/category/videos", icon: "▸", label: "فیلم" },
+  { href: "/english", icon: "En", label: "English", lang: "en" },
+  { href: "/about", icon: "ⓘ", label: "درباره ما" },
 ];
+
+export function DesktopNavigation() {
+  const desktopItems = menuItems.filter((item) => item.href !== "/");
+
+  return (
+    <nav
+      aria-label="دسته‌بندی‌های اصلی"
+      className="hidden min-w-0 flex-1 lg:block"
+    >
+      <ul className="flex list-none items-center justify-start gap-2 p-0 xl:gap-3">
+        {desktopItems.map((item) => (
+          <li
+            className={item.subItems ? "group relative" : "relative"}
+            key={item.href}
+          >
+            <Link
+              href={item.href || "#"}
+              lang={item.lang}
+              className="relative flex min-h-11 items-center whitespace-nowrap px-2.5 text-[12px] font-bold text-[var(--ink-soft)] transition-colors after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:origin-right after:scale-x-0 after:bg-[var(--accent)] after:transition-transform hover:text-[var(--ink)] hover:after:scale-x-100 focus-visible:text-[var(--ink)] focus-visible:outline-2 focus-visible:outline-[var(--ink)] xl:px-3 xl:text-[13px]"
+            >
+              {item.label}
+            </Link>
+
+            {item.subItems ? (
+              <ul className="invisible pointer-events-none absolute start-0 top-full z-50 min-w-48 translate-y-2 list-none border border-[var(--line)] bg-[var(--surface)] p-2 opacity-0 shadow-xl transition-all duration-150 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                {item.subItems.map((subItem) => (
+                  <li key={subItem.href}>
+                    <Link
+                      href={subItem.href}
+                      className="block rounded-md px-3 py-2.5 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-[var(--paper)] hover:text-[var(--accent)] focus-visible:bg-[var(--paper)] focus-visible:outline-2 focus-visible:outline-[var(--ink)]"
+                    >
+                      {subItem.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
 
 export function NavigationMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,7 +129,7 @@ export function NavigationMenu() {
   };
 
   return (
-    <div className="relative" ref={rootRef}>
+    <div className="relative lg:hidden" ref={rootRef}>
       {/* Hamburger Trigger Button */}
       <button
         ref={triggerRef}
@@ -131,7 +177,7 @@ export function NavigationMenu() {
         }`}
       >
         {/* Drawer Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b-2 border-[var(--ink)] bg-[var(--surface)]">
+        <div className="flex items-center justify-between px-5 py-5 sm:px-6 border-b-2 border-[var(--ink)] bg-[var(--surface)]">
           <div className="flex flex-col">
             <span className="block text-xs font-bold tracking-wider text-[var(--accent)]">
               منوی اصلی
@@ -152,19 +198,25 @@ export function NavigationMenu() {
         </div>
 
         {/* Scrollable Menu Container */}
-        <div className="flex-1 overflow-y-auto px-8 py-4">
+        <div className="mobile-menu-body flex-1 overflow-y-auto py-4">
           <nav aria-label="پیوندهای منو">
             <ul className="flex flex-col divide-y divide-[var(--line)] list-none p-0 m-0">
               {menuItems.map((item) => {
                 if (item.subItems) {
                   return (
-                    <li key={item.label} className="py-2.5 px-2">
+                    <li key={item.label} className="py-2.5 px-1">
                       <div className="flex items-center justify-between min-h-[44px]">
                         <Link
                           href={item.href || "#"}
                           onClick={closeMenu}
-                          className="text-base font-extrabold text-[var(--ink)] hover:text-[var(--accent)] transition-colors py-1 flex-1"
+                          className="flex flex-1 items-center gap-3 py-1 text-base font-extrabold text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
                         >
+                          <span
+                            aria-hidden="true"
+                            className="inline-flex w-7 shrink-0 items-center justify-center text-xl font-normal text-[var(--accent)] [font-family:Arial,sans-serif]"
+                          >
+                            {item.icon}
+                          </span>
                           {item.label}
                         </Link>
                         <button
@@ -186,14 +238,20 @@ export function NavigationMenu() {
                       </div>
 
                       {isCinemaOpen && (
-                        <ul className="flex flex-col gap-1.5 ps-4 pt-2 pb-1 border-s-2 border-[var(--line)] ms-2 my-1.5 list-none">
+                        <ul className="flex flex-col gap-1.5 ps-10 pt-2 pb-1 border-s-2 border-[var(--line)] ms-3 my-1.5 list-none">
                           {item.subItems.map((sub) => (
                             <li key={sub.href}>
                               <Link
                                 href={sub.href}
                                 onClick={closeMenu}
-                                className="block py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
+                                className="flex items-center gap-2.5 py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
                               >
+                                <span
+                                  aria-hidden="true"
+                                  className="inline-flex w-5 shrink-0 items-center justify-center text-base font-normal text-[var(--accent)] [font-family:Arial,sans-serif]"
+                                >
+                                  {sub.icon}
+                                </span>
                                 {sub.label}
                               </Link>
                             </li>
@@ -205,13 +263,19 @@ export function NavigationMenu() {
                 }
 
                 return (
-                  <li key={item.href} className="py-1 px-2">
+                  <li key={item.href} className="py-1 px-1">
                     <Link
                       href={item.href || "#"}
                       lang={item.lang}
                       onClick={closeMenu}
-                      className="flex items-center min-h-[44px] py-1 text-base font-bold text-[var(--ink)] hover:text-[var(--accent)] hover:bg-[var(--paper)] rounded-md transition-colors"
+                      className="flex items-center gap-3 min-h-[44px] py-1 text-base font-bold text-[var(--ink)] hover:text-[var(--accent)] hover:bg-[var(--paper)] rounded-md transition-colors"
                     >
+                      <span
+                        aria-hidden="true"
+                        className="inline-flex w-7 shrink-0 items-center justify-center text-xl font-normal text-[var(--accent)] [font-family:Arial,sans-serif]"
+                      >
+                        {item.icon}
+                      </span>
                       {item.label}
                     </Link>
                   </li>

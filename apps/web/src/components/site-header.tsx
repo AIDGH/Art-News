@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { MobileSearch } from "@/components/mobile-search";
-import { NavigationMenu } from "@/components/navigation-menu";
+import {
+  DesktopNavigation,
+  NavigationMenu,
+} from "@/components/navigation-menu";
 
 function BrandMark() {
   return (
@@ -34,10 +37,11 @@ export function SiteHeader() {
 
       {/* Main Header Bar */}
       <header className="sticky top-0 z-40 bg-[var(--paper)]/95 backdrop-blur-md border-b border-[var(--line)] shadow-xs">
-        <div className="container min-h-[72px] md:min-h-[84px] flex items-center justify-between gap-4 py-2">
+        <div className="container min-h-[72px] md:min-h-[84px] flex items-center gap-3 xl:gap-5 py-2">
           <BrandMark />
+          <DesktopNavigation />
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="header-mobile-actions flex shrink-0 items-center gap-2 sm:gap-3">
             <MobileSearch />
             <NavigationMenu />
           </div>
