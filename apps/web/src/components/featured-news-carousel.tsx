@@ -146,9 +146,13 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
             >
               ←
             </button>
-            <span aria-live="polite" dir="rtl">
-              {(currentIndex + 1).toLocaleString("fa-IR")} از{" "}
-              {articles.length.toLocaleString("fa-IR")}
+            <span
+              aria-label={`خبر ${(currentIndex + 1).toLocaleString("fa-IR")} از ${articles.length.toLocaleString("fa-IR")}`}
+              aria-live="polite"
+              dir="ltr"
+            >
+              {articles.length.toLocaleString("fa-IR")} از{" "}
+              {(currentIndex + 1).toLocaleString("fa-IR")}
             </span>
             <button
               type="button"
