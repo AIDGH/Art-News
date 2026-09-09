@@ -18,9 +18,12 @@ export function MobileSearch() {
     inputRef.current?.focus();
 
     const updatePosition = () => {
-      const rect = triggerRef.current?.getBoundingClientRect();
+      const header = triggerRef.current?.closest("header");
+      const rect = header?.getBoundingClientRect();
       if (rect) setSearchTop(rect.top + rect.height / 2);
     };
+
+    const frame = requestAnimationFrame(updatePosition);
 
     const handlePointerDown = (event: PointerEvent) => {
       if (
@@ -44,6 +47,7 @@ export function MobileSearch() {
     window.addEventListener("scroll", updatePosition, { passive: true });
 
     return () => {
+      cancelAnimationFrame(frame);
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", updatePosition);
@@ -67,7 +71,8 @@ export function MobileSearch() {
 
   const handleToggle = () => {
     if (!isOpen) {
-      const rect = triggerRef.current?.getBoundingClientRect();
+      const header = triggerRef.current?.closest("header");
+      const rect = header?.getBoundingClientRect();
       if (rect) setSearchTop(rect.top + rect.height / 2);
     }
     setIsOpen((prev) => !prev);
@@ -82,7 +87,7 @@ export function MobileSearch() {
         aria-label={isOpen ? "بستن جست‌وجو" : "جست‌وجو در سایت"}
         aria-expanded={isOpen}
         aria-controls="header-search-bar"
-        className="header-search-trigger w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full border border-[var(--line-dark)] text-[var(--ink)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-colors duration-150 cursor-pointer"
+        className="header-search-trigger w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full border border-[var(--line-dark)] text-[var(--ink)] hover:bg-[var(--paper-deep)] transition-colors duration-150 cursor-pointer"
       >
         <svg
           className="w-[18px] h-[18px] stroke-current fill-none"
@@ -102,7 +107,7 @@ export function MobileSearch() {
           id="header-search-bar"
           role="search"
           aria-label="جست‌وجوی اخبار و مقالات"
-          className="fixed z-[60] flex items-center"
+          className="header-search-popover fixed z-[60] flex items-center"
           style={{
             top: searchTop ?? 0,
             left: "max(16px, calc((100vw - 1280px) / 2))",

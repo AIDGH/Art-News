@@ -209,7 +209,7 @@ export function NavigationMenu() {
                         <Link
                           href={item.href || "#"}
                           onClick={closeMenu}
-                          className="flex flex-1 items-center gap-3 py-1 text-base font-extrabold text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
+                          className="flex flex-1 items-center gap-1.5 py-1 text-base font-extrabold text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
                         >
                           <span
                             aria-hidden="true"
@@ -244,7 +244,7 @@ export function NavigationMenu() {
                               <Link
                                 href={sub.href}
                                 onClick={closeMenu}
-                                className="flex items-center gap-2.5 py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
+                                className="flex items-center gap-1.5 py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
                               >
                                 <span
                                   aria-hidden="true"
@@ -268,7 +268,7 @@ export function NavigationMenu() {
                       href={item.href || "#"}
                       lang={item.lang}
                       onClick={closeMenu}
-                      className="flex items-center gap-3 min-h-[44px] py-1 text-base font-bold text-[var(--ink)] hover:text-[var(--accent)] hover:bg-[var(--paper)] rounded-md transition-colors"
+                      className="flex items-center gap-1.5 min-h-[44px] py-1 text-base font-bold text-[var(--ink)] hover:text-[var(--accent)] hover:bg-[var(--paper)] rounded-md transition-colors"
                     >
                       <span
                         aria-hidden="true"

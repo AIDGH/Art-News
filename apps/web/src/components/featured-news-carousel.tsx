@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import type { Article } from "@/lib/news";
 
 type FeaturedNewsCarouselProps = {
@@ -11,14 +11,39 @@ type FeaturedNewsCarouselProps = {
 
 export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [trackPosition, setTrackPosition] = useState(1);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isTeleporting, setIsTeleporting] = useState(false);
   const dragStartX = useRef<number | null>(null);
   const didDrag = useRef(false);
 
-  const goTo = (index: number) => {
-    setCurrentIndex(Math.min(Math.max(index, 0), articles.length - 1));
+  const slideArticles =
+    articles.length > 1
+      ? [articles[articles.length - 1], ...articles, articles[0]]
+      : articles;
+
+  const moveBy = (step: number) => {
+    if (articles.length < 2) return;
+    setIsTeleporting(false);
+    setCurrentIndex(
+      (current) => (current + step + articles.length) % articles.length,
+    );
+    setTrackPosition((position) => position + step);
   };
+
+  const goTo = (index: number) => {
+    if (index === currentIndex) return;
+    setIsTeleporting(false);
+    setCurrentIndex(index);
+    setTrackPosition(index + 1);
+  };
+
+  useEffect(() => {
+    if (!isTeleporting) return;
+    const frame = requestAnimationFrame(() => setIsTeleporting(false));
+    return () => cancelAnimationFrame(frame);
+  }, [isTeleporting]);
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === "mouse" && event.button !== 0) return;
@@ -27,18 +52,20 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
     dragStartX.current = event.clientX;
     didDrag.current = false;
     setIsDragging(true);
-    event.currentTarget.setPointerCapture(event.pointerId);
   };
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     if (dragStartX.current === null) return;
 
     const distance = event.clientX - dragStartX.current;
-    if (Math.abs(distance) > 5) didDrag.current = true;
+    if (Math.abs(distance) > 5) {
+      didDrag.current = true;
+      if (!event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      }
+    }
 
-    const isPastStart = currentIndex === 0 && distance > 0;
-    const isPastEnd = currentIndex === articles.length - 1 && distance < 0;
-    setDragOffset(isPastStart || isPastEnd ? distance * 0.22 : distance);
+    setDragOffset(distance);
   };
 
   const finishDrag = (
@@ -56,8 +83,24 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
     setDragOffset(0);
     setIsDragging(false);
 
+    if (didDrag.current) {
+      window.setTimeout(() => {
+        didDrag.current = false;
+      }, 0);
+    }
+
     if (cancelled || Math.abs(distance) < 56) return;
-    goTo(currentIndex + (distance < 0 ? 1 : -1));
+    moveBy(distance > 0 ? 1 : -1);
+  };
+
+  const handleTransitionEnd = () => {
+    if (trackPosition === 0) {
+      setIsTeleporting(true);
+      setTrackPosition(articles.length);
+    } else if (trackPosition === articles.length + 1) {
+      setIsTeleporting(true);
+      setTrackPosition(1);
+    }
   };
 
   if (articles.length === 0) return null;
@@ -78,53 +121,48 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
         onPointerUp={finishDrag}
       >
         <div
-          className={`featured-carousel-track${isDragging ? " is-dragging" : ""}`}
+          className={`featured-carousel-track${isDragging ? " is-dragging" : ""}${isTeleporting ? " is-teleporting" : ""}`}
+          onTransitionEnd={handleTransitionEnd}
           style={{
-            transform: `translate3d(calc(-${currentIndex * 100}% + ${dragOffset}px), 0, 0)`,
+            transform: `translate3d(calc(${trackPosition * 100}% + ${dragOffset}px), 0, 0)`,
           }}
         >
-          {articles.map((article, index) => (
+          {slideArticles.map((article, slideIndex) => {
+            const articleIndex =
+              articles.length > 1
+                ? (slideIndex - 1 + articles.length) % articles.length
+                : 0;
+            const isCurrent = slideIndex === trackPosition;
+
+            return (
             <article
               className="featured-carousel-slide"
-              aria-hidden={index !== currentIndex}
+              aria-hidden={!isCurrent}
               dir="rtl"
-              key={article.slug}
+              key={`${article.slug}-${slideIndex}`}
             >
               <Image
                 src={article.imageUrl}
                 alt={article.imageAlt}
                 fill
-                loading={index === 0 ? "eager" : "lazy"}
+                loading={articleIndex === 0 ? "eager" : "lazy"}
                 draggable={false}
                 sizes="(max-width: 820px) 100vw, 1280px"
               />
               <div className="featured-carousel-overlay" />
+              <Link
+                className="featured-carousel-hit-area"
+                href={`/articles/${article.slug}`}
+                aria-label={`مشاهده خبر: ${article.title}`}
+                draggable={false}
+                tabIndex={isCurrent ? 0 : -1}
+              />
               <div className="featured-carousel-copy">
-                <Link
-                  className="featured-carousel-category"
-                  href={`/category/${article.category.slug}`}
-                  tabIndex={index === currentIndex ? 0 : -1}
-                >
-                  خبر مهم · {article.category.title}
-                </Link>
-                {index === 0 ? (
-                  <h1>
-                    <Link
-                      href={`/articles/${article.slug}`}
-                      tabIndex={index === currentIndex ? 0 : -1}
-                    >
-                      {article.title}
-                    </Link>
-                  </h1>
+                <span className="featured-carousel-category">خبر مهم</span>
+                {articleIndex === 0 ? (
+                  <h1>{article.title}</h1>
                 ) : (
-                  <h2>
-                    <Link
-                      href={`/articles/${article.slug}`}
-                      tabIndex={index === currentIndex ? 0 : -1}
-                    >
-                      {article.title}
-                    </Link>
-                  </h2>
+                  <h2>{article.title}</h2>
                 )}
                 <p>{article.lead}</p>
                 <div className="featured-carousel-meta">
@@ -133,32 +171,33 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
                 </div>
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
 
         {articles.length > 1 ? (
           <div className="featured-carousel-controls" dir="ltr">
             <button
               type="button"
-              aria-label="خبر مهم قبلی"
-              disabled={currentIndex === 0}
-              onClick={() => goTo(currentIndex - 1)}
+              aria-label="خبر مهم بعدی"
+              onClick={() => moveBy(1)}
             >
               ←
             </button>
             <span
+              className="featured-carousel-counter"
               aria-label={`خبر ${(currentIndex + 1).toLocaleString("fa-IR")} از ${articles.length.toLocaleString("fa-IR")}`}
               aria-live="polite"
-              dir="ltr"
+              dir="rtl"
             >
-              {articles.length.toLocaleString("fa-IR")} از{" "}
-              {(currentIndex + 1).toLocaleString("fa-IR")}
+              <b>{(currentIndex + 1).toLocaleString("fa-IR")}</b>
+              <i>از</i>
+              <b>{articles.length.toLocaleString("fa-IR")}</b>
             </span>
             <button
               type="button"
-              aria-label="خبر مهم بعدی"
-              disabled={currentIndex === articles.length - 1}
-              onClick={() => goTo(currentIndex + 1)}
+              aria-label="خبر مهم قبلی"
+              onClick={() => moveBy(-1)}
             >
               →
             </button>
