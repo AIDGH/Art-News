@@ -5,7 +5,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 enum UserRole {
@@ -44,8 +44,8 @@ model User {
   passwordHash String
   role         UserRole  @default(AUTHOR)
   articles     Article[]
-  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime  @updatedAt @db.Timestamptz(6)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model Category {
@@ -55,8 +55,8 @@ model Category {
   description String?
   sortOrder   Int       @default(0)
   articles    Article[]
-  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime  @updatedAt @db.Timestamptz(6)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Article {
@@ -68,7 +68,7 @@ model Article {
   status              PublicationStatus   @default(DRAFT)
   seoTitle            String?
   seoDescription      String?
-  publishedAt         DateTime?            @db.Timestamptz(6)
+  publishedAt         DateTime?           
   authorId            String
   categoryId          String
   coverImageId        String?
@@ -78,8 +78,8 @@ model Article {
   tags                ArticleTag[]
   sources             ArticleSource[]
   homepagePlacements  HomepagePlacement[]
-  createdAt           DateTime              @default(now()) @db.Timestamptz(6)
-  updatedAt           DateTime              @updatedAt @db.Timestamptz(6)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
 
   @@index([status, publishedAt])
   @@index([categoryId, status, publishedAt])
@@ -91,8 +91,8 @@ model Tag {
   slug      String       @unique
   title     String       @unique
   articles  ArticleTag[]
-  createdAt DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime     @updatedAt @db.Timestamptz(6)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 model ArticleTag {
@@ -118,8 +118,8 @@ model MediaAsset {
   focalPointX     Float?
   focalPointY     Float?
   coveredArticles Article[] @relation("ArticleCover")
-  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime  @updatedAt @db.Timestamptz(6)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model ArticleSource {
@@ -129,8 +129,8 @@ model ArticleSource {
   title       String?
   publisher   String?
   author      String?
-  publishedAt DateTime? @db.Timestamptz(6)
-  accessedAt  DateTime  @default(now()) @db.Timestamptz(6)
+  publishedAt DateTime?
+  accessedAt  DateTime  @default(now())
   article     Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
 
   @@index([articleId])
@@ -141,11 +141,11 @@ model HomepagePlacement {
   articleId    String
   slot         HomepageSlot
   displayOrder Int          @default(0)
-  startsAt     DateTime?     @db.Timestamptz(6)
-  endsAt       DateTime?     @db.Timestamptz(6)
+  startsAt     DateTime?    
+  endsAt       DateTime?    
   article      Article      @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  createdAt    DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime     @updatedAt @db.Timestamptz(6)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
   @@unique([articleId, slot])
   @@index([slot, displayOrder])

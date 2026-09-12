@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 import type { EnvironmentVariables } from "../config/environment";
 import { PrismaClient } from "../generated/prisma/client";
 
@@ -11,7 +11,7 @@ export class PrismaService
 {
   constructor(configService: ConfigService<EnvironmentVariables, true>) {
     const connectionString = configService.get("DATABASE_URL", { infer: true });
-    const adapter = new PrismaPg({ connectionString });
+    const adapter = new PrismaLibSql({ url: connectionString });
     super({ adapter });
   }
 

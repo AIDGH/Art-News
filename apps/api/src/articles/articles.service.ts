@@ -71,8 +71,8 @@ export class ArticlesService {
       ...(search
         ? {
             OR: [
-              { title: { contains: search, mode: "insensitive" as const } },
-              { lead: { contains: search, mode: "insensitive" as const } },
+              { title: { contains: search } },
+              { lead: { contains: search } },
             ],
           }
         : {}),
