@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -89,143 +89,86 @@ function BaleIcon({ className = "w-6 h-6" }: { className?: string }) {
 
 export default function AboutPage() {
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-16 flex justify-center">
-      <main className="w-full max-w-3xl bg-[var(--surface)] border border-[var(--line)] rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm">
-
+    <div className="w-full px-5 sm:px-8 py-12 sm:py-16 flex justify-center transition-colors duration-300">
+      <main className="w-full max-w-2xl">
         {/* Main Title */}
-        <h1 className="text-xl sm:text-3xl font-black text-center text-[var(--ink)] mb-6">
-          پایگاه خبری سینما نمایش
+        <h1 className="border-t border-gray-300 pt-4 text-4xl sm:text-5xl font-black text-gray-900 mb-8 tracking-tight">
+          درباره سینما نمایش
         </h1>
 
         {/* Editorial Intro Text */}
-        <p className="text-sm sm:text-base leading-[2.2] sm:leading-[2.2] text-justify sm:text-center text-[var(--ink-soft)] mb-8">
-          «سینما نمایش» رسانه‌ای مستقل در حوزه سینما، تئاتر، تلویزیون و هنرهای
-          نمایشی است. با تکیه بر تجربه «اکران نیوز»، روایتی موثق و تحلیلی از
-          رویدادهای فرهنگی ارائه می‌دهیم.
-        </p>
-
-        {/* License Badge */}
-        <div className="flex justify-center mb-10">
-          <a
-            href="https://e-rasaneh.ir/Certificate/101661"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--line)] text-xs font-medium text-[var(--ink-soft)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
-            aria-label="مشاهده گواهی رسمی رسانه در سامانه جامع رسانه‌ها"
-          >
-            <span className="text-[var(--accent)] text-sm">✦</span>
-            <span>
-              مجوز رسمی وزارت فرهنگ و ارشاد — شناسه{" "}
-              <strong className="font-bold">۱۰۱۶۶۱</strong>
-            </span>
-            <span aria-hidden="true" className="opacity-40">↗</span>
-          </a>
+        <div className="space-y-6 text-base sm:text-lg leading-[2.2] text-gray-800 text-justify sm:text-right font-medium">
+          <p>
+            «سینما نمایش» رسانه‌ای مستقل در حوزه سینما، تئاتر، تلویزیون و هنرهای
+            نمایشی است. با تکیه بر تجربه «اکران نیوز»، روایتی موثق و تحلیلی از
+            رویدادهای فرهنگی ارائه می‌دهیم.
+          </p>
+          
+          <p className="text-sm sm:text-base flex flex-wrap items-center gap-1.5 pt-6 text-gray-800">
+            <span className="opacity-90">فعالیت این رسانه تحت نظارت</span>
+            <a
+              href="https://e-rasaneh.ir/Certificate/101661"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-bold text-[var(--accent)] hover:opacity-80 transition-opacity"
+              aria-label="مشاهده گواهی رسمی رسانه در سامانه جامع رسانه‌ها"
+            >
+              <span>وزارت فرهنگ و ارشاد اسلامی</span>
+              <span aria-hidden="true" className="text-xs">↗</span>
+            </a>
+            <span className="opacity-90">با شناسه <strong className="font-bold">۱۰۱۶۶۱</strong> می‌باشد.</span>
+          </p>
         </div>
 
         {/* Clean Divider */}
-        <hr className="border-[var(--line)] border-t mb-8" />
+        <div className="w-12 h-1 bg-[var(--accent)] my-12 rounded-full opacity-80" />
 
-        {/* Social Media Heading */}
-        <h2 className="text-center text-sm font-bold text-[var(--ink-soft)] mb-6 opacity-80">
-          شبکه‌های اجتماعی
-        </h2>
+        {/* Social Media & Back Link Row */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mt-12">
+          <div className="flex items-center gap-3">
+            <a
+              href="https://instagram.com/cinemanamayesh_ir"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="صفحه اینستاگرام"
+              className="w-12 h-12 rounded-full border border-gray-300 bg-transparent flex items-center justify-center text-gray-700 hover:text-orange-500 hover:border-orange-500 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+            >
+              <InstagramIcon className="w-5 h-5" />
+            </a>
+            
+            <div
+              aria-label="کانال تلگرام — به‌زودی"
+              className="w-12 h-12 rounded-full border border-gray-300 bg-transparent flex items-center justify-center text-gray-700 hover:text-orange-500 hover:border-orange-500 cursor-not-allowed relative group transition-all duration-300"
+            >
+              <TelegramIcon className="w-5 h-5" />
+              <span className="absolute -top-10 bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-sm z-10">به‌زودی</span>
+            </div>
 
-        {/* Grid: 1 column on mobile, 2 on desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+              aria-label="کانال یوتیوب — به‌زودی"
+              className="w-12 h-12 rounded-full border border-gray-300 bg-transparent flex items-center justify-center text-gray-700 hover:text-orange-500 hover:border-orange-500 cursor-not-allowed relative group transition-all duration-300"
+            >
+              <YouTubeIcon className="w-5 h-5" />
+              <span className="absolute -top-10 bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-sm z-10">به‌زودی</span>
+            </div>
 
-          {/* Instagram — active */}
-          <a
-            href="https://instagram.com/cinemanamayesh_ir"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="صفحه اینستاگرام سینما نمایش"
-            className="group w-full flex flex-col items-center p-4 border border-[var(--line)] rounded-2xl bg-[var(--paper)] hover:border-pink-400 hover:shadow-md transition-all duration-200 gap-3"
-          >
-            <div className="w-12 h-12 rounded-full bg-pink-500/10 flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform duration-200">
-              <InstagramIcon className="w-6 h-6" />
+            <div
+              aria-label="کانال بله — به‌زودی"
+              className="w-12 h-12 rounded-full border border-gray-300 bg-transparent flex items-center justify-center text-gray-700 hover:text-orange-500 hover:border-orange-500 cursor-not-allowed relative group transition-all duration-300"
+            >
+              <BaleIcon className="w-5 h-5" />
+              <span className="absolute -top-10 bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-sm z-10">به‌زودی</span>
             </div>
-            <div className="text-center">
-              <span className="block text-sm font-extrabold text-[var(--ink)] group-hover:text-pink-600 transition-colors">
-                اینستاگرام
-              </span>
-              <span className="block text-[11px] font-mono text-[var(--ink-soft)]/70 mt-0.5">
-                @cinemanamayesh_ir
-              </span>
-            </div>
-            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-              فعال
-            </span>
-          </a>
-
-          {/* Telegram — placeholder */}
-          <div
-            aria-label="کانال تلگرام — به‌زودی"
-            className="w-full flex flex-col items-center p-4 border border-[var(--line)] rounded-2xl bg-[var(--paper)]/50 opacity-70 select-none cursor-default gap-3"
-          >
-            <div className="w-12 h-12 rounded-full bg-sky-500/10 flex items-center justify-center text-sky-400">
-              <TelegramIcon className="w-6 h-6" />
-            </div>
-            <div className="text-center">
-              <span className="block text-sm font-extrabold text-[var(--ink-soft)]">تلگرام</span>
-              <span className="block text-[11px] font-mono text-[var(--ink-soft)]/50 mt-0.5">
-                @cinemanamayesh
-              </span>
-            </div>
-            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200">
-              به‌زودی
-            </span>
           </div>
 
-          {/* YouTube — placeholder */}
-          <div
-            aria-label="کانال یوتیوب — به‌زودی"
-            className="w-full flex flex-col items-center p-4 border border-[var(--line)] rounded-2xl bg-[var(--paper)]/50 opacity-70 select-none cursor-default gap-3"
-          >
-            <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-400">
-              <YouTubeIcon className="w-6 h-6" />
-            </div>
-            <div className="text-center">
-              <span className="block text-sm font-extrabold text-[var(--ink-soft)]">یوتیوب</span>
-              <span className="block text-[11px] font-mono text-[var(--ink-soft)]/50 mt-0.5">
-                Cinema Namayesh
-              </span>
-            </div>
-            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200">
-              به‌زودی
-            </span>
-          </div>
-
-          {/* Bale — placeholder */}
-          <div
-            aria-label="کانال بله — به‌زودی"
-            className="w-full flex flex-col items-center p-4 border border-[var(--line)] rounded-2xl bg-[var(--paper)]/50 opacity-70 select-none cursor-default gap-3"
-          >
-            <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-              <BaleIcon className="w-6 h-6" />
-            </div>
-            <div className="text-center">
-              <span className="block text-sm font-extrabold text-[var(--ink-soft)]">بله</span>
-              <span className="block text-[11px] font-mono text-[var(--ink-soft)]/50 mt-0.5">
-                @cinemanamayesh
-              </span>
-            </div>
-            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200">
-              به‌زودی
-            </span>
-          </div>
-
-        </div>
-
-        {/* Back link */}
-        <div className="mt-10 text-center">
+          {/* Back link */}
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--accent)] hover:underline"
+            className="inline-flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-orange-500 transition-colors"
           >
-            <span>← بازگشت به صفحه نخست</span>
+            <span>← بازگشت به خانه</span>
           </Link>
         </div>
-
       </main>
     </div>
   );
