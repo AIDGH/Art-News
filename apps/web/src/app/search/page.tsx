@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArticleCard } from "@/components/article-card";
-import { articles } from "@/lib/news";
+import { fetchArticles } from "@/lib/api";
 
 export const metadata: Metadata = {
   title: "جست‌وجو",
@@ -12,25 +12,10 @@ type SearchPageProps = {
   searchParams: Promise<{ q?: string }>;
 };
 
-function normalizeSearchText(value: string): string {
-  return value
-    .trim()
-    .toLocaleLowerCase("fa-IR")
-    .replaceAll("ي", "ی")
-    .replaceAll("ك", "ک")
-    .replace(/\s+/g, " ");
-}
-
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q = "" } = await searchParams;
-  const query = normalizeSearchText(q);
-  const results = query
-    ? articles.filter((article) =>
-        normalizeSearchText(
-          `${article.title} ${article.lead} ${article.category.title}`,
-        ).includes(query),
-      )
-    : [];
+  const query = q.trim();
+  const results = query ? await fetchArticles({ query, pageSize: 30 }) : [];
 
   return (
     <main className="search-page container">

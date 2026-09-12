@@ -8,21 +8,21 @@ import {
   EcranNewsPromo,
 } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
-import { articles, getArticle } from "@/lib/news";
+import { fetchArticleBySlug, fetchArticles } from "@/lib/api";
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return articles.map((article) => ({ slug: article.slug }));
-}
+// Next.js will fetch params dynamically if not found in static generation
+// For now, we can skip static generation or fetch all slugs from API.
+// Removing `generateStaticParams` for now as it relies on hardcoded data, and Next.js app router automatically handles dynamic routes.
 
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await fetchArticleBySlug(slug);
 
   if (!article) return {};
 
@@ -48,19 +48,14 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await fetchArticleBySlug(slug);
 
   if (!article) notFound();
 
-  const related = articles
+  // Fetch related articles from same category, excluding current
+  const categoryArticles = await fetchArticles({ category: article.category.slug, pageSize: 4 });
+  const related = categoryArticles
     .filter((item) => item.slug !== article.slug)
-    .sort((a, b) =>
-      a.category.slug === article.category.slug
-        ? -1
-        : b.category.slug === article.category.slug
-          ? 1
-          : 0,
-    )
     .slice(0, 3);
   const jsonLd = {
     "@context": "https://schema.org",

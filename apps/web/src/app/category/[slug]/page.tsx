@@ -7,11 +7,8 @@ import {
   AdvertisementPlaceholder,
   EcranNewsPromo,
 } from "@/components/promotion-blocks";
-import {
-  categories,
-  getCategory,
-  getCategoryArticles,
-} from "@/lib/news";
+import { categories, getCategory } from "@/lib/news";
+import { fetchArticles } from "@/lib/api";
 
 type CategoryPageProps = {
   params: Promise<{ slug: string }>;
@@ -42,16 +39,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   if (!category) notFound();
 
-  const directArticles = getCategoryArticles(slug);
-  const categoryArticles =
-    directArticles.length >= 3
-      ? directArticles
-      : [
-          ...directArticles,
-          ...categories
-            .flatMap((item) => getCategoryArticles(item.slug))
-            .filter((article) => article.category.slug !== slug),
-        ].slice(0, 7);
+  const categoryArticles = await fetchArticles({ category: slug, pageSize: 15 });
   const [lead, ...rest] = categoryArticles;
 
   if (!lead) notFound();

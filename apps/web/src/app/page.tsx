@@ -8,6 +8,7 @@ import {
 } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { type Article } from "@/lib/news";
+import { fetchArticles } from "@/lib/api";
 
 const homepageSectionSlugs = [
   "news",
@@ -18,47 +19,9 @@ const homepageSectionSlugs = [
   "world-cinema",
 ];
 
-async function fetchArticles() {
-  try {
-    const res = await fetch("http://localhost:4001/api/v1/articles?pageSize=30", {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) {
-      console.error("Failed to fetch articles:", await res.text());
-      return [];
-    }
-    const json = await res.json();
-    return json.data || [];
-  } catch (error) {
-    console.error("Error fetching articles:", error);
-    return [];
-  }
-}
-
-function mapApiArticleToUi(apiArticle: any): Article {
-  return {
-    slug: apiArticle.slug,
-    title: apiArticle.title,
-    lead: apiArticle.lead,
-    category: apiArticle.category,
-    imageUrl: apiArticle.coverImage?.url || "/images/placeholder.jpg",
-    imageAlt: apiArticle.coverImage?.alt || "",
-    imageCredit: apiArticle.coverImage?.credit || "",
-    publishedAt: apiArticle.publishedAt,
-    publishedLabel: new Intl.DateTimeFormat("fa-IR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }).format(new Date(apiArticle.publishedAt)),
-    readingTime: "۳ دقیقه",
-    author: apiArticle.author?.displayName || apiArticle.author?.username || "",
-    body: [apiArticle.body || ""],
-  };
-}
-
 export default async function HomePage() {
-  const apiArticles = await fetchArticles();
-  const uiArticles = apiArticles.map(mapApiArticleToUi);
+  const uiArticles = await fetchArticles();
+
 
   const featuredArticles = uiArticles.slice(0, 4);
   const sectionArticles = homepageSectionSlugs

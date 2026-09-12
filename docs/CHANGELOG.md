@@ -7,6 +7,10 @@
 - Mapped API payload to the frontend `Article` shape and replaced hardcoded local mock data (`lib/news`).
 - Updated `NewsTicker` component to accept dynamic array of `TickerItem` props instead of static list.
 - Verified CORS configuration in `main.ts` and `.env` (`CORS_ORIGIN=http://localhost:3001`).
+- Centralized API fetching logic in `lib/api.ts` to manage endpoints and data transformation.
+- Updated Article Detail page (`articles/[slug]/page.tsx`) to fetch single articles and their related category articles dynamically.
+- Refactored Category page (`category/[slug]/page.tsx`) to pull category-specific paginated articles directly from the backend.
+- Converted Search page (`search/page.tsx`) to query the API with live search parameters instead of local filtering.
 
 
 ## 2026-09-12 (database transition)
