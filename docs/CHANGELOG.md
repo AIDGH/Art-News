@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-09-12 (frontend API integration)
+
+- Connected the Next.js frontend to fetch data dynamically from the local NestJS API (`/api/v1/articles`).
+- Refactored `page.tsx` (Home) to fetch published articles server-side via `fetch` with Next.js revalidation.
+- Mapped API payload to the frontend `Article` shape and replaced hardcoded local mock data (`lib/news`).
+- Updated `NewsTicker` component to accept dynamic array of `TickerItem` props instead of static list.
+- Verified CORS configuration in `main.ts` and `.env` (`CORS_ORIGIN=http://localhost:3001`).
+
+
 ## 2026-09-12 (database transition)
 
 - Switched local database from PostgreSQL to SQLite for faster, dependency-free local development.

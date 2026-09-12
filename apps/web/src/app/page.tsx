@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FeaturedNewsCarousel } from "@/components/featured-news-carousel";
-import { NewsTicker } from "@/components/news-ticker";
+import { NewsTicker, type TickerItem } from "@/components/news-ticker";
 import {
   AdvertisementPlaceholder,
   EcranNewsPromo,
 } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
-import { articles, getCategoryArticles } from "@/lib/news";
+import { type Article } from "@/lib/news";
 
 const homepageSectionSlugs = [
   "news",
@@ -18,17 +18,66 @@ const homepageSectionSlugs = [
   "world-cinema",
 ];
 
-export default function HomePage() {
-  const featuredArticles = articles.slice(0, 4);
+async function fetchArticles() {
+  try {
+    const res = await fetch("http://localhost:4001/api/v1/articles?pageSize=30", {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) {
+      console.error("Failed to fetch articles:", await res.text());
+      return [];
+    }
+    const json = await res.json();
+    return json.data || [];
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    return [];
+  }
+}
+
+function mapApiArticleToUi(apiArticle: any): Article {
+  return {
+    slug: apiArticle.slug,
+    title: apiArticle.title,
+    lead: apiArticle.lead,
+    category: apiArticle.category,
+    imageUrl: apiArticle.coverImage?.url || "/images/placeholder.jpg",
+    imageAlt: apiArticle.coverImage?.alt || "",
+    imageCredit: apiArticle.coverImage?.credit || "",
+    publishedAt: apiArticle.publishedAt,
+    publishedLabel: new Intl.DateTimeFormat("fa-IR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(new Date(apiArticle.publishedAt)),
+    readingTime: "۳ دقیقه",
+    author: apiArticle.author?.displayName || apiArticle.author?.username || "",
+    body: [apiArticle.body || ""],
+  };
+}
+
+export default async function HomePage() {
+  const apiArticles = await fetchArticles();
+  const uiArticles = apiArticles.map(mapApiArticleToUi);
+
+  const featuredArticles = uiArticles.slice(0, 4);
   const sectionArticles = homepageSectionSlugs
-    .map((slug) => getCategoryArticles(slug)[0])
-    .filter((article) => article !== undefined);
+    .map((slug) => uiArticles.find((a) => a.category.slug === slug))
+    .filter((article) => article !== undefined) as Article[];
+
+  const tickerItems: TickerItem[] = uiArticles.slice(0, 8).map((a) => ({
+    id: a.slug,
+    headline: a.title,
+    href: `/articles/${a.slug}`,
+  }));
 
   return (
     <main>
-      <NewsTicker />
+      <NewsTicker items={tickerItems} />
 
-      <FeaturedNewsCarousel articles={featuredArticles} />
+      {featuredArticles.length > 0 && (
+        <FeaturedNewsCarousel articles={featuredArticles} />
+      )}
 
       <section className="container promotion-stack promotion-stack-compact">
         <EcranNewsPromo />

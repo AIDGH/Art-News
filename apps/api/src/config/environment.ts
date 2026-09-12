@@ -23,6 +23,6 @@ export const environmentValidationSchema = Joi.object<EnvironmentVariables>({
     .falsy("false")
     .default(nodeEnvironment !== "production"),
   DATABASE_URL: Joi.string()
-    .uri({ scheme: ["postgresql", "postgres"] })
+    .uri({ scheme: ["postgresql", "postgres", "file"] })
     .required(),
 });
