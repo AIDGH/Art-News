@@ -29,7 +29,7 @@ Art News نام فنی پروژه رسانه خبری فارسی و RTL «سین
 پایه فنی و قالب اولیه قابل‌نمایش پیاده‌سازی شده‌اند. پروژه اکنون monorepo فعال
 با Next.js frontend، NestJS API و Prisma schema معتبر دارد. صفحه اصلی،
 دسته‌بندی، جزئیات خبر و جست‌وجو با داده typed نمایشی build می‌شوند. اتصال
-frontend به PostgreSQL/API و CMS تحریریه مرحله بعد است. ۹ تصویرسازی نمایشی
+frontend به SQLite/API و CMS تحریریه مرحله بعد است. ۹ تصویرسازی نمایشی
 اختصاصی به‌صورت WebP محلی جایگزین تصویرهای remote قالب شده‌اند و دو خبر نمونه
 ارائه‌شده توسط کاربر نیز با تصویر محلی و متن کامل در سایت قرار دارند. هدر
 دسکتاپ ناوبری افقی دسته‌بندی‌ها را کنار لوگو نمایش می‌دهد و منوی همبرگری
@@ -50,13 +50,13 @@ NestJS REST API
   ↓
 Prisma ORM
   ↓
-PostgreSQL
+SQLite
 ```
 
 - Monorepo با pnpm workspaces
 - Frontend: Next.js، React، TypeScript، App Router
 - Backend: NestJS، TypeScript، REST API نسخه‌بندی‌شده
-- Database: PostgreSQL با Prisma ORM
+- Database: SQLite با Prisma ORM
 - معماری Backend: Modular Monolith
 - رابط: Persian-first و RTL
 - پورت‌های پیش‌فرض توسعه: frontend روی `3001` و API روی `4001`
@@ -148,7 +148,7 @@ Drag/Swipe کنترل می‌شود و تپ روی تمام سطح هر اسلا
 - داده‌های قالب فعلاً نمایشی هستند.
 - frontend عمومی هنوز داده را از API دریافت نمی‌کند.
 - CMS و authentication هنوز پیاده‌سازی نشده‌اند.
-- PostgreSQL محلی هنوز provision نشده است.
+- پایگاه داده SQLite محلی آماده و با داده‌های نمایشی (dummy) مقداردهی اولیه شده است.
 - سیاست editorial، source verification و correction policy نیاز به تأیید دارد.
 - لوگوی هدر تأیید و اعمال شده است؛ سایر اجزای هویت بصری هنوز نیازمند تأییدند.
 - لوگو و لینک رسمی اکران نیوز و محتوای واقعی تبلیغات هنوز دریافت نشده‌اند.

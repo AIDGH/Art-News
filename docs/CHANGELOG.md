@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-12 (database transition)
+
+- Switched local database from PostgreSQL to SQLite for faster, dependency-free local development.
+- Removed PostgreSQL specific data types (Timestamptz) from Prisma schema.
+- Fixed Prisma driver adapters and execution issues by transitioning to `@libsql/client` and utilizing `tsx` for TypeScript execution.
+- Successfully seeded the local `dev.db` SQLite database with initial dummy data.
+
 ## 2026-09-09 (navigation, search and carousel polish)
 
 - تبدیل اسلایدر خبرهای مهم به حلقه پیوسته؛ عبور از خبر چهارم به اول و از اول به چهارم بدون توقف انجام می‌شود.

@@ -9,7 +9,7 @@
 - [ ] دریافت مشخصات جایگاه‌های تبلیغاتی
 - [x] پیاده‌سازی نوار متحرک اخبار تازه ✓ (تکمیل‌شد ۲۰۲۶-۰۹-۰۹)
 - [ ] اتصال frontend به NestJS API
-- [ ] ایجاد اولین Prisma migration پس از آماده‌شدن PostgreSQL محلی
+- [x] ایجاد اولین Prisma migration و راه‌اندازی SQLite محلی همراه با seed داده‌های نمایشی
 
 ## Completed foundation
 
