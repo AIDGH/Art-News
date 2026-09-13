@@ -922,12 +922,12 @@ img {
 
 .mobile-menu-item {
   position: relative;
-  padding-inline: 15px 8px;
+  padding-inline: 20px 8px;
 }
 
 .mobile-menu-item::before {
   position: absolute;
-  width: 3px;
+  width: 8px;
   inset-block: 0;
   inset-inline-start: 0;
   background: var(--menu-accent);
