@@ -1,8 +1,23 @@
-import { Article } from "./news";
+import { Article, type Category } from "./news";
 
-export const API_BASE_URL = "http://localhost:4001/api/v1";
+export const API_BASE_URL = (process.env.API_BASE_URL ?? "http://localhost:4001/api/v1").replace(/\/$/, "");
 
-export function mapApiArticleToUi(apiArticle: any): Article {
+type ApiArticle = {
+  slug: string;
+  title: string;
+  lead: string;
+  body: string;
+  category: Category;
+  coverImage?: { url: string; alt: string; credit?: string | null } | null;
+  publishedAt: string;
+  author?: { displayName?: string; username?: string };
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  tags?: Array<{ tag: { slug: string; title: string } }>;
+  sources?: Array<{ url: string; title?: string | null; publisher?: string | null }>;
+};
+
+export function mapApiArticleToUi(apiArticle: ApiArticle): Article {
   return {
     slug: apiArticle.slug,
     title: apiArticle.title,
@@ -17,10 +32,42 @@ export function mapApiArticleToUi(apiArticle: any): Article {
       month: "long",
       day: "numeric",
     }).format(new Date(apiArticle.publishedAt)),
-    readingTime: "۳ دقیقه", // Mock reading time for now
+    readingTime: `${Math.max(1, Math.ceil(apiArticle.body.trim().split(/\s+/).length / 220)).toLocaleString("fa-IR")} دقیقه`,
     author: apiArticle.author?.displayName || apiArticle.author?.username || "",
-    body: [apiArticle.body || ""],
+    body: (apiArticle.body || "").split(/\n\s*\n/).filter(Boolean),
+    seoTitle: apiArticle.seoTitle || undefined,
+    seoDescription: apiArticle.seoDescription || undefined,
+    tags: apiArticle.tags?.map(({ tag }) => tag) || [],
+    sources: apiArticle.sources?.map((source) => ({
+      url: source.url,
+      title: source.title || undefined,
+      publisher: source.publisher || undefined,
+    })) || [],
   };
+}
+
+export async function fetchFeaturedArticles(): Promise<Article[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/articles/featured`, { next: { revalidate: 60 } });
+    if (!response.ok) return [];
+    const json = (await response.json()) as { data?: ApiArticle[] };
+    return (json.data || []).map(mapApiArticleToUi);
+  } catch (error) {
+    console.error("Error fetching featured articles:", error);
+    return [];
+  }
+}
+
+export async function fetchCategoryBySlug(slug: string): Promise<Category | undefined> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/categories`, { next: { revalidate: 60 } });
+    if (!response.ok) return undefined;
+    const json = (await response.json()) as { data?: Array<Category & { articleCount: number }> };
+    return json.data?.find((category) => category.slug === slug);
+  } catch (error) {
+    console.error(`Error fetching category ${slug}:`, error);
+    return undefined;
+  }
 }
 
 export async function fetchArticles(params?: { category?: string; query?: string; pageSize?: number }): Promise<Article[]> {

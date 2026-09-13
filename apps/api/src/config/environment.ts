@@ -6,6 +6,9 @@ export type EnvironmentVariables = {
   CORS_ORIGIN: string;
   SWAGGER_ENABLED: boolean;
   DATABASE_URL: string;
+  SESSION_SECRET: string;
+  SESSION_TTL_HOURS: number;
+  UPLOAD_DIRECTORY: string;
 };
 
 const nodeEnvironment = process.env.NODE_ENV ?? "development";
@@ -25,4 +28,11 @@ export const environmentValidationSchema = Joi.object<EnvironmentVariables>({
   DATABASE_URL: Joi.string()
     .uri({ scheme: ["postgresql", "postgres", "file"] })
     .required(),
+  SESSION_SECRET: Joi.string().min(32).when("NODE_ENV", {
+    is: "production",
+    then: Joi.required(),
+    otherwise: Joi.string().default("local-art-news-session-secret-change-me"),
+  }),
+  SESSION_TTL_HOURS: Joi.number().integer().min(1).max(720).default(168),
+  UPLOAD_DIRECTORY: Joi.string().default("../web/public/uploads"),
 });

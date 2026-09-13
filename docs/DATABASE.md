@@ -2,13 +2,14 @@
 
 ## Overview
 
-Database اصلی PostgreSQL و ORM پروژه Prisma است.
+Database فعلی SQLite و ORM پروژه Prisma است. فایل توسعه `apps/api/dev.db` داخل
+Git قرار نمی‌گیرد. مهاجرت احتمالی آینده به PostgreSQL یک تصمیم استقراری جداست.
 
 ## Core Models
 
 ### User
 
-عضو تحریریه با roleهای `AUTHOR`، `EDITOR` و `ADMIN`.
+عضو سینما نمایش با roleهای `AUTHOR`، `EDITOR` و `ADMIN`.
 
 ### Article
 
@@ -55,3 +56,6 @@ ARCHIVED
 - query عمومی فقط `PUBLISHED` با `publishedAt <= now` را نمایش می‌دهد.
 - حذف خبر منتشرشده باید به archive ترجیح داده شود.
 - migrationها تنها مسیر تغییر schema هستند.
+- password کاربر با scrypt hash می‌شود و رمز خام ذخیره نمی‌شود.
+- انتخاب خبر مهم با رکورد HomepagePlacement از نوع LEAD و displayOrder کنترل
+  می‌شود؛ صفحه اصلی این ترتیب را مستقیماً از API دریافت می‌کند.

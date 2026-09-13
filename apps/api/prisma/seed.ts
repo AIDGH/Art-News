@@ -1,5 +1,6 @@
 import { PrismaClient } from '../src/generated/prisma/client'
 import { PrismaLibSql } from '@prisma/adapter-libsql'
+import { hashPassword } from '../src/auth/password'
 
 const adapter = new PrismaLibSql({ url: 'file:dev.db' })
 const prisma = new PrismaClient({ adapter })
@@ -30,11 +31,11 @@ const articles = [
     category: categoryBySlug["news"],
     imageUrl: "/images/articles/shootinga-cast-return.jpg",
     imageAlt: "بازیگران فیلم شوتینگا سوار بر یک خودروی کلاسیک در جاده‌ای جنگلی",
-    imageCredit: "تصویر ارائه‌شده برای نمونه؛ اعتبار نهایی در انتظار اعلام تحریریه",
+    imageCredit: "تصویر ارائه‌شده برای نمونه؛ اعتبار نهایی در انتظار اعلام سینما نمایش",
     publishedAt: "2026-09-08T08:30:00.000Z",
     publishedLabel: "۱۷ شهریور ۱۴۰۵، ۱۲:۰۰",
     readingTime: "۲ دقیقه",
-    author: "تحریریه سینما نمایش",
+    author: "سینما نمایش",
     featured: true,
     body: [
       "علی فروتن، محمد مسلمی و حمید گلی، چهره‌های محبوب و خاطره‌ساز چند نسل، پس از ۱۴ سال در فیلم سینمایی «شوتینگا» در کنار یکدیگر به سینما بازمی‌گردند.",
@@ -49,11 +50,11 @@ const articles = [
     category: categoryBySlug["news"],
     imageUrl: "/images/articles/bot-leila-hatami-first-look.jpg",
     imageAlt: "لیلا حاتمی با تاج و پوشش آبی در نمایی از فیلم بُت",
-    imageCredit: "تصویر ارائه‌شده برای نمونه؛ اعتبار نهایی در انتظار اعلام تحریریه",
+    imageCredit: "تصویر ارائه‌شده برای نمونه؛ اعتبار نهایی در انتظار اعلام سینما نمایش",
     publishedAt: "2026-09-08T07:45:00.000Z",
     publishedLabel: "۱۷ شهریور ۱۴۰۵، ۱۱:۱۵",
     readingTime: "۲ دقیقه",
-    author: "تحریریه سینما نمایش",
+    author: "سینما نمایش",
     featured: true,
     body: [
       "با اعلام زمان اکران فیلم «بُت»، نخستین تصویر از تازه‌ترین ساخته حمید نعمت‌الله منتشر شد. این فیلم به تهیه‌کنندگی و کارگردانی حمید نعمت‌الله و با پخش فیلمیران، از اوایل پاییز روی پرده سینماها می‌رود.",
@@ -72,13 +73,13 @@ const articles = [
     publishedAt: "2026-08-31T07:30:00.000Z",
     publishedLabel: "۹ شهریور ۱۴۰۵، ۱۱:۰۰",
     readingTime: "۶ دقیقه",
-    author: "تحریریه سینما نمایش",
+    author: "سینما نمایش",
     featured: true,
     body: [
       "این خبر برای نمایش قالب اولیه رسانه سینمایی نوشته شده و به رویداد واقعی اشاره نمی‌کند.",
       "در این پروژه فرضی، گروه طراحی صحنه چند هفته پیش از آغاز فیلم‌برداری ساخت دکورها و آزمون رنگ را شروع کرده است.",
       "ساختار صفحه خبر طوری طراحی شده که تصویر اصلی، تیتر، لید و اطلاعات انتشار بدون ازدحام در اختیار مخاطب موبایل قرار بگیرند.",
-      "پس از تأیید قالب، این متن‌های نمایشی با محتوای واقعی تحریریه و داده‌های API جایگزین خواهند شد.",
+      "پس از تأیید قالب، این متن‌های نمایشی با محتوای واقعی سینما نمایش و داده‌های API جایگزین خواهند شد.",
     ],
   },
   {
@@ -145,7 +146,7 @@ const articles = [
     readingTime: "۵ دقیقه",
     author: "مریم پورآزاد",
     body: [
-      "این یادداشت نمایشی است و پس از راه‌اندازی CMS با محتوای واقعی تحریریه جایگزین می‌شود.",
+      "این یادداشت نمایشی است و پس از راه‌اندازی CMS با محتوای واقعی سینما نمایش جایگزین می‌شود.",
       "بخش نقد و یادداشت برای متن‌های تحلیلی و روایت‌هایی در نظر گرفته شده که فراتر از خبر روز هستند.",
     ],
   },
@@ -163,7 +164,7 @@ const articles = [
     author: "پویان مرادی",
     body: [
       "این متن نمایشی برای نشان‌دادن قالب خبرهای تئاتر نوشته شده است.",
-      "در فاز CMS، تحریریه می‌تواند تصویر، زیرنویس، تگ و مطالب مرتبط را مدیریت کند.",
+      "در فاز CMS، سینما نمایش می‌تواند تصویر، زیرنویس، تگ و مطالب مرتبط را مدیریت کند.",
     ],
   },
   {
@@ -194,7 +195,7 @@ const articles = [
     publishedAt: "2026-08-28T14:00:00.000Z",
     publishedLabel: "۶ شهریور ۱۴۰۵، ۱۷:۳۰",
     readingTime: "۳ دقیقه",
-    author: "تحریریه سینما نمایش",
+    author: "سینما نمایش",
     body: [
       "این خبر نمونه برای نمایش محتوای شبکه نمایش خانگی در قالب ساخته شده است.",
       "در نسخه واقعی، اطلاعات پلتفرم، زمان انتشار و منبع رسمی خبر ثبت می‌شوند.",
@@ -220,14 +221,23 @@ const articles = [
 ];
 
 async function main() {
+  const adminEmail = process.env.ADMIN_SEED_EMAIL ?? 'admin@cinemanamayesh.ir';
+  const adminPassword = process.env.ADMIN_SEED_PASSWORD;
+  if (!adminPassword || adminPassword.length < 8) {
+    throw new Error('ADMIN_SEED_PASSWORD must contain at least 8 characters');
+  }
+
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@cinemanamayesh.ir' },
-    update: {},
+    where: { email: adminEmail },
+    update: {
+      displayName: 'سینما نمایش',
+      passwordHash: hashPassword(adminPassword),
+    },
     create: {
-      email: 'admin@cinemanamayesh.ir',
+      email: adminEmail,
       username: 'admin',
-      displayName: 'تحریریه سینما نمایش',
-      passwordHash: 'dummyhash',
+      displayName: 'سینما نمایش',
+      passwordHash: hashPassword(adminPassword),
       role: 'ADMIN',
     },
   });
@@ -251,19 +261,37 @@ async function main() {
       where: { slug: art.category.slug }
     });
 
-    const coverImage = await prisma.mediaAsset.create({
-      data: {
-        url: art.imageUrl,
-        mimeType: 'image/jpeg',
-        alt: art.imageAlt || '',
-        credit: art.imageCredit || '',
-        kind: 'IMAGE',
-      }
+    const existingCoverImage = await prisma.mediaAsset.findFirst({
+      where: { url: art.imageUrl },
     });
+    const coverImage = existingCoverImage
+      ? await prisma.mediaAsset.update({
+          where: { id: existingCoverImage.id },
+          data: {
+            mimeType: 'image/jpeg',
+            alt: art.imageAlt || '',
+            credit: art.imageCredit || '',
+          },
+        })
+      : await prisma.mediaAsset.create({
+          data: {
+            url: art.imageUrl,
+            mimeType: 'image/jpeg',
+            alt: art.imageAlt || '',
+            credit: art.imageCredit || '',
+            kind: 'IMAGE',
+          },
+        });
 
     const createdArticle = await prisma.article.upsert({
       where: { slug: art.slug },
-      update: {},
+      update: {
+        title: art.title,
+        lead: art.lead,
+        body: art.body.join('\n\n'),
+        categoryId: category!.id,
+        coverImageId: coverImage.id,
+      },
       create: {
         slug: art.slug,
         title: art.title,
@@ -278,13 +306,18 @@ async function main() {
     });
 
     if (art.featured) {
-      await prisma.homepagePlacement.create({
-        data: {
+      await prisma.homepagePlacement.upsert({
+        where: {
+          articleId_slot: { articleId: createdArticle.id, slot: 'LEAD' },
+        },
+        update: { displayOrder: i },
+        create: {
           articleId: createdArticle.id,
           slot: 'LEAD',
-          displayOrder: i++,
+          displayOrder: i,
         }
       });
+      i += 1;
     }
   }
 }

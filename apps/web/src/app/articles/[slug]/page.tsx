@@ -27,20 +27,20 @@ export async function generateMetadata({
   if (!article) return {};
 
   return {
-    title: article.title,
-    description: article.lead,
+    title: article.seoTitle || article.title,
+    description: article.seoDescription || article.lead,
     alternates: { canonical: `/articles/${article.slug}` },
     openGraph: {
       type: "article",
-      title: article.title,
-      description: article.lead,
+      title: article.seoTitle || article.title,
+      description: article.seoDescription || article.lead,
       publishedTime: article.publishedAt,
       images: [{ url: article.imageUrl, alt: article.imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
-      title: article.title,
-      description: article.lead,
+      title: article.seoTitle || article.title,
+      description: article.seoDescription || article.lead,
       images: [{ url: article.imageUrl, alt: article.imageAlt }],
     },
   };
@@ -121,13 +121,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {article.body.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
-            <div className="demo-disclaimer">
-              <strong>یادآوری</strong>
-              <p>
-                این مطلب بخشی از نسخه نمایشی قالب است و گزارش یک رویداد واقعی
-                محسوب نمی‌شود.
-              </p>
-            </div>
+            {article.tags && article.tags.length > 0 ? (
+              <div className="article-tags" aria-label="برچسب‌های خبر">
+                {article.tags.map((tag) => <span key={tag.slug}>#{tag.title}</span>)}
+              </div>
+            ) : null}
+            {article.sources && article.sources.length > 0 ? (
+              <section className="article-sources">
+                <h2>منابع خبر</h2>
+                <ul>{article.sources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.title || source.publisher || source.url}</a></li>)}</ul>
+              </section>
+            ) : null}
           </div>
           <aside className="article-side-note">
             <span>در این پرونده</span>

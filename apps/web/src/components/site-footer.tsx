@@ -22,7 +22,7 @@ export function SiteFooter() {
         </nav>
         <div className="footer-note">
           <Link href="/about">درباره ما</Link>
-          <span>تماس با تحریریه</span>
+          <span>تماس با سینما نمایش</span>
           <span>سیاست اصلاح خبر</span>
           <a
             href="https://e-rasaneh.ir/Certificate/101661"

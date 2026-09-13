@@ -7,22 +7,17 @@ import {
   AdvertisementPlaceholder,
   EcranNewsPromo,
 } from "@/components/promotion-blocks";
-import { categories, getCategory } from "@/lib/news";
-import { fetchArticles } from "@/lib/api";
+import { fetchArticles, fetchCategoryBySlug } from "@/lib/api";
 
 type CategoryPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return categories.map((category) => ({ slug: category.slug }));
-}
-
 export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = getCategory(slug);
+  const category = await fetchCategoryBySlug(slug);
 
   if (!category) return {};
 
@@ -35,7 +30,7 @@ export async function generateMetadata({
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  const category = getCategory(slug);
+  const category = await fetchCategoryBySlug(slug);
 
   if (!category) notFound();
 

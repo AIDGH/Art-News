@@ -2,7 +2,7 @@
 
 پروژه یک رسانه خبری فارسی و RTL با تمرکز بر سینما، تئاتر، تلویزیون و شبکه
 نمایش خانگی است. این repository به‌صورت monorepo نگهداری می‌شود و در نسخه
-نهایی شامل Next.js frontend، NestJS API، PostgreSQL و Prisma خواهد بود.
+فعلی شامل Next.js frontend، NestJS API، SQLite و Prisma است.
 
 نام فعلی برند عمومی سایت «سینما نمایش» است؛ نام فنی repository همچنان
 `Art-News` باقی می‌ماند.
@@ -12,8 +12,7 @@
 
 ## Current phase
 
-فاز فعلی ساخت قالب نمایشی محصول با داده‌های نمونه است تا ساختار صفحه اصلی،
-صفحه دسته‌بندی و صفحه خبر پیش از تکمیل CMS تأیید شوند.
+فاز فعلی شامل سایت عمومی متصل به API و MVP پنل سینما نمایش برای ثبت و انتشار خبر است.
 
 ## Applications
 
@@ -28,12 +27,14 @@ apps/api   NestJS REST API
 pnpm install
 cp apps/api/.env.example apps/api/.env
 pnpm api:prisma:generate
+ADMIN_SEED_PASSWORD="یک-رمز-حداقل-هشت-کاراکتری" pnpm --filter @art-news/api exec tsx prisma/seed.ts
 pnpm web:dev
 pnpm api:dev
 ```
 
-Frontend به‌تنهایی با داده نمایشی اجرا می‌شود. اجرای API به PostgreSQL محلی و
-`DATABASE_URL` معتبر نیاز دارد.
+SQLite محلی با `DATABASE_URL=file:dev.db` اجرا می‌شود. رمز seed در Git ذخیره
+نمی‌شود و باید هنگام اجرای seed تعیین شود. پنل در `http://localhost:3001/admin`
+در دسترس است.
 
 آدرس‌های پیش‌فرض محیط توسعه:
 

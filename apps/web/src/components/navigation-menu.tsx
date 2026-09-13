@@ -1,43 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 interface SubItem {
   href: string;
-  icon: string;
   label: string;
 }
 
 interface MenuItem {
   href?: string;
-  icon: string;
+  color: string;
   label: string;
   lang?: string;
   subItems?: SubItem[];
 }
 
 const menuItems: MenuItem[] = [
-  { href: "/", icon: "⌂", label: "صفحه نخست" },
+  { href: "/", color: "#92908a", label: "صفحه نخست" },
   {
-    icon: "◉◉",
+    color: "#2878b8",
     label: "سینما",
     href: "/category/cinema",
     subItems: [
-      { href: "/category/news", icon: "▤", label: "خبر" },
-      { href: "/category/reviews-notes", icon: "✎", label: "نقد و یادداشت" },
-      { href: "/category/interviews", icon: "❝", label: "گفت‌وگو" },
-      { href: "/category/screenings", icon: "◫", label: "نمایش" },
+      { href: "/category/news", label: "خبر" },
+      { href: "/category/reviews-notes", label: "نقد و یادداشت" },
+      { href: "/category/interviews", label: "گفت‌وگو" },
+      { href: "/category/screenings", label: "نمایش" },
     ],
   },
-  { href: "/category/theater", icon: "╰╯", label: "تئاتر" },
-  { href: "/category/television", icon: "▣⌄", label: "تلویزیون" },
-  { href: "/category/home-video", icon: "⌂▷", label: "شبکه نمایش خانگی" },
-  { href: "/category/world-cinema", icon: "⊕◉", label: "سینمای جهان" },
-  { href: "/category/photos", icon: "▧", label: "عکس" },
-  { href: "/category/videos", icon: "▷│", label: "فیلم" },
-  { href: "/english", icon: "A", label: "English", lang: "en" },
-  { href: "/about", icon: "ⓘ", label: "درباره ما" },
+  { href: "/category/theater", color: "#9c4aa5", label: "تئاتر" },
+  { href: "/category/television", color: "#df8c21", label: "تلویزیون" },
+  { href: "/category/home-video", color: "#2c9a86", label: "شبکه نمایش خانگی" },
+  { href: "/category/world-cinema", color: "#d64c4c", label: "سینمای جهان" },
+  { href: "/category/photos", color: "#5f69b5", label: "عکس" },
+  { href: "/category/videos", color: "#d35d8d", label: "فیلم" },
+  { href: "/english", color: "#3f8e51", label: "English", lang: "en" },
+  { href: "/about", color: "#706a61", label: "درباره ما" },
 ];
 
 export function DesktopNavigation() {
@@ -172,7 +171,7 @@ export function NavigationMenu() {
         id="site-navigation-panel"
         aria-label="منوی ناوبری اصلی سایت"
         aria-hidden={!isOpen}
-        className={`fixed top-0 bottom-0 start-0 z-50 w-[min(380px,calc(100vw-32px))] h-[100dvh] bg-[var(--surface)] text-[var(--ink)] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 bottom-0 start-0 z-50 w-[min(310px,calc(100vw-48px))] h-[100dvh] bg-[var(--surface)] text-[var(--ink)] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full rtl:translate-x-full"
         }`}
       >
@@ -200,23 +199,18 @@ export function NavigationMenu() {
         {/* Scrollable Menu Container */}
         <div className="mobile-menu-body flex-1 overflow-y-auto py-4">
           <nav aria-label="پیوندهای منو">
-            <ul className="flex flex-col divide-y divide-[var(--line)] list-none p-0 m-0">
+            <ul className="mobile-menu-list flex flex-col list-none p-0 m-0">
               {menuItems.map((item) => {
+                const itemStyle = { "--menu-accent": item.color } as CSSProperties;
                 if (item.subItems) {
                   return (
-                    <li key={item.label} className="py-2.5 px-1">
+                    <li key={item.label} className="mobile-menu-item py-2.5" style={itemStyle}>
                       <div className="flex items-center justify-between min-h-[44px]">
                         <Link
                           href={item.href || "#"}
                           onClick={closeMenu}
-                          className="flex flex-1 items-center gap-1.5 py-1 text-base font-extrabold text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
+                          className="flex flex-1 items-center py-1 text-base font-extrabold text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
                         >
-                          <span
-                            aria-hidden="true"
-                            className="menu-topic-icon"
-                          >
-                            {item.icon}
-                          </span>
                           {item.label}
                         </Link>
                         <button
@@ -238,20 +232,14 @@ export function NavigationMenu() {
                       </div>
 
                       {isCinemaOpen && (
-                        <ul className="flex flex-col gap-1.5 ps-10 pt-2 pb-1 border-s-2 border-[var(--line)] ms-3 my-1.5 list-none">
+                        <ul className="mobile-menu-submenu flex flex-col gap-1 pt-2 pb-1 ps-4 my-1.5 list-none">
                           {item.subItems.map((sub) => (
                             <li key={sub.href}>
                               <Link
                                 href={sub.href}
                                 onClick={closeMenu}
-                                className="flex items-center gap-1.5 py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
+                                className="flex items-center py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
                               >
-                                <span
-                                  aria-hidden="true"
-                                  className="menu-subtopic-icon"
-                                >
-                                  {sub.icon}
-                                </span>
                                 {sub.label}
                               </Link>
                             </li>
@@ -263,19 +251,13 @@ export function NavigationMenu() {
                 }
 
                 return (
-                  <li key={item.href} className="py-1 px-1">
+                  <li key={item.href} className="mobile-menu-item py-1" style={itemStyle}>
                     <Link
                       href={item.href || "#"}
                       lang={item.lang}
                       onClick={closeMenu}
-                      className="flex items-center gap-1.5 min-h-[44px] py-1 text-base font-bold text-[var(--ink)] hover:text-[var(--accent)] hover:bg-[var(--paper)] rounded-md transition-colors"
+                      className="flex items-center min-h-[44px] py-1 text-base font-bold text-[var(--ink)] hover:text-[var(--accent)] hover:bg-[var(--paper)] rounded-md transition-colors"
                     >
-                      <span
-                        aria-hidden="true"
-                        className="menu-topic-icon"
-                      >
-                        {item.icon}
-                      </span>
                       {item.label}
                     </Link>
                   </li>

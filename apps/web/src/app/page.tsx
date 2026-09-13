@@ -8,7 +8,7 @@ import {
 } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { type Article } from "@/lib/news";
-import { fetchArticles } from "@/lib/api";
+import { fetchArticles, fetchFeaturedArticles } from "@/lib/api";
 
 const homepageSectionSlugs = [
   "news",
@@ -20,10 +20,13 @@ const homepageSectionSlugs = [
 ];
 
 export default async function HomePage() {
-  const uiArticles = await fetchArticles();
-
-
-  const featuredArticles = uiArticles.slice(0, 4);
+  const [uiArticles, selectedFeaturedArticles] = await Promise.all([
+    fetchArticles(),
+    fetchFeaturedArticles(),
+  ]);
+  const featuredArticles = selectedFeaturedArticles.length > 0
+    ? selectedFeaturedArticles
+    : uiArticles.slice(0, 4);
   const sectionArticles = homepageSectionSlugs
     .map((slug) => uiArticles.find((a) => a.category.slug === slug))
     .filter((article) => article !== undefined) as Article[];

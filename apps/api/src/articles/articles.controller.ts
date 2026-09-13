@@ -23,6 +23,13 @@ export class ArticlesController {
     return this.articlesService.findAll(query);
   }
 
+  @Get("featured")
+  @ApiOperation({ summary: "List featured homepage articles" })
+  @ApiOkResponse({ description: "Ordered featured articles" })
+  findFeatured() {
+    return this.articlesService.findFeatured();
+  }
+
   @Get(":slug")
   @ApiOperation({ summary: "Get a published article by slug" })
   @ApiParam({ name: "slug", example: "an-art-news-story" })

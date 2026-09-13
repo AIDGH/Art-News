@@ -63,7 +63,9 @@ export class ArticlesService {
     const now = new Date();
     const search = query.query?.trim();
     const where = {
-      status: PublicationStatus.PUBLISHED,
+      status: {
+        in: [PublicationStatus.PUBLISHED, PublicationStatus.SCHEDULED],
+      },
       publishedAt: { lte: now },
       ...(query.category
         ? { category: { slug: query.category } }
@@ -99,7 +101,9 @@ export class ArticlesService {
     const article = await this.prisma.article.findFirst({
       where: {
         slug,
-        status: PublicationStatus.PUBLISHED,
+        status: {
+          in: [PublicationStatus.PUBLISHED, PublicationStatus.SCHEDULED],
+        },
         publishedAt: { lte: new Date() },
       },
       select: publicArticleSelect,
@@ -110,5 +114,26 @@ export class ArticlesService {
     }
 
     return { data: article };
+  }
+
+  async findFeatured(): Promise<{ data: PublicArticle[] }> {
+    const now = new Date();
+    const placements = await this.prisma.homepagePlacement.findMany({
+      where: {
+        slot: "LEAD",
+        OR: [{ startsAt: null }, { startsAt: { lte: now } }],
+        AND: [{ OR: [{ endsAt: null }, { endsAt: { gte: now } }] }],
+        article: {
+          status: {
+            in: [PublicationStatus.PUBLISHED, PublicationStatus.SCHEDULED],
+          },
+          publishedAt: { lte: now },
+        },
+      },
+      orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }],
+      take: 4,
+      select: { article: { select: publicArticleSelect } },
+    });
+    return { data: placements.map((placement) => placement.article) };
   }
 }

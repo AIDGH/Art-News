@@ -38,9 +38,13 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body>
-        <SiteHeader />
+        <div className="public-site-header">
+          <SiteHeader />
+        </div>
         {children}
-        <SiteFooter />
+        <div className="public-site-footer">
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );

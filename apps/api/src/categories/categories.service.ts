@@ -17,7 +17,12 @@ export class CategoriesService {
           select: {
             articles: {
               where: {
-                status: PublicationStatus.PUBLISHED,
+                status: {
+                  in: [
+                    PublicationStatus.PUBLISHED,
+                    PublicationStatus.SCHEDULED,
+                  ],
+                },
                 publishedAt: { lte: new Date() },
               },
             },
@@ -43,7 +48,12 @@ export class CategoriesService {
         description: true,
         articles: {
           where: {
-            status: PublicationStatus.PUBLISHED,
+            status: {
+              in: [
+                PublicationStatus.PUBLISHED,
+                PublicationStatus.SCHEDULED,
+              ],
+            },
             publishedAt: { lte: new Date() },
           },
           orderBy: [{ publishedAt: "desc" }, { id: "desc" }],

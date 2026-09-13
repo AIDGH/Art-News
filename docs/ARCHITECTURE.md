@@ -13,7 +13,7 @@ NestJS REST API
       ↓
 Prisma
       ↓
-PostgreSQL
+SQLite
 ```
 
 Frontend هیچ‌گاه مستقیم به database متصل نمی‌شود.
@@ -43,13 +43,13 @@ Art-News/
 
 مسئولیت‌ها:
 
-- rendering صفحات عمومی و پنل تحریریه؛
+- rendering صفحات عمومی و پنل سینما نمایش؛
 - metadata، canonical و structured data؛
 - navigation و responsive layout؛
 - فراخوانی API؛
 - preview محتوای Draft برای کاربران مجاز.
 
-Frontend نباید شامل Prisma query، PostgreSQL access یا publication rule اصلی
+Frontend نباید شامل Prisma query، database access یا publication rule اصلی
 باشد.
 
 رابط فارسی از `Vazirmatn-Regular.woff2` به‌صورت self-hosted استفاده می‌کند.
@@ -84,31 +84,24 @@ Placeholder تبلیغات Componentهای مشترک و بدون داده runti
 - publication و scheduling rules؛
 - query و persistence از طریق Prisma.
 
-ماژول‌های پیاده‌سازی‌شده اولیه:
+ماژول‌های پیاده‌سازی‌شده:
 
 ```text
 HealthModule
+AuthModule
 ArticlesModule
 CategoriesModule
-```
-
-ماژول‌های برنامه‌ریزی‌شده:
-
-```text
-AuthModule
-MediaModule
 EditorialModule
-HomepageModule
 ```
 
 ## Rendering Strategy
 
 - صفحات عمومی با Server Components رندر می‌شوند.
-- قالب اولیه از داده محلی typed استفاده می‌کند.
+- صفحات عمومی داده منتشرشده را از NestJS API با revalidation کوتاه دریافت می‌کنند.
 - routeهای فعلی `/`، `/category/[slug]`، `/articles/[slug]`، `/search`،
-  `/english` و `/about` هستند.
-- پس از اتصال API، homepage و category با cache کوتاه و on-demand
-  revalidation خوانده می‌شوند.
+  `/english`، `/about` و مسیرهای `/admin/*` هستند.
+- پنل سینما نمایش Client Component است و تمام mutationها را از API محافظت‌شده انجام
+  می‌دهد؛ کوکی نشست HttpOnly است و کد دیتابیس به مرورگر فرستاده نمی‌شود.
 - صفحه خبر metadata و JSON-LD اختصاصی تولید می‌کند.
 - استفاده سراسری از `force-dynamic` انجام نمی‌شود مگر route واقعاً به آن نیاز
   داشته باشد.
@@ -119,6 +112,8 @@ HomepageModule
   `apps/web/public/images/articles/` نگهداری می‌شوند تا preview به سرویس remote
   یا image proxy وابسته نباشد.
 - uploadهای runtime در Git نگهداری نمی‌شوند.
+- در توسعه، upload پنل در `apps/web/public/uploads/` ذخیره می‌شود و مستقیماً از
+  Next.js سرو می‌شود.
 - production به object storage/CDN نیاز دارد.
 - alt و credit بخشی از domain model رسانه هستند.
 - تصویرسازی تولیدشده با هوش مصنوعی باید در credit به‌صورت صریح مشخص شود و
@@ -129,7 +124,7 @@ HomepageModule
   `apps/web/public/logo-cinema-namayesh.png` است و از CSS نمایش داده می‌شود.
 - دو تصویر خبری ارائه‌شده برای نمونه به‌ترتیب در
   `shootinga-cast-return.jpg` و `bot-leila-hatami-first-look.jpg` نگهداری
-  می‌شوند؛ credit نهایی آن‌ها هنوز باید توسط تحریریه تکمیل شود.
+  می‌شوند؛ credit نهایی آن‌ها هنوز باید توسط سینما نمایش تکمیل شود.
 
 ## External Trust Seal
 
@@ -143,7 +138,8 @@ HomepageModule
 
 ## Production Direction
 
-نسخه اول می‌تواند روی یک VPS با Nginx، Next.js، NestJS و PostgreSQL اجرا شود.
+نسخه اول می‌تواند روی یک VPS با Nginx، Next.js، NestJS و SQLite اجرا شود؛ Prisma
+امکان مهاجرت بعدی به PostgreSQL را در صورت رشد ترافیک و نیاز عملیاتی حفظ می‌کند.
 application port و database port نباید عمومی باشند. Domain، HTTPS، backup،
 monitoring و off-server media storage پیش از انتشار عمومی الزامی‌اند.
 `cinemanamayesh.ir` دامنه canonical برنامه‌ریزی‌شده است و `ecrannews.ir` باید
@@ -154,5 +150,5 @@ monitoring و off-server media storage پیش از انتشار عمومی ال�
 1. Frontend و database از طریق API جدا می‌مانند.
 2. publication rule در backend اجرا می‌شود.
 3. UI عمومی بدون login قابل استفاده است.
-4. قابلیت‌های جدید فقط بر اساس workflow واقعی تحریریه اضافه می‌شوند.
+4. قابلیت‌های جدید فقط بر اساس workflow واقعی سینما نمایش اضافه می‌شوند.
 5. URLها پایدار، خوانا و SEO-friendly هستند.

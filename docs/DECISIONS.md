@@ -15,10 +15,12 @@ Next.js هستند.
 workflow انتشار، authentication و database logic از UI جدا می‌مانند. REST برای
 MVP ساده‌تر از GraphQL است و قرارداد آن با Swagger مستند می‌شود.
 
-## 4. Use PostgreSQL and Prisma
+## 4. Use SQLite and Prisma for the Current Product Phase
 
 Article، Category، Tag، Media و editorial relations ساختار رابطه‌ای دارند.
-PostgreSQL منبع اصلی داده و Prisma لایه دسترسی database است.
+SQLite منبع فعلی داده و Prisma لایه دسترسی database است تا توسعه و استقرار اولیه
+بدون سرویس جدا انجام شود. اگر هم‌زمانی سینما نمایش یا بار واقعی آن را لازم کند،
+مهاجرت کنترل‌شده به PostgreSQL بدون تغییر قرارداد پنل انجام می‌شود.
 
 ## 5. Start as a Modular Monolith
 
@@ -66,8 +68,9 @@ repository و packageها فعلاً `Art-News` باقی می‌ماند.
 
 در دسکتاپ دسته‌بندی‌های اصلی به‌صورت افقی و بلافاصله کنار لوگو نمایش داده
 می‌شوند تا دسترسی مستقیم داشته باشند. منوی همبرگری فقط در موبایل باقی می‌ماند،
-برای هر موضوع آیکون Unicode متنی دارد و زیرمنوی سینما شامل خبر، نقد و یادداشت،
-گفت‌وگو و نمایش است. Drawer با کلیک بیرون، Escape و انتخاب لینک بسته می‌شود.
+بدون آیکون است و یک نوار باریک رنگی پیوسته کنار هر موضوع دارد. زیرمنوی سینما
+شامل خبر، نقد و یادداشت، گفت‌وگو و نمایش است. Drawer با کلیک بیرون، Escape و
+انتخاب لینک بسته می‌شود.
 
 ## 14. Present Ecran News as a Promotional Placement
 
@@ -96,7 +99,7 @@ repository و packageها فعلاً `Art-News` باقی می‌ماند.
 ## 18. Keep Template Navigation Manually Defined Until the CMS Phase
 
 آیتم‌های منوی نسخه قالب در یک آرایه typed و ثابت داخل frontend تعریف می‌شوند.
-مدیریت منو از API یا پنل تحریریه تا زمانی که نیاز واقعی آن مشخص نشده اضافه
+مدیریت منو از API یا پنل سینما نمایش تا زمانی که نیاز واقعی آن مشخص نشده اضافه
 نمی‌شود؛ در فاز CMS می‌توان این تصمیم را بازبینی کرد.
 
 ## 19. Use a Manual, Touch-Friendly Featured News Carousel
@@ -114,3 +117,15 @@ repository و packageها فعلاً `Art-News` باقی می‌ماند.
 تا زمانی که حجم انتشار پایین است، صفحه اصلی از بلوک‌های بزرگ و تکراری پر
 نمی‌شود. بعد از اسلایدر و تبلیغات فقط یک مرور فشرده از شش بخش اصلی و لینک‌های
 چندرسانه‌ای نمایش داده می‌شود تا فوتر زودتر در دسترس باشد.
+
+## 21. Protect the Editorial Panel with an HttpOnly Signed Session
+
+ورود پنل از رکورد User و password hash مبتنی بر scrypt استفاده می‌کند. شناسه
+نشست امضاشده فقط در کوکی HttpOnly، SameSite=Lax و در production با Secure نگهداری
+می‌شود؛ هیچ token قابل‌خواندن برای JavaScript در localStorage قرار نمی‌گیرد.
+
+## 22. Store Development Uploads Outside Git
+
+تصاویر پنل در توسعه از API اعتبارسنجی و در `apps/web/public/uploads/` ذخیره
+می‌شوند. این مسیر در Git نادیده گرفته می‌شود. metadata تصویر در MediaAsset است
+و production باید همین قرارداد را به object storage منتقل کند.
