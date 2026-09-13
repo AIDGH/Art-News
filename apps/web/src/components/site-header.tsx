@@ -21,6 +21,13 @@ function BrandMark() {
 }
 
 export function SiteHeader() {
+  const now = new Date();
+  const weekday = new Intl.DateTimeFormat('fa-IR', { weekday: 'long' }).format(now);
+  const day = new Intl.DateTimeFormat('fa-IR', { day: 'numeric' }).format(now);
+  const month = new Intl.DateTimeFormat('fa-IR', { month: 'long' }).format(now);
+  const year = new Intl.DateTimeFormat('fa-IR', { year: 'numeric' }).format(now);
+  const formattedDate = `${weekday}، ${day} ${month} ${year}`;
+
   return (
     <>
       {/* Edition & Date Bar */}
@@ -29,8 +36,8 @@ export function SiteHeader() {
           <span className="text-[#f6a28e] font-semibold text-[11px] md:text-xs">
             پایگاه خبری سینما نمایش
           </span>
-          <span className="text-stone-300 text-[11px] md:text-xs">
-            یکشنبه ۹ شهریور ۱۴۰۵
+          <span dir="rtl" suppressHydrationWarning className="inline-block text-stone-300 text-[11px] md:text-xs">
+            {formattedDate}
           </span>
         </div>
       </div>
