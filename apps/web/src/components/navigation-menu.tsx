@@ -232,7 +232,7 @@ export function NavigationMenu() {
                       </div>
 
                       {isCinemaOpen && (
-                        <ul className="mobile-menu-submenu flex flex-col gap-1 pt-2 pb-1 ps-4 my-1.5 list-none">
+                        <ul className="mobile-menu-submenu flex flex-col gap-1 pt-2 pb-1 my-1.5 list-none">
                           {item.subItems.map((sub) => (
                             <li key={sub.href}>
                               <Link

@@ -940,7 +940,7 @@ img {
 }
 
 .mobile-menu-submenu {
-  border-inline-start: 1px solid color-mix(in srgb, var(--menu-accent) 32%, transparent);
+  padding-inline-start: 22px;
 }
 
 .container {
