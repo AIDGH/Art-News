@@ -13,7 +13,10 @@ async function bootstrap(): Promise<void> {
   configureSwagger(app);
   app.enableShutdownHooks();
 
-  await app.listen(configService.get("PORT", { infer: true }));
+  await app.listen(
+    configService.get("PORT", { infer: true }),
+    configService.get("HOST", { infer: true }),
+  );
 }
 
 void bootstrap();

@@ -1,0 +1,6 @@
+[Unit]
+Description=Back up Cinema Namayesh data
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/backup-cinema-namayesh

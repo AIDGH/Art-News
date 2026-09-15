@@ -2,7 +2,9 @@ import { PrismaClient } from '../src/generated/prisma/client'
 import { PrismaLibSql } from '@prisma/adapter-libsql'
 import { hashPassword } from '../src/auth/password'
 
-const adapter = new PrismaLibSql({ url: 'file:dev.db' })
+const adapter = new PrismaLibSql({
+  url: process.env.DATABASE_URL ?? "file:dev.db",
+})
 const prisma = new PrismaClient({ adapter })
 
 const categories = [

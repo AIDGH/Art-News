@@ -46,3 +46,10 @@ Swagger:  http://localhost:4001/docs
 
 جزئیات کامل وضعیت و تصمیم‌های پروژه در `PROJECT_CONTEXT.md` و `docs/` قرار
 دارند.
+
+## Production
+
+استقرار فعلی برای یک ابرک Ubuntu 24.04 با Nginx، سرویس‌های systemd و releaseهای
+جداگانه طراحی شده است. سرور تقریباً هر یک دقیقه شاخه `main` را بررسی می‌کند و
+در صورت وجود commit جدید، migration و build و restart را خودکار انجام می‌دهد.
+راهنمای عملیات، مسیر داده‌های پایدار و بکاپ در `docs/DEPLOYMENT.md` ثبت شده‌اند.

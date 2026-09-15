@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-09-15 (initial cloud deployment)
+
+- افزودن تنظیمات production برای Nginx و سرویس‌های systemd فرانت و API.
+- افزودن استقرار pull-based خودکار از شاخه `main` با release مجزا، migration،
+  health check و rollback در صورت شکست.
+- افزودن بکاپ روزانه SQLite و uploadها با نگهداری محلی ۱۴ روزه.
+- انتقال مسیر production دیتابیس و uploadها به فضای پایدار خارج از Git.
+- محدود کردن bind پیش‌فرض API به loopback و قابل‌تنظیم‌کردن آن با `HOST`.
+- اصلاح seed برای احترام به `DATABASE_URL` و فعال‌سازی build مجاز `esbuild` در
+  تنظیمات pnpm.
+- مستندسازی توپولوژی و عملیات سرور در `docs/DEPLOYMENT.md`.
+
 ## 2026-09-13 (editorial admin MVP)
 
 - بازطراحی Drawer موبایل با عرض کمتر، حذف کامل آیکون موضوع‌ها، جداکننده‌های بسیار محو و نوار رنگی CSS پیوسته کنار هر ردیف.

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+STATE_DIR=/var/lib/cinema-namayesh
+BACKUP_DIR=/var/backups/cinema-namayesh
+timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+
+install -d -m 0700 "$BACKUP_DIR"
+sqlite3 "$STATE_DIR/cinema.db" ".backup '$BACKUP_DIR/cinema-$timestamp.db'"
+tar -C "$STATE_DIR" -czf "$BACKUP_DIR/uploads-$timestamp.tar.gz" uploads
+find "$BACKUP_DIR" -type f -mtime +14 -delete

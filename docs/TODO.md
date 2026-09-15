@@ -53,7 +53,8 @@
 
 - [ ] Domain و HTTPS
 - [ ] Object storage و CDN
-- [ ] Database backup
+- [x] بکاپ روزانه محلی SQLite و uploadها همراه با بکاپ هفتگی ابرک
+- [ ] انتقال خودکار نسخه بکاپ روزانه به فضای خارج از ابرک
 - [ ] Monitoring و error reporting
 - [ ] تنظیم CSP محدود برای منابع لازم مهر رسمی رسانه
 - [ ] Editorial policy و correction policy نهایی

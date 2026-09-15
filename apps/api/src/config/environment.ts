@@ -2,6 +2,7 @@ import Joi from "joi";
 
 export type EnvironmentVariables = {
   NODE_ENV: "development" | "test" | "production";
+  HOST: string;
   PORT: number;
   CORS_ORIGIN: string;
   SWAGGER_ENABLED: boolean;
@@ -19,6 +20,9 @@ export const environmentValidationSchema = Joi.object<EnvironmentVariables>({
   NODE_ENV: Joi.string()
     .valid("development", "test", "production")
     .default("development"),
+  HOST: Joi.string()
+    .ip({ version: ["ipv4", "ipv6"], cidr: "forbidden" })
+    .default("127.0.0.1"),
   PORT: Joi.number().port().default(4001),
   CORS_ORIGIN: Joi.string().uri().default("http://localhost:3001"),
   SWAGGER_ENABLED: Joi.boolean()

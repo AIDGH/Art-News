@@ -138,10 +138,12 @@ EditorialModule
 
 ## Production Direction
 
-نسخه اول می‌تواند روی یک VPS با Nginx، Next.js، NestJS و SQLite اجرا شود؛ Prisma
-امکان مهاجرت بعدی به PostgreSQL را در صورت رشد ترافیک و نیاز عملیاتی حفظ می‌کند.
-application port و database port نباید عمومی باشند. Domain، HTTPS، backup،
-monitoring و off-server media storage پیش از انتشار عمومی الزامی‌اند.
+نسخه اول روی یک ابرک Ubuntu 24.04 با Nginx، Next.js، NestJS و SQLite اجرا می‌شود؛
+Prisma امکان مهاجرت بعدی به PostgreSQL را در صورت رشد ترافیک و نیاز عملیاتی حفظ
+می‌کند. releaseهای جداگانه و systemd timer، شاخه `main` را پایش و پس از build و
+health check منتشر می‌کنند. پورت‌های برنامه فقط روی loopback گوش می‌دهند. Domain،
+HTTPS، monitoring و off-server media storage پیش از انتشار عمومی الزامی‌اند؛
+بکاپ روزانه برنامه و بکاپ هفتگی زیرساخت فعال می‌شوند.
 `cinemanamayesh.ir` دامنه canonical برنامه‌ریزی‌شده است و `ecrannews.ir` باید
 پس از تنظیم DNS و SSL با redirect دائمی `301` به آن منتقل شود.
 
