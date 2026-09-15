@@ -16,6 +16,9 @@ Runtime uploads live in `/var/lib/cinema-namayesh/uploads`. Application releases
 live under `/srv/cinema-namayesh/releases`, while
 `/srv/cinema-namayesh/current` points to the active release.
 
+The current public IPv4 address is `37.32.25.137`. The application, API, article,
+category, and admin-login routes have been verified through Nginx on this address.
+
 ## Automatic deployment
 
 `cinema-deploy.timer` checks `origin/main` approximately once per minute. When a
@@ -60,6 +63,23 @@ Only SSH, HTTP, and HTTPS are public. Application ports `3001` and `4001` bind
 to loopback and must not be exposed by the cloud security group. The canonical
 domain is `cinemanamayesh.ir`; `ecrannews.ir` will receive a permanent redirect
 after both domains point to the server and TLS certificates are issued.
+
+UFW defaults to denying inbound traffic and allows only OpenSSH and Nginx Full.
+SSH password and keyboard-interactive authentication are disabled; root access
+is permitted only with an authorized key.
+
+Create these DNS records before issuing certificates:
+
+```text
+cinemanamayesh.ir      A      37.32.25.137
+www.cinemanamayesh.ir  CNAME  cinemanamayesh.ir
+ecrannews.ir           A      37.32.25.137
+www.ecrannews.ir       CNAME  ecrannews.ir
+```
+
+Certbot and its renewal timer are installed. Certificate issuance, the canonical
+HTTPS server block, and the permanent redirect from both Ecran News hostnames
+remain pending until all four names resolve to this server.
 
 ## Secrets
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-09-16 (production verification and hardening)
+
+- تأیید پاسخ موفق Nginx برای صفحه اصلی، API health، دسته‌بندی، جزئیات خبر و
+  ورود پنل از IP عمومی ابرک.
+- فعال‌سازی UFW با دسترسی عمومی محدود به SSH، HTTP و HTTPS.
+- غیرفعال‌سازی ورود SSH با password و keyboard-interactive و محدودکردن root به
+  کلید مجاز، همراه با تست اتصال مجدد.
+- نصب Certbot و فعال‌سازی timer تمدید خودکار؛ صدور گواهی تا اتصال DNS دامنه‌ها
+  به ابرک در انتظار است.
+- اجرای موفق بکاپ محلی دیتابیس و uploadها و تأیید اجرای سالم timerهای deploy و
+  backup.
+
 ## 2026-09-15 (initial cloud deployment)
 
 - افزودن تنظیمات production برای Nginx و سرویس‌های systemd فرانت و API.
