@@ -8,6 +8,7 @@
 - افزودن بکاپ روزانه SQLite و uploadها با نگهداری محلی ۱۴ روزه.
 - انتقال مسیر production دیتابیس و uploadها به فضای پایدار خارج از Git.
 - محدود کردن bind پیش‌فرض API به loopback و قابل‌تنظیم‌کردن آن با `HOST`.
+- اعطای دسترسی نوشتن cache به کاربر محدود سرویس Next.js در هر release.
 - اصلاح seed برای احترام به `DATABASE_URL` و فعال‌سازی build مجاز `esbuild` در
   تنظیمات pnpm.
 - مستندسازی توپولوژی و عملیات سرور در `docs/DEPLOYMENT.md`.

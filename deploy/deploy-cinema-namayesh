@@ -42,6 +42,7 @@ set -a
 source /etc/cinema-namayesh/web.env
 set +a
 corepack pnpm web:build
+chown -R cinema:cinema "$release_dir/apps/web/.next/cache"
 
 ln -sfn "$release_dir" "$CURRENT_LINK.new"
 mv -Tf "$CURRENT_LINK.new" "$CURRENT_LINK"
