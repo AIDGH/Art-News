@@ -52,9 +52,9 @@ ln -sfn "$release_dir" "$CURRENT_LINK.new"
 mv -Tf "$CURRENT_LINK.new" "$CURRENT_LINK"
 systemctl restart cinema-api.service cinema-web.service
 
-if ! curl --fail --silent --show-error --retry 10 --retry-delay 2 \
+if ! curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused \
   http://127.0.0.1:4001/api/v1/health >/dev/null || \
-  ! curl --fail --silent --show-error --retry 10 --retry-delay 2 \
+  ! curl --fail --silent --show-error --retry 10 --retry-delay 2 --retry-connrefused \
   http://127.0.0.1:3001/ >/dev/null; then
   if [[ -n "$previous_release" && -d "$previous_release" ]]; then
     ln -sfn "$previous_release" "$CURRENT_LINK.new"
