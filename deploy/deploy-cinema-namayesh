@@ -20,7 +20,10 @@ if [[ "$target_revision" == "$deployed_revision" ]]; then
 fi
 
 release_dir="$RELEASES_DIR/$target_revision"
-previous_release="$(readlink -f "$CURRENT_LINK" 2>/dev/null || true)"
+previous_release=""
+if [[ -L "$CURRENT_LINK" ]]; then
+  previous_release="$(readlink -f "$CURRENT_LINK" 2>/dev/null || true)"
+fi
 
 if [[ ! -d "$release_dir" ]]; then
   git -C "$SOURCE_DIR" worktree add --detach "$release_dir" "$target_revision"
@@ -35,6 +38,8 @@ source /etc/cinema-namayesh/api.env
 set +a
 corepack pnpm api:prisma:generate
 corepack pnpm --filter @art-news/api exec prisma migrate deploy
+chown cinema:cinema "$STATE_DIR/cinema.db"
+chmod 0660 "$STATE_DIR/cinema.db"
 corepack pnpm api:build
 set -a
 source /etc/cinema-namayesh/web.env

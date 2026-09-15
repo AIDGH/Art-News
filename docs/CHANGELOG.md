@@ -12,6 +12,8 @@
 - اصلاح seed برای احترام به `DATABASE_URL` و فعال‌سازی build مجاز `esbuild` در
   تنظیمات pnpm.
 - بارگذاری environment تولید پیش از generate و migrate مربوط به Prisma.
+- جلوگیری از ساخت symlink بازگشتی در اولین deployment و تثبیت مالکیت فایل
+  SQLite برای کاربر محدود API.
 - مستندسازی توپولوژی و عملیات سرور در `docs/DEPLOYMENT.md`.
 
 ## 2026-09-13 (editorial admin MVP)
