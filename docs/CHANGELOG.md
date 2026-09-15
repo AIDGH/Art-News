@@ -11,6 +11,7 @@
 - اعطای دسترسی نوشتن cache به کاربر محدود سرویس Next.js در هر release.
 - اصلاح seed برای احترام به `DATABASE_URL` و فعال‌سازی build مجاز `esbuild` در
   تنظیمات pnpm.
+- بارگذاری environment تولید پیش از generate و migrate مربوط به Prisma.
 - مستندسازی توپولوژی و عملیات سرور در `docs/DEPLOYMENT.md`.
 
 ## 2026-09-13 (editorial admin MVP)

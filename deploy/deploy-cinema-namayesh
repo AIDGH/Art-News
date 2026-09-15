@@ -30,13 +30,11 @@ ln -sfn "$STATE_DIR/uploads" "$release_dir/apps/web/public/uploads"
 
 cd "$release_dir"
 corepack pnpm install --frozen-lockfile
+set -a
+source /etc/cinema-namayesh/api.env
+set +a
 corepack pnpm api:prisma:generate
-(
-  set -a
-  source /etc/cinema-namayesh/api.env
-  set +a
-  corepack pnpm --filter @art-news/api exec prisma migrate deploy
-)
+corepack pnpm --filter @art-news/api exec prisma migrate deploy
 corepack pnpm api:build
 set -a
 source /etc/cinema-namayesh/web.env
