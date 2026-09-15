@@ -23,6 +23,8 @@ new commit exists, `/usr/local/sbin/deploy-cinema-namayesh` creates an isolated
 Git worktree, installs the locked dependencies, generates Prisma Client, applies
 database migrations, builds both applications, switches the `current` symlink,
 and restarts the services. A failed health check restores the previous release.
+The `acl` package provides read-only access to each built release for the
+restricted `cinema` service user; production secrets remain outside releases.
 
 Useful commands:
 

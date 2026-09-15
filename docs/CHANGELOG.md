@@ -14,6 +14,8 @@
 - بارگذاری environment تولید پیش از generate و migrate مربوط به Prisma.
 - جلوگیری از ساخت symlink بازگشتی در اولین deployment و تثبیت مالکیت فایل
   SQLite برای کاربر محدود API.
+- اعطای مجوز خواندن release فقط به کاربر محدود سرویس با ACL، بدون تغییر
+  دسترسی secretهای خارج از Git.
 - مستندسازی توپولوژی و عملیات سرور در `docs/DEPLOYMENT.md`.
 
 ## 2026-09-13 (editorial admin MVP)
