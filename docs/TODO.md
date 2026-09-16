@@ -55,6 +55,7 @@
 - [x] استقرار pull-based خودکار از `main` همراه با health check و rollback
 - [x] فعال‌سازی UFW و محدودکردن SSH به ورود key-only
 - [x] نصب Certbot و فعال‌سازی تمدید خودکار گواهی
+- [x] smoke test ورود مدیر، ساخت خبر، انتشار عمومی و افزودن به اسلایدر production
 - [ ] Domain و HTTPS
 - [ ] Object storage و CDN
 - [x] بکاپ روزانه محلی SQLite و uploadها همراه با بکاپ هفتگی ابرک

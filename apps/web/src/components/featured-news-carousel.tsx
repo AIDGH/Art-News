@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent,
+  type TransitionEvent,
+} from "react";
 import type { Article } from "@/lib/news";
 
 type FeaturedNewsCarouselProps = {
@@ -17,6 +23,8 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
   const [isTeleporting, setIsTeleporting] = useState(false);
   const dragStartX = useRef<number | null>(null);
   const didDrag = useRef(false);
+  const isTransitioning = useRef(false);
+  const transitionFallback = useRef<number | null>(null);
 
   const slideArticles =
     articles.length > 1
@@ -24,7 +32,15 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
       : articles;
 
   const moveBy = (step: number) => {
-    if (articles.length < 2) return;
+    if (articles.length < 2 || isTransitioning.current) return;
+    isTransitioning.current = true;
+    if (transitionFallback.current !== null) {
+      window.clearTimeout(transitionFallback.current);
+    }
+    transitionFallback.current = window.setTimeout(() => {
+      isTransitioning.current = false;
+      transitionFallback.current = null;
+    }, 650);
     setIsTeleporting(false);
     setCurrentIndex(
       (current) => (current + step + articles.length) % articles.length,
@@ -33,7 +49,15 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
   };
 
   const goTo = (index: number) => {
-    if (index === currentIndex) return;
+    if (index === currentIndex || isTransitioning.current) return;
+    isTransitioning.current = true;
+    if (transitionFallback.current !== null) {
+      window.clearTimeout(transitionFallback.current);
+    }
+    transitionFallback.current = window.setTimeout(() => {
+      isTransitioning.current = false;
+      transitionFallback.current = null;
+    }, 650);
     setIsTeleporting(false);
     setCurrentIndex(index);
     setTrackPosition(index + 1);
@@ -41,11 +65,24 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
 
   useEffect(() => {
     if (!isTeleporting) return;
-    const frame = requestAnimationFrame(() => setIsTeleporting(false));
+    const frame = requestAnimationFrame(() => {
+      setIsTeleporting(false);
+      isTransitioning.current = false;
+    });
     return () => cancelAnimationFrame(frame);
   }, [isTeleporting]);
 
+  useEffect(
+    () => () => {
+      if (transitionFallback.current !== null) {
+        window.clearTimeout(transitionFallback.current);
+      }
+    },
+    [],
+  );
+
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (isTransitioning.current) return;
     if (event.pointerType === "mouse" && event.button !== 0) return;
     if ((event.target as HTMLElement).closest("button")) return;
 
@@ -93,13 +130,22 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
     moveBy(distance > 0 ? 1 : -1);
   };
 
-  const handleTransitionEnd = () => {
+  const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget || event.propertyName !== "transform") {
+      return;
+    }
+    if (transitionFallback.current !== null) {
+      window.clearTimeout(transitionFallback.current);
+      transitionFallback.current = null;
+    }
     if (trackPosition === 0) {
       setIsTeleporting(true);
       setTrackPosition(articles.length);
     } else if (trackPosition === articles.length + 1) {
       setIsTeleporting(true);
       setTrackPosition(1);
+    } else {
+      isTransitioning.current = false;
     }
   };
 

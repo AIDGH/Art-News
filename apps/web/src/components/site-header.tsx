@@ -14,6 +14,7 @@ function BrandMark() {
     >
       <span
         className="block w-24 h-14 md:w-28 md:h-16 bg-[url('/logo-cinema-namayesh.png')] bg-center bg-[length:165%_auto] bg-no-repeat mix-blend-multiply"
+        style={{ backgroundPosition: "center 42%" }}
         aria-hidden="true"
       />
     </Link>
