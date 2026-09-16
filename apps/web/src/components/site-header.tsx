@@ -13,7 +13,7 @@ function BrandMark() {
       aria-label="سینما نمایش، صفحه نخست"
     >
       <span
-        className="block w-24 h-14 md:w-28 md:h-16 bg-[url('/logo-cinema-namayesh.png')] bg-center bg-[length:165%_auto] bg-no-repeat mix-blend-multiply"
+        className="block h-16 w-24 bg-[url('/logo-cinema-namayesh.png')] bg-center bg-[length:165%_auto] bg-no-repeat mix-blend-multiply md:h-20 md:w-28"
         style={{ backgroundPosition: "center 42%" }}
         aria-hidden="true"
       />
