@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 
 interface SubItem {
   href: string;
@@ -86,6 +87,7 @@ export function NavigationMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCinemaOpen, setIsCinemaOpen] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -99,7 +101,8 @@ export function NavigationMenu() {
     const handlePointerDown = (event: PointerEvent) => {
       if (
         rootRef.current &&
-        !rootRef.current.contains(event.target as Node)
+        !rootRef.current.contains(event.target as Node) &&
+        !panelRef.current?.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }
@@ -156,25 +159,23 @@ export function NavigationMenu() {
         />
       </button>
 
-      {/* Backdrop */}
-      {isOpen && (
-        <button
-          type="button"
-          aria-label="بستن منو با کلیک روی پس‌زمینه"
-          onClick={closeMenu}
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs border-0 cursor-default transition-opacity"
-        />
-      )}
+      {isOpen
+        ? createPortal(
+          <>
+            <button
+              type="button"
+              aria-label="بستن منو با کلیک روی پس‌زمینه"
+              onClick={closeMenu}
+              className="fixed inset-0 z-[60] cursor-default border-0 bg-black/50 backdrop-blur-xs transition-opacity"
+            />
 
-      {/* Drawer Panel */}
-      <aside
-        id="site-navigation-panel"
-        aria-label="منوی ناوبری اصلی سایت"
-        aria-hidden={!isOpen}
-        className={`fixed top-0 bottom-0 start-0 z-50 w-[min(310px,calc(100vw-48px))] h-[100dvh] bg-[var(--surface)] text-[var(--ink)] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full rtl:translate-x-full"
-        }`}
-      >
+            {/* Drawer Panel */}
+            <aside
+              ref={panelRef}
+              id="site-navigation-panel"
+              aria-label="منوی ناوبری اصلی سایت"
+              className="fixed top-0 bottom-0 start-0 z-[70] flex h-[100dvh] w-[min(310px,calc(100vw-48px))] flex-col bg-[var(--surface)] text-[var(--ink)] shadow-2xl"
+            >
         {/* Drawer Header */}
         <div className="mobile-menu-header flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--surface)]">
           <div className="flex flex-col">
@@ -272,7 +273,11 @@ export function NavigationMenu() {
           <span>رسانه سینما و نمایش</span>
           <span className="font-mono text-[11px]">نسخه ۱.۰</span>
         </div>
-      </aside>
+            </aside>
+          </>,
+          document.body,
+        )
+        : null}
     </div>
   );
 }
