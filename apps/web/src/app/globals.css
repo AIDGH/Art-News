@@ -1700,9 +1700,9 @@ img {
   padding: 22px;
   grid-template-columns: minmax(180px, 0.45fr) minmax(0, 1fr) auto;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
   color: #f8f4eb;
-  background: var(--night);
+  border-radius: 12px;
 }
 
 .ecran-logo-placeholder {
