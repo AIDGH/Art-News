@@ -1,23 +1,51 @@
+import Image from "next/image";
+import Link from "next/link";
+
 type AdvertisementPlaceholderProps = {
   label?: string;
 };
 
 export function EcranNewsPromo() {
   return (
-    <section className="ecran-promo" aria-label="معرفی رسانه اکران نیوز">
-      <div className="ecran-logo-placeholder" aria-hidden="true">
-        <span>محل لوگو</span>
-        <strong>ECRAN NEWS</strong>
+    <section
+      className="ecran-promo bg-gradient-to-br from-zinc-900 via-zinc-900 to-black relative overflow-hidden"
+      aria-label="معرفی رسانه اکران نیوز"
+    >
+      {/* Subtle orange radial glow in the corner for depth */}
+      <div className="pointer-events-none absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-orange-600/10 blur-3xl" />
+
+      <div
+        className="relative flex items-center justify-center min-h-[92px] p-2"
+        aria-hidden="true"
+      >
+        <div className="rounded-2xl overflow-hidden shadow-md shadow-white/10">
+          <Image
+            src="/ecran-logo.png"
+            alt="لوگو اکران نیوز"
+            width={180}
+            height={60}
+            className="object-contain max-h-[92px] w-auto"
+          />
+        </div>
       </div>
-      <div>
+
+      <div className="flex flex-col gap-1">
         <span className="promo-kicker">رسانه همراه</span>
         <h2>اکران نیوز</h2>
         <p>
-          لوگو و لینک رسمی اکران نیوز پس از دریافت فایل‌های برند در این بخش
-          قرار می‌گیرد.
+          برای پیگیری لحظه‌ای حواشی و اخبار سینما، به صفحه رسمی اکران نیوز در
+          اینستاگرام بپیوندید.
         </p>
       </div>
-      <span className="promo-link-placeholder">لینک شبکه اجتماعی</span>
+
+      <Link
+        href="https://instagram.com/ecrannews"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-orange-600 text-white font-medium border-none hover:bg-orange-500 transition-colors shadow-lg rounded-lg px-5 py-2.5 text-sm whitespace-nowrap flex items-center justify-center"
+      >
+        اینستاگرام اکران نیوز
+      </Link>
     </section>
   );
 }
