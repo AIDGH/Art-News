@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+} from "react";
 import { createPortal } from "react-dom";
 
 interface SubItem {
@@ -39,6 +45,10 @@ const menuItems: MenuItem[] = [
   { href: "/english", color: "#3f8e51", label: "English", lang: "en" },
   { href: "/about", color: "#706a61", label: "درباره ما" },
 ];
+
+const subscribeToClient = () => () => undefined;
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export function DesktopNavigation() {
   const desktopItems = menuItems.filter((item) => item.href !== "/");
@@ -84,6 +94,11 @@ export function DesktopNavigation() {
 }
 
 export function NavigationMenu() {
+  const canUsePortal = useSyncExternalStore(
+    subscribeToClient,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [isCinemaOpen, setIsCinemaOpen] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -159,14 +174,20 @@ export function NavigationMenu() {
         />
       </button>
 
-      {isOpen
+      {canUsePortal
         ? createPortal(
           <>
             <button
               type="button"
               aria-label="بستن منو با کلیک روی پس‌زمینه"
+              aria-hidden={!isOpen}
+              tabIndex={isOpen ? 0 : -1}
               onClick={closeMenu}
-              className="fixed inset-0 z-[60] cursor-default border-0 bg-black/50 backdrop-blur-xs transition-opacity"
+              className={`fixed inset-0 z-[60] cursor-default border-0 bg-black/50 transition-[opacity,backdrop-filter] duration-300 ease-out ${
+                isOpen
+                  ? "pointer-events-auto opacity-100 backdrop-blur-xs"
+                  : "pointer-events-none opacity-0 backdrop-blur-none"
+              }`}
             />
 
             {/* Drawer Panel */}
@@ -174,7 +195,13 @@ export function NavigationMenu() {
               ref={panelRef}
               id="site-navigation-panel"
               aria-label="منوی ناوبری اصلی سایت"
-              className="fixed top-0 bottom-0 start-0 z-[70] flex h-[100dvh] w-[min(310px,calc(100vw-48px))] flex-col bg-[var(--surface)] text-[var(--ink)] shadow-2xl"
+              aria-hidden={!isOpen}
+              inert={!isOpen}
+              className={`fixed top-0 bottom-0 start-0 z-[70] flex h-[100dvh] w-[min(310px,calc(100vw-48px))] flex-col bg-[var(--surface)] text-[var(--ink)] shadow-2xl transition-transform duration-300 ease-out ${
+                isOpen
+                  ? "translate-x-0"
+                  : "pointer-events-none -translate-x-full rtl:translate-x-full"
+              }`}
             >
         {/* Drawer Header */}
         <div className="mobile-menu-header flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--surface)]">
