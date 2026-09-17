@@ -4,6 +4,7 @@
 
 ### Changed
 
+- **Authentication:** Made the session cookie protocol-aware so temporary HTTP IP login works while HTTPS remains Secure.
 - **Homepage:** Renamed the header, ticker, and featured-carousel labels and moved the carousel label to the upper-left corner.
 - **Ecran News Promo:** Increased the Instagram button's horizontal spacing for improved readability.
 - **Ecran News Promo:** Fixed the button's desktop grid width and added responsive tablet/mobile sizing.

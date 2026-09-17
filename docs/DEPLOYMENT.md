@@ -68,6 +68,10 @@ UFW defaults to denying inbound traffic and allows only OpenSSH and Nginx Full.
 SSH password and keyboard-interactive authentication are disabled; root access
 is permitted only with an authorized key.
 
+Nginx must overwrite `X-Forwarded-Proto` with `$scheme`. Authentication uses
+this trusted proxy header to issue a non-Secure session cookie on the temporary
+HTTP IP and a Secure cookie after HTTPS is enabled.
+
 Create these DNS records before issuing certificates:
 
 ```text
