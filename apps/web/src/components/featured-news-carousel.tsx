@@ -196,6 +196,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
                 sizes="(max-width: 820px) 100vw, 1280px"
               />
               <div className="featured-carousel-overlay" />
+              <span className="featured-carousel-category">تازه‌ها</span>
               <Link
                 className="featured-carousel-hit-area"
                 href={`/articles/${article.slug}`}
@@ -204,7 +205,6 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
                 tabIndex={isCurrent ? 0 : -1}
               />
               <div className="featured-carousel-copy">
-                <span className="featured-carousel-category">خبر مهم</span>
                 {articleIndex === 0 ? (
                   <h1>{article.title}</h1>
                 ) : (
@@ -225,7 +225,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
           <div className="featured-carousel-controls" dir="ltr">
             <button
               type="button"
-              aria-label="خبر مهم بعدی"
+              aria-label="خبر تازه بعدی"
               onClick={() => moveBy(1)}
             >
               ←
@@ -242,7 +242,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
             </span>
             <button
               type="button"
-              aria-label="خبر مهم قبلی"
+              aria-label="خبر تازه قبلی"
               onClick={() => moveBy(-1)}
             >
               →
@@ -252,7 +252,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
       </div>
 
       {articles.length > 1 ? (
-        <div className="featured-carousel-dots" aria-label="انتخاب خبر مهم">
+        <div className="featured-carousel-dots" aria-label="انتخاب خبر تازه">
           {articles.map((article, index) => (
             <button
               type="button"

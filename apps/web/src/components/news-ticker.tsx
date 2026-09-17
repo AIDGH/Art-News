@@ -12,8 +12,8 @@ export function NewsTicker({ items = [] }: { items?: TickerItem[] }) {
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="news-ticker" role="marquee" aria-label="نوار متحرک اخبار تازه">
-      <span className="news-ticker-label" aria-hidden="true">تازه‌ترین</span>
+    <div className="news-ticker" role="marquee" aria-label="نوار متحرک چه خبر">
+      <span className="news-ticker-label" aria-hidden="true">چه خبر</span>
       <div className="news-ticker-viewport">
         <div className="news-ticker-track">
           {/* First block — real, focusable links */}

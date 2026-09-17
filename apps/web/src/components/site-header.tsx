@@ -35,7 +35,7 @@ export function SiteHeader() {
       <div className="bg-[var(--night)] text-[#f6efe5] text-xs py-1.5 border-b border-[var(--night-soft)]">
         <div className="container flex items-center justify-between min-h-[26px]">
           <span className="text-[#f6a28e] font-semibold text-[11px] md:text-xs">
-            پایگاه خبری سینما نمایش
+            رسانه سینما نمایش
           </span>
           <span dir="rtl" suppressHydrationWarning className="inline-block text-stone-300 text-[11px] md:text-xs">
             {formattedDate}

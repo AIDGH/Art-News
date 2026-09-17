@@ -1470,17 +1470,22 @@ img {
 }
 
 .featured-carousel-category {
+  position: absolute;
+  z-index: 3;
+  top: clamp(16px, 3vw, 34px);
+  left: clamp(16px, 3vw, 42px);
   display: inline-flex;
   padding: 4px 10px;
   color: #fff;
   background: var(--accent);
   font-size: 0.7rem;
   font-weight: 900;
+  pointer-events: none;
 }
 
 .featured-carousel-copy h1,
 .featured-carousel-copy h2 {
-  margin-top: 12px;
+  margin-top: 0;
   font-size: clamp(1.8rem, 3.4vw, 3.55rem);
   font-weight: 950;
   letter-spacing: -0.045em;
