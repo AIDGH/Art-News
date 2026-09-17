@@ -2254,6 +2254,25 @@ img {
   padding-block: 48px 100px;
 }
 
+.about-page {
+  width: min(calc(100% - 64px), 672px);
+  margin-inline: auto;
+  padding-block: 40px 96px;
+}
+
+.about-page-title {
+  margin-bottom: 40px;
+}
+
+.about-page-body {
+  margin-bottom: 64px;
+  white-space: pre-line;
+}
+
+.about-page-back {
+  margin-top: 40px;
+}
+
 .category-hero {
   display: grid;
   padding-block: 30px 42px;
@@ -3124,6 +3143,11 @@ img {
     flex-direction: column;
     justify-content: center;
     gap: 2px;
+  }
+
+  .about-page {
+    width: calc(100% - 40px);
+    padding-block: 30px 72px;
   }
 
   .article-card-horizontal {

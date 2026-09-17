@@ -92,16 +92,16 @@ export default async function AboutPage() {
   const { aboutBody } = await fetchSiteSettings();
 
   return (
-    <div className="max-w-2xl mx-auto pt-10 pb-24 px-8 sm:px-12">
+    <div className="about-page">
       <main>
 
         {/* 2. Typography: Main heading — elegant, not oversized */}
-        <h1 className="text-3xl font-extrabold mb-10 text-slate-900 tracking-tight">
+        <h1 className="about-page-title text-3xl font-extrabold text-slate-900 tracking-tight">
           درباره سینما نمایش
         </h1>
 
         {aboutBody ? (
-          <div className="text-base sm:text-lg leading-loose text-slate-700 whitespace-pre-line mb-16">
+          <div className="about-page-body text-base sm:text-lg leading-loose text-slate-700">
             {aboutBody}
           </div>
         ) : null}
@@ -150,7 +150,7 @@ export default async function AboutPage() {
         </div>
 
         {/* 5. Back Link: centered secondary button-style link */}
-        <div className="flex justify-center mt-10">
+        <div className="about-page-back flex justify-center">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-orange-500 transition-colors"

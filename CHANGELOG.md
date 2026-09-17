@@ -13,3 +13,4 @@
 - **Site Settings:** Added database-backed footer and about-page copy editable from the admin panel.
 - **Footer:** Simplified secondary content and hid category links on mobile while retaining them on desktop.
 - **Categories:** Renamed the `screenings` display title from «نمایش» to «گزارش» across the site.
+- **About Page:** Added dedicated layout spacing that is not overridden by the global reset.
