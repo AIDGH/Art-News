@@ -42,7 +42,7 @@ export function EcranNewsPromo() {
         href="https://instagram.com/ecrannews"
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-orange-600 text-white font-medium border-none hover:bg-orange-500 transition-colors shadow-lg rounded-lg px-7 py-2.5 text-sm whitespace-nowrap flex items-center justify-center"
+        className="ecran-promo-link bg-orange-600 text-white font-medium border-none hover:bg-orange-500 transition-colors shadow-lg rounded-lg py-2.5 text-sm whitespace-nowrap flex items-center justify-center"
       >
         اینستاگرام اکران نیوز
       </Link>

@@ -1752,6 +1752,11 @@ img {
   font-size: 0.78rem;
 }
 
+.ecran-promo-link {
+  min-width: 220px;
+  padding-inline: 32px;
+}
+
 .promo-link-placeholder {
   padding: 9px 13px;
   border: 1px solid #68645c;
@@ -2813,6 +2818,11 @@ img {
     gap: 18px;
   }
 
+  .ecran-promo-link {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+
   .promo-link-placeholder {
     width: fit-content;
     grid-column: 1 / -1;
@@ -3033,6 +3043,12 @@ img {
   .ecran-promo {
     padding: 18px;
     grid-template-columns: 1fr;
+  }
+
+  .ecran-promo-link {
+    width: 100%;
+    min-width: 0;
+    grid-column: auto;
   }
 
   .ecran-logo-placeholder {
