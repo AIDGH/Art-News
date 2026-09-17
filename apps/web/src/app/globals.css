@@ -2928,12 +2928,12 @@ img {
   }
 
   .footer-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 42px;
   }
 
-  .footer-note {
-    grid-column: auto;
+  .footer-grid nav {
+    display: none;
   }
 
   .category-hero {
@@ -3113,10 +3113,6 @@ img {
 
   .footer-grid {
     grid-template-columns: 1fr;
-  }
-
-  .footer-grid nav {
-    display: none;
   }
 
   .footer-note {
