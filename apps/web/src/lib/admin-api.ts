@@ -50,6 +50,12 @@ export type AdminArticle = {
   homepagePlacements: Array<{ slot: string; displayOrder: number }>;
 };
 
+export type AdminSiteSettings = {
+  footerDescription: string;
+  aboutBody: string;
+  updatedAt: string | null;
+};
+
 export class AdminApiError extends Error {
   constructor(message: string, readonly status: number) {
     super(message);

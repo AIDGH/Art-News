@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { fetchSiteSettings } from "@/lib/api";
 
 export const metadata: Metadata = {
   title: "درباره ما | پایگاه خبری سینما نمایش",
   description:
-    "آشنایی با ماموریت، مجوز رسمی و شبکه‌های اجتماعی پایگاه خبری سینما نمایش.",
+    "آشنایی با سینما نمایش و راه‌های ارتباطی این رسانه.",
   alternates: { canonical: "/about" },
 };
 
@@ -87,44 +88,23 @@ function BaleIcon({ className = "w-6 h-6" }: { className?: string }) {
 
 /* ─── Page ────────────────────────────────────────────────────── */
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { aboutBody } = await fetchSiteSettings();
+
   return (
-    <div className="max-w-2xl mx-auto pt-10 pb-24 px-6">
+    <div className="max-w-2xl mx-auto pt-10 pb-24 px-8 sm:px-12">
       <main>
 
         {/* 2. Typography: Main heading — elegant, not oversized */}
-        <h1 className="text-3xl font-extrabold mb-6 text-slate-900 tracking-tight">
+        <h1 className="text-3xl font-extrabold mb-10 text-slate-900 tracking-tight">
           درباره سینما نمایش
         </h1>
 
-        {/* 2. Typography: Body text — comfortable reading size & line-height */}
-        <div className="text-base sm:text-lg leading-loose text-slate-700 text-justify sm:text-right mb-16">
-          <p>
-            «سینما نمایش» رسانه‌ای مستقل در حوزه سینما، تئاتر، تلویزیون و هنرهای
-            نمایشی است. روایتی موثق و تحلیلی از
-            رویدادهای فرهنگی ارائه می‌دهیم.
-          </p>
-        </div>
-
-        {/* 3. License Info Box: subtle elegant card */}
-        <div className="mb-16 p-4 sm:p-5 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed text-slate-600 text-center">
-          <p className="flex flex-wrap items-center justify-center gap-1.5">
-            <span>فعالیت این رسانه تحت نظارت</span>
-            <a
-              href="https://e-rasaneh.ir/Certificate/101661"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-bold text-orange-600 hover:opacity-80 transition-opacity"
-              aria-label="مشاهده گواهی رسمی رسانه در سامانه جامع رسانه‌ها"
-            >
-              <span>وزارت فرهنگ و ارشاد اسلامی</span>
-              <span aria-hidden="true" className="text-xs">↗</span>
-            </a>
-            <span>
-              با شناسه <strong className="font-bold">۱۰۱۶۶۱</strong> می‌باشد.
-            </span>
-          </p>
-        </div>
+        {aboutBody ? (
+          <div className="text-base sm:text-lg leading-loose text-slate-700 whitespace-pre-line mb-16">
+            {aboutBody}
+          </div>
+        ) : null}
 
         {/* 4. Social Icons: centered, neatly grouped with premium styling */}
         <div className="flex justify-center gap-4">

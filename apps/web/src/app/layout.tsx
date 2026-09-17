@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { fetchSiteSettings } from "@/lib/api";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
@@ -32,9 +33,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const siteSettings = await fetchSiteSettings();
+
   return (
     <html lang="fa" dir="rtl">
       <body>
@@ -43,7 +46,7 @@ export default function RootLayout({
         </div>
         {children}
         <div className="public-site-footer">
-          <SiteFooter />
+          <SiteFooter description={siteSettings.footerDescription} />
         </div>
       </body>
     </html>

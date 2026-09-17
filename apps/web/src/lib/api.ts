@@ -2,6 +2,17 @@ import { Article, type Category } from "./news";
 
 export const API_BASE_URL = (process.env.API_BASE_URL ?? "http://localhost:4001/api/v1").replace(/\/$/, "");
 
+export type SiteSettings = {
+  footerDescription: string;
+  aboutBody: string;
+};
+
+export const DEFAULT_SITE_SETTINGS: SiteSettings = {
+  footerDescription:
+    "پایگاه خبری سینما نمایش، رسانه انتشار تازه‌ترین و مهم‌ترین اخبار فرهنگی است",
+  aboutBody: "",
+};
+
 type ApiArticle = {
   slug: string;
   title: string;
@@ -97,5 +108,19 @@ export async function fetchArticleBySlug(slug: string): Promise<Article | undefi
   } catch (error) {
     console.error(`Error fetching article ${slug}:`, error);
     return undefined;
+  }
+}
+
+export async function fetchSiteSettings(): Promise<SiteSettings> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/site-settings`, {
+      next: { revalidate: 60 },
+    });
+    if (!response.ok) return DEFAULT_SITE_SETTINGS;
+    const json = (await response.json()) as { data?: SiteSettings };
+    return json.data ?? DEFAULT_SITE_SETTINGS;
+  } catch (error) {
+    console.error("Error fetching site settings:", error);
+    return DEFAULT_SITE_SETTINGS;
   }
 }

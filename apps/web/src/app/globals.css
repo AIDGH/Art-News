@@ -503,6 +503,10 @@ body:has(.admin-root) .public-site-footer {
   padding: 24px;
 }
 
+.admin-site-settings-form {
+  width: min(100%, 900px);
+}
+
 .admin-card>h2 {
   margin-bottom: 18px;
   font-size: 1.05rem;
@@ -2191,7 +2195,7 @@ img {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 0.65fr;
+  grid-template-columns: 1.2fr 1fr;
   gap: 80px;
   padding-bottom: 50px;
 }
@@ -2222,6 +2226,10 @@ img {
   gap: 10px;
   color: #aba69d;
   font-size: 0.78rem;
+}
+
+.footer-intro .footer-note {
+  margin-top: 22px;
 }
 
 .footer-note a:hover {
@@ -2925,7 +2933,7 @@ img {
   }
 
   .footer-note {
-    grid-column: 1 / -1;
+    grid-column: auto;
   }
 
   .category-hero {
@@ -3105,6 +3113,10 @@ img {
 
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .footer-grid nav {
+    display: none;
   }
 
   .footer-note {

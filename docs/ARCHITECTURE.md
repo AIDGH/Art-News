@@ -92,6 +92,7 @@ AuthModule
 ArticlesModule
 CategoriesModule
 EditorialModule
+SiteSettingsModule
 ```
 
 ## Rendering Strategy
@@ -102,6 +103,8 @@ EditorialModule
   `/english`، `/about` و مسیرهای `/admin/*` هستند.
 - پنل سینما نمایش Client Component است و تمام mutationها را از API محافظت‌شده انجام
   می‌دهد؛ کوکی نشست HttpOnly است و کد دیتابیس به مرورگر فرستاده نمی‌شود.
+- متن معرفی فوتر و بدنه صفحه درباره ما از `SiteSettingsModule` و رکورد singleton
+  دیتابیس خوانده می‌شوند؛ خواندن عمومی است و تغییر فقط با نشست پنل انجام می‌شود.
 - صفحه خبر metadata و JSON-LD اختصاصی تولید می‌کند.
 - استفاده سراسری از `force-dynamic` انجام نمی‌شود مگر route واقعاً به آن نیاز
   داشته باشد.

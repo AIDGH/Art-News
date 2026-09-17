@@ -33,7 +33,7 @@ const menuItems: MenuItem[] = [
       { href: "/category/news", label: "خبر" },
       { href: "/category/reviews-notes", label: "نقد و یادداشت" },
       { href: "/category/interviews", label: "گفت‌وگو" },
-      { href: "/category/screenings", label: "نمایش" },
+      { href: "/category/screenings", label: "گزارش" },
     ],
   },
   { href: "/category/theater", color: "#9c4aa5", label: "تئاتر" },

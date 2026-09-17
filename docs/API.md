@@ -24,6 +24,7 @@ GET /articles/featured
 GET /articles/:slug
 GET /categories
 GET /categories/:slug/articles
+GET /site-settings
 ```
 
 فهرست Article رکوردهای `PUBLISHED` و خبرهای `SCHEDULED` رسیده به زمان
@@ -60,6 +61,8 @@ POST   /editorial/articles/:id/archive
 GET    /editorial/categories
 POST   /editorial/categories
 PATCH  /editorial/categories/:id
+GET    /editorial/site-settings
+PUT    /editorial/site-settings
 GET    /editorial/media
 POST   /editorial/media
 PATCH  /editorial/media/:id
@@ -69,6 +72,8 @@ PATCH  /editorial/media/:id
 status، publishedAt، SEO، tags، sources، featured و featuredOrder است.
 آپلود تصویر multipart با نام فیلد `file` انجام می‌شود؛ JPEG، PNG، WebP و GIF تا
 حداکثر ۸ مگابایت پذیرفته می‌شوند.
+تنظیمات سایت شامل `footerDescription` و `aboutBody` است؛ متن فوتر اجباری و متن
+درباره ما می‌تواند خالی باشد.
 
 ## Response Shape
 

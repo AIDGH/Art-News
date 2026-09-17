@@ -51,8 +51,8 @@ export const categories: Category[] = [
   },
   {
     slug: "screenings",
-    title: "نمایش",
-    description: "اکران‌ها، برنامه‌های نمایش و رویدادهای ویژه فیلم",
+    title: "گزارش",
+    description: "گزارش‌ها، برنامه‌های نمایش و رویدادهای ویژه فیلم",
   },
   {
     slug: "theater",

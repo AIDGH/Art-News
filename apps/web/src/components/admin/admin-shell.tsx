@@ -46,6 +46,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <Link className={pathname === "/admin" ? "is-active" : ""} href="/admin">خبرها</Link>
             <Link className={pathname === "/admin/articles/new" ? "is-active" : ""} href="/admin/articles/new">خبر جدید</Link>
             <Link className={pathname === "/admin/categories" ? "is-active" : ""} href="/admin/categories">دسته‌بندی‌ها</Link>
+            <Link className={pathname === "/admin/site-settings" ? "is-active" : ""} href="/admin/site-settings">متن‌های سایت</Link>
             <Link href="/" target="_blank">مشاهده سایت</Link>
           </nav>
           <div className="admin-account"><span>{user.displayName}</span><button type="button" onClick={logout}>خروج</button></div>

@@ -10,3 +10,6 @@
 - **Ecran News Promo:** Reduced the desktop button width and padding to a more balanced size.
 - **Footer:** Removed "اکران نیوز" reference from the site description in `site-footer.tsx`.
 - **About Page:** Removed "اکران نیوز" reference from the editorial intro in `about/page.tsx`.
+- **Site Settings:** Added database-backed footer and about-page copy editable from the admin panel.
+- **Footer:** Simplified secondary content and hid category links on mobile while retaining them on desktop.
+- **Categories:** Renamed the `screenings` display title from «نمایش» to «گزارش» across the site.

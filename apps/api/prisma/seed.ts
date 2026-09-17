@@ -12,7 +12,7 @@ const categories = [
   { slug: "news", title: "خبر", description: "خبرهای روز سینما، تولید، اکران و جشنواره‌ها" },
   { slug: "reviews-notes", title: "نقد و یادداشت", description: "نقد فیلم، تحلیل جریان‌ها و یادداشت‌های سینمایی" },
   { slug: "interviews", title: "گفت‌وگو", description: "گفت‌وگو با فیلم‌سازان، بازیگران و فعالان سینما" },
-  { slug: "screenings", title: "نمایش", description: "اکران‌ها، برنامه‌های نمایش و رویدادهای ویژه فیلم" },
+  { slug: "screenings", title: "گزارش", description: "گزارش‌ها، برنامه‌های نمایش و رویدادهای ویژه فیلم" },
   { slug: "theater", title: "تئاتر", description: "خبر، نقد و گفت‌وگو از صحنه تئاتر" },
   { slug: "television", title: "تلویزیون", description: "سریال‌ها، برنامه‌ها و تازه‌های تلویزیون" },
   { slug: "home-video", title: "شبکه نمایش خانگی", description: "سریال‌ها و تولیدات پلتفرم‌های نمایش خانگی" },
@@ -247,7 +247,10 @@ async function main() {
   for (const cat of categories) {
     await prisma.category.upsert({
       where: { slug: cat.slug },
-      update: {},
+      update: {
+        title: cat.title,
+        description: cat.description,
+      },
       create: {
         slug: cat.slug,
         title: cat.title,
@@ -256,6 +259,16 @@ async function main() {
       },
     });
   }
+
+  await prisma.siteSettings.upsert({
+    where: { id: 'site' },
+    update: {},
+    create: {
+      id: 'site',
+      footerDescription: 'پایگاه خبری سینما نمایش، رسانه انتشار تازه‌ترین و مهم‌ترین اخبار فرهنگی است',
+      aboutBody: '',
+    },
+  });
 
   let i = 0;
   for (const art of articles) {

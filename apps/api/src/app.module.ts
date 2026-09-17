@@ -9,6 +9,7 @@ import {
 } from "./config/environment";
 import { HealthModule } from "./health/health.module";
 import { EditorialModule } from "./editorial/editorial.module";
+import { SiteSettingsModule } from "./site-settings/site-settings.module";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EditorialModule } from "./editorial/editorial.module";
     ArticlesModule,
     CategoriesModule,
     EditorialModule,
+    SiteSettingsModule,
   ],
 })
 export class AppModule {}
