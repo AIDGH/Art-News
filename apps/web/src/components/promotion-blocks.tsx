@@ -15,7 +15,7 @@ export function EcranNewsPromo() {
       <div className="pointer-events-none absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-orange-600/10 blur-3xl" />
 
       <div
-        className="relative flex items-center justify-center min-h-[92px] p-2"
+        className="ecran-promo-logo relative flex items-center justify-center min-h-[92px] p-2"
         aria-hidden="true"
       >
         <div className="rounded-2xl overflow-hidden shadow-md shadow-white/10">
@@ -29,7 +29,7 @@ export function EcranNewsPromo() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="ecran-promo-copy flex flex-col gap-1">
         <span className="promo-kicker">رسانه همراه</span>
         <h2>اکران نیوز</h2>
         <p>

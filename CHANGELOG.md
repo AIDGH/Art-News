@@ -4,6 +4,8 @@
 
 ### Changed
 
+- **Ecran News Promo:** Compacted the mobile card into a horizontal logo-and-copy layout while retaining its description and Instagram action.
+- **Admin Categories:** Replaced the overflowing mobile table with readable category cards and full-width edit actions.
 - **Authentication:** Made the session cookie protocol-aware so temporary HTTP IP login works while HTTPS remains Secure.
 - **Homepage:** Renamed the header, ticker, and featured-carousel labels and moved the carousel label to the upper-left corner.
 - **Ecran News Promo:** Increased the Instagram button's horizontal spacing for improved readability.

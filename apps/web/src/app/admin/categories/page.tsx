@@ -77,9 +77,9 @@ export default function AdminCategoriesPage() {
           <label className="admin-field"><span>ترتیب نمایش</span><input type="number" min={0} value={sortOrder} onChange={(event) => setSortOrder(Number(event.target.value))} /></label>
           <div className="admin-form-actions"><button className="admin-primary-button" type="submit" disabled={saving}>{saving ? "در حال ذخیره…" : "ذخیره"}</button>{editingId ? <button className="admin-secondary-button" type="button" onClick={reset}>انصراف</button> : null}</div>
         </form>
-        <section className="admin-table-card">
+        <section className="admin-table-card admin-category-list">
           <div className="admin-table-scroll"><table><thead><tr><th>عنوان</th><th>شناسه</th><th>خبرها</th><th>ترتیب</th><th /></tr></thead><tbody>
-            {categories.map((category) => <tr key={category.id}><td><strong>{category.title}</strong><small>{category.description}</small></td><td dir="ltr">{category.slug}</td><td>{(category._count?.articles ?? 0).toLocaleString("fa-IR")}</td><td>{category.sortOrder.toLocaleString("fa-IR")}</td><td><button type="button" onClick={() => edit(category)}>ویرایش</button></td></tr>)}
+            {categories.map((category) => <tr key={category.id}><td className="admin-category-title-cell"><strong>{category.title}</strong><small>{category.description}</small></td><td data-label="شناسه"><code dir="ltr">{category.slug}</code></td><td data-label="خبرها">{(category._count?.articles ?? 0).toLocaleString("fa-IR")}</td><td data-label="ترتیب">{category.sortOrder.toLocaleString("fa-IR")}</td><td className="admin-category-action"><button type="button" onClick={() => edit(category)}>ویرایش</button></td></tr>)}
           </tbody></table></div>
         </section>
       </div>
