@@ -6,13 +6,18 @@ type ArticleCardProps = {
   article: Article;
   variant?: "standard" | "compact" | "horizontal";
   priority?: boolean;
+  hideCategory?: boolean;
+  excerptClassName?: string;
 };
 
 export function ArticleCard({
   article,
   variant = "standard",
   priority = false,
+  hideCategory = false,
+  excerptClassName,
 }: ArticleCardProps) {
+  const excerpt = article.lead || (article.body && article.body.length > 0 ? article.body[0] : "");
   return (
     <article className={`article-card article-card-${variant}`}>
       <Link className="article-card-image" href={`/articles/${article.slug}`}>
@@ -29,13 +34,15 @@ export function ArticleCard({
         />
       </Link>
       <div className="article-card-content">
-        <Link className="category-label" href={`/category/${article.category.slug}`}>
-          {article.category.title}
-        </Link>
+        {!hideCategory && (
+          <Link className="category-label" href={`/category/${article.category.slug}`}>
+            {article.category.title}
+          </Link>
+        )}
         <h3>
           <Link href={`/articles/${article.slug}`}>{article.title}</Link>
         </h3>
-        {variant !== "compact" ? <p>{article.lead}</p> : null}
+        {variant !== "compact" ? <p className={excerptClassName}>{excerpt}</p> : null}
         <div className="article-meta">
           <span>{article.publishedLabel}</span>
           <span>{article.readingTime}</span>
