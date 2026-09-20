@@ -150,7 +150,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <SectionHeading eyebrow="ادامه مسیر" title="مطالب مرتبط" />
         <div className="three-card-grid">
           {related.map((item) => (
-            <ArticleCard article={item} key={item.slug} />
+            <ArticleCard article={item} key={item.slug} excerptClassName="!line-clamp-2 text-sm text-gray-600 dark:text-gray-400 mt-2" />
           ))}
         </div>
       </section>

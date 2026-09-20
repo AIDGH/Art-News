@@ -4,6 +4,11 @@
 
 ### Changed
 
+- **UI Polish:** Fixed text contrast and removed dark mode conflicts on the "About Us" page.
+- **Top Bar:** Corrected the Persian date rendering order to standard format.
+- **Mobile Menu:** Fixed sub-menu vertical spacing and margins to prevent items from touching borders.
+- **Homepage:** Increased vertical spacing between article lists and securely darkened the horizontal separator lines.
+
 - **Ecran News Promo:** Compacted the mobile card into a horizontal logo-and-copy layout while retaining its description and Instagram action.
 - **Admin Categories:** Replaced the overflowing mobile table with readable category cards and full-width edit actions.
 - **Authentication:** Made the session cookie protocol-aware so temporary HTTP IP login works while HTTPS remains Secure.

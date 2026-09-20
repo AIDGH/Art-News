@@ -260,19 +260,22 @@ export function NavigationMenu() {
                       </div>
 
                       {isCinemaOpen && (
-                        <ul className="mobile-menu-submenu flex flex-col gap-1 pt-2 pb-1 my-1.5 list-none">
-                          {item.subItems.map((sub) => (
-                            <li key={sub.href}>
-                              <Link
-                                href={sub.href}
-                                onClick={closeMenu}
-                                className="flex items-center py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
-                              >
-                                {sub.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
+                        <>
+                          <ul className="mobile-menu-submenu flex flex-col gap-3 pt-2 list-none">
+                            {item.subItems.map((sub) => (
+                              <li key={sub.href}>
+                                <Link
+                                  href={sub.href}
+                                  onClick={closeMenu}
+                                  className="flex items-center py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
+                                >
+                                  {sub.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="h-4" aria-hidden="true" />
+                        </>
                       )}
                     </li>
                   );

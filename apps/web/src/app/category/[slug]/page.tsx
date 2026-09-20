@@ -69,9 +69,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <main className="category-page container">
       <header className="category-hero">
-        <span>دسته‌بندی</span>
         <h1>{category.title}</h1>
-        <p>{category.description}</p>
       </header>
 
       {lead ? (
@@ -87,7 +85,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               />
             </Link>
             <div>
-              <span className="category-label">انتخاب دبیر</span>
               <h2>
                 <Link href={`/articles/${lead.slug}`}>{lead.title}</Link>
               </h2>
@@ -101,7 +98,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
           <section className="category-list" aria-label={`خبرهای ${category.title}`}>
             {rest.map((article) => (
-              <ArticleCard article={article} variant="horizontal" key={article.slug} />
+              <ArticleCard article={article} variant="horizontal" key={article.slug} excerptClassName="!line-clamp-2 text-sm text-gray-600 dark:text-gray-400 mt-2" />
             ))}
           </section>
         </>
