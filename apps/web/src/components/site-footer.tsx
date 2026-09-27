@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FooterSocials } from "@/components/footer-socials";
 import { categories } from "@/lib/news";
 import { ERasanehTrustSeal } from "@/components/e-rasaneh-trust-seal";
 
@@ -19,6 +20,7 @@ export function SiteFooter({ description }: { description: string }) {
             </a>
             <ERasanehTrustSeal />
           </div>
+          <FooterSocials />
         </div>
         <nav aria-label="دسته‌بندی‌های فوتر">
           {categories.map((category) => (

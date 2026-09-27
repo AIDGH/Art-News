@@ -4,6 +4,13 @@
 
 ### Changed
 
+- **Article Page:** Removed placeholder sharing controls and the redundant category note; enlarged the category label and reduced the headline size on desktop and mobile.
+
+- **Footer Socials:** Moved the icons below the press permit; all six marks gain brand colors and a subtle upward hover motion, while only Instagram navigates.
+
+- **Article Page:** Moved promotions and «مطالب مرتبط» into a left desktop sidebar and hid placeholder photo credits and the old section eyebrow.
+- **Footer:** Added six locally hosted white social brand icons; Instagram links to `cinemanamayesh.ir`, with other destinations pending.
+
 - **UI Polish:** Fixed text contrast and removed dark mode conflicts on the "About Us" page.
 - **Top Bar:** Corrected the Persian date rendering order to standard format.
 - **Mobile Menu:** Fixed sub-menu vertical spacing and margins to prevent items from touching borders.

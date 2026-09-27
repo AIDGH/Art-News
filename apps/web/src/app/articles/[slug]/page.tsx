@@ -52,6 +52,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   if (!article) notFound();
 
+  const imageCredit = /تصویر ارائه[\s‌-]*شده برای نمونه/.test(article.imageCredit ?? "")
+    ? ""
+    : article.imageCredit;
+
   // Fetch related articles from same category, excluding current
   const categoryArticles = await fetchArticles({ category: article.category.slug, pageSize: 4 });
   const related = categoryArticles
@@ -79,6 +83,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      <div className="article-desktop-layout">
       <article>
         <header className="article-header container-narrow">
           <Link
@@ -105,18 +110,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               alt={article.imageAlt}
               fill
               priority
-              sizes="(max-width: 1100px) 100vw, 1180px"
+              sizes="(max-width: 1100px) 100vw, 800px"
             />
           </div>
-          <figcaption>{article.imageCredit}</figcaption>
+          {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
         </figure>
 
         <div className="article-body-layout container-wide">
-          <aside className="article-share" aria-label="اشتراک‌گذاری نمایشی">
-            <span>اشتراک</span>
-            <button type="button" aria-label="کپی لینک">پیوند</button>
-            <button type="button" aria-label="اشتراک در شبکه اجتماعی">شبکه</button>
-          </aside>
           <div className="article-body">
             {article.body.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
@@ -133,27 +133,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </section>
             ) : null}
           </div>
-          <aside className="article-side-note">
-            <span>در این پرونده</span>
-            <strong>{article.category.title}</strong>
-            <p>{article.category.description}</p>
-          </aside>
         </div>
       </article>
 
+      <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">
       <section className="container promotion-stack article-promotions">
         <EcranNewsPromo />
-        <AdvertisementPlaceholder label="تبلیغات پس از خبر" />
+        <AdvertisementPlaceholder label="جایگاه تبلیغات" />
       </section>
 
       <section className="container home-section related-section">
-        <SectionHeading eyebrow="ادامه مسیر" title="مطالب مرتبط" />
+        <SectionHeading title="مطالب مرتبط" />
         <div className="three-card-grid">
           {related.map((item) => (
             <ArticleCard article={item} key={item.slug} excerptClassName="!line-clamp-2 text-sm text-gray-600 dark:text-gray-400 mt-2" />
           ))}
         </div>
       </section>
+      </aside>
+      </div>
     </main>
   );
 }
