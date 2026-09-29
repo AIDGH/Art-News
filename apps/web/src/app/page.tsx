@@ -25,7 +25,7 @@ const homepageSectionSlugs = [
 function PremiumArticle({ article }: { article: Article }) {
   const excerpt = article.lead || (article.body && article.body.length > 0 ? article.body[0] : "");
   return (
-    <article className="group flex gap-4 items-center">
+    <article className="group flex gap-4 items-center !py-2 md:!py-3">
       <Link
         href={`/articles/${article.slug}`}
         className="block overflow-hidden rounded-xl shrink-0 w-32 md:w-48 aspect-[3/2] relative"
@@ -112,14 +112,14 @@ export default async function HomePage() {
         <div className="flex flex-col">
           {latestNewsArticles.map((article, index) => (
             <div key={article.slug}>
-              {index > 0 && <hr className="border-t-[1.5px] border-dashed border-gray-300 my-8 w-full" />}
+              {index > 0 && <hr className="border-t-[1.5px] border-dashed border-gray-300 !my-4 md:!my-5 w-full" />}
               <PremiumArticle article={article} />
             </div>
           ))}
         </div>
       </section>
 
-      <div className="container flex items-center py-8 w-full mt-4">
+      <div className="container flex items-center !pt-15 !pb-0.1 w-full">
         <div className="flex-grow border-t-[1.5px] border-gray-300"></div>
         <span className="shrink-0 mx-4 text-gray-600 font-bold text-base bg-[#f5f1e9] px-4 py-1">دسته‌بندی‌ها</span>
         <div className="flex-grow border-t-[1.5px] border-gray-300"></div>

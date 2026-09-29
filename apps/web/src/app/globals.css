@@ -2286,7 +2286,6 @@ img {
 }
 
 .site-footer {
-  padding-top: 62px;
   color: #e9e4da;
   background: #11110f;
 }
@@ -2300,7 +2299,6 @@ img {
 
 .footer-brand {
   font-family: "Vazirmatn", Tahoma, "Segoe UI", Arial, sans-serif;
-  font-size: 2.1rem;
 }
 
 .footer-socials {

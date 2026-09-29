@@ -5,10 +5,10 @@ import { ERasanehTrustSeal } from "@/components/e-rasaneh-trust-seal";
 
 export function SiteFooter({ description }: { description: string }) {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer !pt-8 md:!pt-12">
       <div className="container footer-grid">
         <div className="footer-intro">
-          <strong className="footer-brand">سینما نمایش</strong>
+          <strong className="footer-brand text-2xl md:text-3xl font-bold">سینما نمایش</strong>
           <p>{description}</p>
           <div className="footer-note">
             <a
