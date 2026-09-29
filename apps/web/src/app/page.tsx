@@ -15,32 +15,31 @@ const homepageSectionSlugs = [
   "news",
   "reviews-notes",
   "interviews",
-  "screenings",
+  "report",
   "theater",
   "television",
   "home-video",
   "world-cinema",
 ];
 
-function PremiumArticle({ article, isFeatured = false }: { article: Article; isFeatured?: boolean }) {
+function PremiumArticle({ article }: { article: Article }) {
   const excerpt = article.lead || (article.body && article.body.length > 0 ? article.body[0] : "");
   return (
-    <article className={`group flex ${isFeatured ? "flex-col gap-4" : "gap-4 items-center"}`}>
+    <article className="group flex gap-4 items-center">
       <Link
         href={`/articles/${article.slug}`}
-        className={`block overflow-hidden rounded-xl shrink-0 ${isFeatured ? "w-full aspect-[2/1] relative" : "w-32 md:w-48 aspect-[3/2] relative"}`}
+        className="block overflow-hidden rounded-xl shrink-0 w-32 md:w-48 aspect-[3/2] relative"
       >
         <Image
           src={article.imageUrl}
           alt={article.imageAlt}
           fill
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          sizes={isFeatured ? "(max-width: 760px) 100vw, 800px" : "(max-width: 760px) 30vw, 200px"}
-          priority={isFeatured}
+          sizes="(max-width: 760px) 30vw, 200px"
         />
       </Link>
       <div className="flex-1 min-w-0">
-        <h3 className={`text-slate-900 font-extrabold group-hover:text-orange-600 transition-colors duration-300 ${isFeatured ? "text-xl md:text-2xl" : "text-base md:text-lg"} line-clamp-2`}>
+        <h3 className="text-slate-900 font-extrabold group-hover:text-orange-600 transition-colors duration-300 text-base md:text-lg line-clamp-2">
           <Link href={`/articles/${article.slug}`}>{article.title}</Link>
         </h3>
         <p className="text-slate-700 text-sm line-clamp-2 mt-2">
@@ -68,6 +67,23 @@ export default async function HomePage() {
     .map((slug) => uiArticles.find((a) => a.category.slug === slug))
     .filter((article) => article !== undefined) as Article[];
 
+  if (!sectionArticles.find((a) => a.category.slug === "report")) {
+    sectionArticles.splice(3, 0, {
+      slug: "dummy-report",
+      title: "گزارشی از پردیس سینمایی ملت",
+      lead: "پوشش ویژه اخبار و حواشی پردیس سینمایی",
+      category: { slug: "report", title: "گزارش", description: "" },
+      imageUrl: "/images/articles/night-photography-exhibition.webp",
+      imageAlt: "",
+      imageCredit: "",
+      publishedAt: new Date().toISOString(),
+      publishedLabel: "امروز",
+      readingTime: "۳ دقیقه",
+      author: "سینما نمایش",
+      body: [],
+    });
+  }
+
   const latestNewsArticles = [...uiArticles]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, 8);
@@ -93,27 +109,23 @@ export default async function HomePage() {
 
       <section className="container compact-home-section">
         <SectionHeading title="خبرها" />
-        <div className="flex flex-col gap-6">
-          {latestNewsArticles.length > 0 && (
-            <div className="mb-2">
-              <PremiumArticle 
-                article={latestNewsArticles[0]} 
-                isFeatured={true} 
-              />
+        <div className="flex flex-col">
+          {latestNewsArticles.map((article, index) => (
+            <div key={article.slug}>
+              {index > 0 && <hr className="border-t-[1.5px] border-dashed border-gray-300 my-8 w-full" />}
+              <PremiumArticle article={article} />
             </div>
-          )}
-          <div className="flex flex-col gap-6">
-            {latestNewsArticles.slice(1).map((article) => (
-              <PremiumArticle 
-                key={article.slug} 
-                article={article} 
-              />
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 
-      <section className="container compact-home-section mt-12 pt-8 border-t border-gray-300 dark:border-gray-700">
+      <div className="container flex items-center py-8 w-full mt-4">
+        <div className="flex-grow border-t-[1.5px] border-gray-300"></div>
+        <span className="shrink-0 mx-4 text-gray-600 font-bold text-base bg-[#f5f1e9] px-4 py-1">دسته‌بندی‌ها</span>
+        <div className="flex-grow border-t-[1.5px] border-gray-300"></div>
+      </div>
+
+      <section className="container compact-home-section">
         <div className="compact-news-grid">
           {sectionArticles.map((article) => (
             <article className="compact-news-item" key={article.slug}>
@@ -129,11 +141,10 @@ export default async function HomePage() {
                 />
               </Link>
               <div>
-                <Link
-                  className="category-label"
-                  href={`/category/${article.category.slug}`}
-                >
-                  {article.category.title}
+                <Link href={`/category/${article.category.slug}`}>
+                  <span className="inline-block bg-orange-100 text-orange-600 text-xs font-bold px-3 py-1 rounded-md mb-2">
+                    {article.category.title}
+                  </span>
                 </Link>
                 <h2>
                   <Link href={`/articles/${article.slug}`}>{article.title}</Link>

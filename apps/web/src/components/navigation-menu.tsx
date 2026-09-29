@@ -33,7 +33,7 @@ const menuItems: MenuItem[] = [
       { href: "/category/news", label: "خبر" },
       { href: "/category/reviews-notes", label: "نقد و یادداشت" },
       { href: "/category/interviews", label: "گفت‌وگو" },
-      { href: "/category/screenings", label: "گزارش" },
+      { href: "/category/report", label: "گزارش" },
     ],
   },
   { href: "/category/theater", color: "#9c4aa5", label: "تئاتر" },
@@ -158,19 +158,16 @@ export function NavigationMenu() {
         className="w-10 h-10 md:w-11 md:h-11 flex flex-col items-center justify-center gap-1.5 rounded-full border border-[var(--line-dark)] text-[var(--ink)] bg-transparent hover:bg-[var(--ink)] hover:text-white hover:border-[var(--ink)] focus-visible:outline-2 focus-visible:outline-[var(--accent)] transition-all duration-160 cursor-pointer"
       >
         <span
-          className={`block w-4 h-[1.5px] bg-current transition-transform duration-200 ${
-            isOpen ? "rotate-45 translate-y-[4.5px]" : ""
-          }`}
+          className={`block w-4 h-[1.5px] bg-current transition-transform duration-200 ${isOpen ? "rotate-45 translate-y-[4.5px]" : ""
+            }`}
         />
         <span
-          className={`block w-4 h-[1.5px] bg-current transition-opacity duration-200 ${
-            isOpen ? "opacity-0" : "opacity-100"
-          }`}
+          className={`block w-4 h-[1.5px] bg-current transition-opacity duration-200 ${isOpen ? "opacity-0" : "opacity-100"
+            }`}
         />
         <span
-          className={`block w-4 h-[1.5px] bg-current transition-transform duration-200 ${
-            isOpen ? "-rotate-45 -translate-y-[4.5px]" : ""
-          }`}
+          className={`block w-4 h-[1.5px] bg-current transition-transform duration-200 ${isOpen ? "-rotate-45 -translate-y-[4.5px]" : ""
+            }`}
         />
       </button>
 
@@ -183,11 +180,10 @@ export function NavigationMenu() {
               aria-hidden={!isOpen}
               tabIndex={isOpen ? 0 : -1}
               onClick={closeMenu}
-              className={`fixed inset-0 z-[60] cursor-default border-0 bg-black/50 transition-[opacity,backdrop-filter] duration-300 ease-out ${
-                isOpen
+              className={`fixed inset-0 z-[60] cursor-default border-0 bg-black/50 transition-[opacity,backdrop-filter] duration-300 ease-out ${isOpen
                   ? "pointer-events-auto opacity-100 backdrop-blur-xs"
                   : "pointer-events-none opacity-0 backdrop-blur-none"
-              }`}
+                }`}
             />
 
             {/* Drawer Panel */}
@@ -197,112 +193,110 @@ export function NavigationMenu() {
               aria-label="منوی ناوبری اصلی سایت"
               aria-hidden={!isOpen}
               inert={!isOpen}
-              className={`fixed top-0 bottom-0 start-0 z-[70] flex h-[100dvh] w-[min(310px,calc(100vw-48px))] flex-col bg-[var(--surface)] text-[var(--ink)] shadow-2xl transition-transform duration-300 ease-out ${
-                isOpen
+              className={`fixed top-0 bottom-0 start-0 z-[70] flex h-[100dvh] w-[min(310px,calc(100vw-48px))] flex-col bg-[var(--surface)] text-[var(--ink)] shadow-2xl transition-transform duration-300 ease-out ${isOpen
                   ? "translate-x-0"
                   : "pointer-events-none -translate-x-full rtl:translate-x-full"
-              }`}
+                }`}
             >
-        {/* Drawer Header */}
-        <div className="mobile-menu-header flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--surface)]">
-          <div className="flex flex-col">
-            <span className="block text-xs font-bold tracking-wider text-[var(--accent)]">
-              منوی اصلی
-            </span>
-            <strong className="block text-xl md:text-2xl font-black text-[var(--ink)] mt-0.5">
-              سینما نمایش
-            </strong>
-          </div>
-          <button
-            ref={closeRef}
-            type="button"
-            aria-label="بستن منو"
-            onClick={closeMenu}
-            className="w-10 h-10 flex items-center justify-center rounded-full border border-[var(--line-dark)] text-[var(--ink)] hover:bg-[var(--ink)] hover:text-white hover:border-[var(--ink)] transition-colors text-2xl leading-none cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--accent)] shrink-0"
-          >
-            ×
-          </button>
-        </div>
+              {/* Drawer Header */}
+              <div className="mobile-menu-header flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--surface)]">
+                <div className="flex flex-col">
+                  <span className="block text-xs font-bold tracking-wider text-[var(--accent)]">
+                    منوی اصلی
+                  </span>
+                  <strong className="block text-xl md:text-2xl font-black text-[var(--ink)] mt-0.5">
+                    سینما نمایش
+                  </strong>
+                </div>
+                <button
+                  ref={closeRef}
+                  type="button"
+                  aria-label="بستن منو"
+                  onClick={closeMenu}
+                  className="w-10 h-10 flex items-center justify-center rounded-full border border-[var(--line-dark)] text-[var(--ink)] hover:bg-[var(--ink)] hover:text-white hover:border-[var(--ink)] transition-colors text-2xl leading-none cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--accent)] shrink-0"
+                >
+                  ×
+                </button>
+              </div>
 
-        {/* Scrollable Menu Container */}
-        <div className="mobile-menu-body flex-1 overflow-y-auto py-4">
-          <nav aria-label="پیوندهای منو">
-            <ul className="mobile-menu-list flex flex-col list-none p-0 m-0">
-              {menuItems.map((item) => {
-                const itemStyle = { "--menu-accent": item.color } as CSSProperties;
-                if (item.subItems) {
-                  return (
-                    <li key={item.label} className="mobile-menu-item py-2.5" style={itemStyle}>
-                      <div className="flex items-center justify-between min-h-[44px]">
-                        <Link
-                          href={item.href || "#"}
-                          onClick={closeMenu}
-                          className="flex flex-1 items-center py-1 text-base font-extrabold text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
-                        >
-                          {item.label}
-                        </Link>
-                        <button
-                          type="button"
-                          aria-label={`نمایش یا پنهان‌سازی زیرمنوی ${item.label}`}
-                          aria-expanded={isCinemaOpen}
-                          onClick={() => setIsCinemaOpen((prev) => !prev)}
-                          className="w-9 h-9 flex items-center justify-center text-[var(--ink)] hover:text-[var(--accent)] cursor-pointer rounded-full hover:bg-[var(--paper)] transition-colors shrink-0"
-                        >
-                          <span
-                            aria-hidden="true"
-                            className={`text-lg font-bold transition-transform duration-200 inline-block ${
-                              isCinemaOpen ? "rotate-0" : "-rotate-90"
-                            }`}
-                          >
-                            ⌄
-                          </span>
-                        </button>
-                      </div>
-
-                      {isCinemaOpen && (
-                        <>
-                          <ul className="mobile-menu-submenu flex flex-col gap-3 pt-2 list-none">
-                            {item.subItems.map((sub) => (
-                              <li key={sub.href}>
-                                <Link
-                                  href={sub.href}
-                                  onClick={closeMenu}
-                                  className="flex items-center py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
+              {/* Scrollable Menu Container */}
+              <div className="mobile-menu-body flex-1 overflow-y-auto py-4">
+                <nav aria-label="پیوندهای منو">
+                  <ul className="mobile-menu-list flex flex-col list-none p-0 m-0">
+                    {menuItems.map((item) => {
+                      const itemStyle = { "--menu-accent": item.color } as CSSProperties;
+                      if (item.subItems) {
+                        return (
+                          <li key={item.label} className="mobile-menu-item py-2.5" style={itemStyle}>
+                            <div className="flex items-center justify-between min-h-[44px]">
+                              <Link
+                                href={item.href || "#"}
+                                onClick={closeMenu}
+                                className="flex flex-1 items-center py-1 text-base font-extrabold text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
+                              >
+                                {item.label}
+                              </Link>
+                              <button
+                                type="button"
+                                aria-label={`نمایش یا پنهان‌سازی زیرمنوی ${item.label}`}
+                                aria-expanded={isCinemaOpen}
+                                onClick={() => setIsCinemaOpen((prev) => !prev)}
+                                className="w-9 h-9 flex items-center justify-center text-[var(--ink)] hover:text-[var(--accent)] cursor-pointer rounded-full hover:bg-[var(--paper)] transition-colors shrink-0"
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={`text-lg font-bold transition-transform duration-200 inline-block ${isCinemaOpen ? "rotate-0" : "-rotate-90"
+                                    }`}
                                 >
-                                  {sub.label}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                          <div className="h-4" aria-hidden="true" />
-                        </>
-                      )}
-                    </li>
-                  );
-                }
+                                  ⌄
+                                </span>
+                              </button>
+                            </div>
 
-                return (
-                  <li key={item.href} className="mobile-menu-item py-1" style={itemStyle}>
-                    <Link
-                      href={item.href || "#"}
-                      lang={item.lang}
-                      onClick={closeMenu}
-                      className="flex items-center min-h-[44px] py-1 text-base font-bold text-[var(--ink)] hover:text-[var(--accent)] hover:bg-[var(--paper)] rounded-md transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
-        </div>
+                            {isCinemaOpen && (
+                              <>
+                                <ul className="mobile-menu-submenu flex flex-col gap-3 pt-2 list-none">
+                                  {item.subItems.map((sub) => (
+                                    <li key={sub.href}>
+                                      <Link
+                                        href={sub.href}
+                                        onClick={closeMenu}
+                                        className="flex items-center py-1.5 text-sm font-semibold rounded-md text-[var(--ink-soft)] hover:text-[var(--accent)] hover:bg-[var(--paper)] transition-colors"
+                                      >
+                                        {sub.label}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                                <div className="h-4" aria-hidden="true" />
+                              </>
+                            )}
+                          </li>
+                        );
+                      }
 
-        {/* Drawer Footer info */}
-        <div className="px-6 py-4 border-t border-[var(--line)] bg-[var(--paper)] text-xs text-[var(--ink-soft)] flex items-center justify-between">
-          <span>رسانه سینما و نمایش</span>
-          <span className="font-mono text-[11px]">نسخه ۱.۰</span>
-        </div>
+                      return (
+                        <li key={item.href} className="mobile-menu-item py-1" style={itemStyle}>
+                          <Link
+                            href={item.href || "#"}
+                            lang={item.lang}
+                            onClick={closeMenu}
+                            className="flex items-center min-h-[44px] py-1 text-base font-bold text-[var(--ink)] hover:text-[var(--accent)] hover:bg-[var(--paper)] rounded-md transition-colors"
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </nav>
+              </div>
+
+              {/* Drawer Footer info */}
+              <div className="px-6 py-4 border-t border-[var(--line)] bg-[var(--paper)] text-xs text-[var(--ink-soft)] flex items-center justify-between">
+                <span>رسانه سینما و نمایش</span>
+                <span className="font-mono text-[11px]">نسخه ۱.۰</span>
+              </div>
             </aside>
           </>,
           document.body,

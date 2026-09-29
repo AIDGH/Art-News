@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArticleCard } from "@/components/article-card";
 import {
   AdvertisementPlaceholder,
   EcranNewsPromo,
@@ -19,7 +18,7 @@ const cinemaCategorySlugs = [
   "news",
   "reviews-notes",
   "interviews",
-  "screenings",
+  "report",
 ];
 
 async function fetchCategoryArticles(slug: string): Promise<Article[]> {
@@ -46,7 +45,11 @@ export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = await fetchCategoryBySlug(slug);
+  let category = await fetchCategoryBySlug(slug);
+
+  if (!category && slug === "report") {
+    category = { slug: "report", title: "گزارش", description: "گزارش‌ها، برنامه‌های نمایش و رویدادهای ویژه فیلم" };
+  }
 
   if (!category) return {};
 
@@ -59,49 +62,79 @@ export async function generateMetadata({
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  const category = await fetchCategoryBySlug(slug);
+  let category = await fetchCategoryBySlug(slug);
+
+  if (!category && slug === "report") {
+    category = { slug: "report", title: "گزارش", description: "گزارش‌ها، برنامه‌های نمایش و رویدادهای ویژه فیلم" };
+  }
 
   if (!category) notFound();
 
-  const categoryArticles = await fetchCategoryArticles(slug);
-  const [lead, ...rest] = categoryArticles;
+  let categoryArticles = await fetchCategoryArticles(slug);
+  
+  if (slug === "report") {
+    categoryArticles = [
+      {
+        slug: "dummy-report",
+        title: "گزارشی از پردیس سینمایی ملت",
+        lead: "پوشش ویژه اخبار و حواشی پردیس سینمایی",
+        category,
+        imageUrl: "/images/articles/night-photography-exhibition.webp",
+        imageAlt: "",
+        imageCredit: "",
+        publishedAt: new Date().toISOString(),
+        publishedLabel: "امروز",
+        readingTime: "۳ دقیقه",
+        author: "سینما نمایش",
+        body: [],
+      }
+    ];
+  }
+
+  const hasArticles = categoryArticles.length > 0;
 
   return (
-    <main className="category-page container">
-      <header className="category-hero">
-        <h1>{category.title}</h1>
+    <main className="container pt-6 md:pt-10 pb-12">
+      <header>
+        <h1 className="!mt-8 md:!mt-12 !mb-8 md:!mb-10 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">{category.title}</h1>
+        <hr className="border-t-[3px] border-slate-900 mt-4 mb-6" />
       </header>
 
-      {lead ? (
-        <>
-          <article className="category-lead">
-            <Link className="category-lead-image" href={`/articles/${lead.slug}`}>
-              <Image
-                src={lead.imageUrl}
-                alt={lead.imageAlt}
-                fill
-                priority
-                sizes="(max-width: 900px) 100vw, 62vw"
-              />
-            </Link>
-            <div>
-              <h2>
-                <Link href={`/articles/${lead.slug}`}>{lead.title}</Link>
-              </h2>
-              <p>{lead.lead}</p>
-              <div className="article-meta">
-                <span>{lead.publishedLabel}</span>
-                <span>{lead.readingTime}</span>
-              </div>
-            </div>
-          </article>
-
-          <section className="category-list" aria-label={`خبرهای ${category.title}`}>
-            {rest.map((article) => (
-              <ArticleCard article={article} variant="horizontal" key={article.slug} excerptClassName="!line-clamp-2 text-sm text-gray-600 dark:text-gray-400 mt-2" />
-            ))}
-          </section>
-        </>
+      {hasArticles ? (
+        <section className="flex flex-col gap-6 mt-6" aria-label={`خبرهای ${category.title}`}>
+          {categoryArticles.map((article) => {
+            const excerpt = article.lead || (article.body && article.body.length > 0 ? article.body[0] : "");
+            return (
+              <article key={article.slug} className="group flex gap-4 items-center">
+                <Link
+                  href={`/articles/${article.slug}`}
+                  className="block overflow-hidden rounded-xl shrink-0 w-32 md:w-48 aspect-[3/2] relative"
+                >
+                  <Image
+                    src={article.imageUrl}
+                    alt={article.imageAlt}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    sizes="(max-width: 760px) 30vw, 200px"
+                  />
+                </Link>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-slate-900 font-extrabold group-hover:text-orange-600 transition-colors duration-300 text-base md:text-lg line-clamp-2">
+                    <Link href={`/articles/${article.slug}`}>{article.title}</Link>
+                  </h3>
+                  <p className="text-slate-700 text-sm line-clamp-2 mt-2">
+                    {excerpt}
+                  </p>
+                  <div className="text-slate-500 text-xs font-medium mt-3 flex items-center gap-1">
+                    <span>{article.publishedLabel}</span>
+                    <span className="mx-1">&bull;</span>
+                    <span>{article.readingTime}</span>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </section>
       ) : (
         <section className="category-empty" aria-live="polite">
           <span>آرشیو این بخش به‌زودی تکمیل می‌شود</span>

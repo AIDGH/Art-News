@@ -50,7 +50,7 @@ export const categories: Category[] = [
     description: "گفت‌وگو با فیلم‌سازان، بازیگران و فعالان سینما",
   },
   {
-    slug: "screenings",
+    slug: "report",
     title: "گزارش",
     description: "گزارش‌ها، برنامه‌های نمایش و رویدادهای ویژه فیلم",
   },
@@ -91,6 +91,23 @@ const categoryBySlug = Object.fromEntries(
 ) as Record<string, Category>;
 
 export const articles: Article[] = [
+  {
+    slug: "report-from-the-fajr-film-festival",
+    title: "حاشیه‌های روز اول جشنواره؛ از تأخیر در نمایش تا غافلگیری منتقدان",
+    lead:
+      "گزارشی از شلوغ‌ترین روز پردیس سینمایی ملت که با استقبال دور از انتظار مخاطبان همراه بود.",
+    category: categoryBySlug["report"],
+    imageUrl: "/images/articles/night-photography-exhibition.webp",
+    imageAlt: "حضور خبرنگاران در سالن تاریک",
+    imageCredit: "سینما نمایش",
+    publishedAt: "2026-09-08T09:00:00.000Z",
+    publishedLabel: "۱۷ شهریور ۱۴۰۵، ۱۲:۳۰",
+    readingTime: "۴ دقیقه",
+    author: "سینما نمایش",
+    body: [
+      "این گزارش نمونه‌ای برای بخش دسته‌بندی است و به‌زودی با محتوای واقعی جایگزین خواهد شد."
+    ],
+  },
   {
     slug: "fitileh-uncles-return-with-shootinga",
     title: "بعد از ۱۴ سال، بازگشت «عموهای فیتیله‌ای» با شوتینگا به سینما",
