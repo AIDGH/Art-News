@@ -4,6 +4,9 @@
 
 ### Changed
 
+- **Homepage Spacing & Visual Hierarchy:** Optimized vertical spacing and padding (using `!important` modifiers where necessary) for the top articles list (`!py-2 md:!py-3`) and their dashed separators (`!my-4 md:!my-5`). Adjusted the position and padding (`!pt-12 !pb-2`) of the main section divider ("دسته‌بندی‌ها") for optimal visual balance.
+- **Category Management & Routing:** Added the "گزارش" (`report`) category to both the frontend mock structure and dynamic routing handlers to prevent 404 errors; ensured all categories dynamically render modern orange badge styling (`bg-orange-100 text-orange-600`).
+- **Footer Refinements:** Reduced the font size of the main brand heading "سینما نمایش" in the footer (`text-2xl md:text-3xl`) and tightened the top padding of the dark footer container (`!pt-8 md:!pt-12`) for a more compact and elegant layout.
 - **Article Page:** Removed placeholder sharing controls and the redundant category note; enlarged the category label and reduced the headline size on desktop and mobile.
 
 - **Footer Socials:** Moved the icons below the press permit; all six marks gain brand colors and a subtle upward hover motion, while only Instagram navigates.
