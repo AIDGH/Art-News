@@ -3178,10 +3178,6 @@ img {
     gap: 42px;
   }
 
-  .footer-grid nav {
-    display: none;
-  }
-
   .category-hero h1 {
     font-size: clamp(2rem, 9vw, 3.2rem);
   }
@@ -3434,4 +3430,73 @@ img {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+/* Reader comments and editorial moderation */
+.article-engagement {
+  margin: 36px auto 64px;
+  padding: 28px;
+  border-top: 1px solid var(--line);
+}
+.article-engagement-heading,
+.article-comment > div,
+.admin-comment-card > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.article-engagement h2 { font-size: 1.5rem; }
+.article-engagement button,
+.admin-comment-actions button {
+  border: 1px solid #d5cbc0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.article-engagement button:disabled,
+.admin-comment-actions button:disabled { cursor: default; opacity: .55; }
+.article-comment-form {
+  display: grid;
+  gap: 14px;
+  margin: 24px 0 32px;
+}
+.article-comment-form label { display: grid; gap: 6px; }
+.article-comment-form input,
+.article-comment-form textarea {
+  width: 100%;
+  border: 1px solid #d5cbc0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #1d1b18;
+  background: #fff;
+  font: inherit;
+}
+.article-comment-form > button,
+.admin-comment-actions button:first-child { width: fit-content; background: #c44b31; color: white; border-color: #c44b31; }
+.article-comment-form small { color: #6e6861; }
+.article-comment-message { color: #8a4329; }
+.article-comment-list,
+.admin-comment-list { display: grid; gap: 16px; }
+.article-comment,
+.admin-comment-card {
+  border: 1px solid #ded7cf;
+  border-radius: 10px;
+  padding: 18px;
+  background: #fffdf9;
+}
+.article-comment time,
+.admin-comment-card small { color: #77716a; font-size: .8rem; }
+.article-comment p,
+.admin-comment-card p { white-space: pre-wrap; overflow-wrap: anywhere; margin: 12px 0; }
+.article-comment button { font-size: .85rem; }
+.admin-comment-card > a { display: inline-block; margin-top: 10px; color: #a4432d; }
+.admin-comment-actions { display: flex; gap: 10px; margin-top: 16px; }
+.admin-comment-filter { display: flex; }
+.admin-comment-filter select { min-width: min(100%, 240px); }
+@media (max-width: 600px) {
+  .article-engagement { padding: 22px 0; }
+  .article-engagement-heading { align-items: flex-start; flex-direction: column; }
+  .admin-comment-actions { flex-wrap: wrap; }
 }

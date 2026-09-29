@@ -36,6 +36,12 @@ enum HomepageSlot {
   SECTION_FEATURE
 }
 
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id           String    @id @default(uuid())
   email        String    @unique
@@ -78,12 +84,51 @@ model Article {
   tags               ArticleTag[]
   sources            ArticleSource[]
   homepagePlacements HomepagePlacement[]
+  comments           ArticleComment[]
+  likes              ArticleLike[]
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
 
   @@index([status, publishedAt])
   @@index([categoryId, status, publishedAt])
   @@index([authorId])
+}
+
+model ArticleComment {
+  id          String        @id @default(uuid())
+  articleId   String
+  authorName  String
+  body        String
+  visitorId   String
+  status      CommentStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  moderatedAt DateTime?
+  article     Article       @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  likes       CommentLike[]
+
+  @@index([articleId, status, createdAt])
+  @@index([status, createdAt])
+  @@index([visitorId, createdAt])
+}
+
+model ArticleLike {
+  id        String   @id @default(uuid())
+  articleId String
+  visitorId String
+  createdAt DateTime @default(now())
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([articleId, visitorId])
+}
+
+model CommentLike {
+  id        String         @id @default(uuid())
+  commentId String
+  visitorId String
+  createdAt DateTime       @default(now())
+  comment   ArticleComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, visitorId])
 }
 
 model Tag {

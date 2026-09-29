@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/article-card";
+import { ArticleEngagement } from "@/components/article-engagement";
 import {
   AdvertisementPlaceholder,
   EcranNewsPromo,
@@ -134,6 +135,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             ) : null}
           </div>
         </div>
+        <ArticleEngagement slug={article.slug} />
       </article>
 
       <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">

@@ -63,6 +63,9 @@ fallbackهای سیستمی فقط برای حالت خطای asset باقی م�
 رسانه نیز Client Component است چون script
 رسمی ارائه‌دهنده را پس از mount بارگذاری و initialize می‌کند. بنر اکران نیوز و
 Placeholder تبلیغات Componentهای مشترک و بدون داده runtime هستند.
+فرم نظر و دکمه‌های لایک در صفحه خبر Client Component هستند و از مسیر
+`/api/v1/articles/:slug/engagement` به API درخواست می‌دهند. فهرست عمومی فقط
+نظرهای تأییدشده را دریافت می‌کند؛ صف بررسی در پنل با نشست مدیر خوانده می‌شود.
 
 آیتم‌های منوی قالب فعلی در آرایه ثابت `menuItems` تعریف شده‌اند و هنوز از CMS
 دریافت نمی‌شوند. اسلایدر خبرهای مهم نیز Client Component است؛ داده Article را
@@ -93,6 +96,7 @@ ArticlesModule
 CategoriesModule
 EditorialModule
 SiteSettingsModule
+EngagementModule
 ```
 
 ## Rendering Strategy
