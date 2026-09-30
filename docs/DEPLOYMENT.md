@@ -61,10 +61,11 @@ initialization action because running it repeatedly can overwrite editorial
 sample data or the administrator password.
 
 The comments/likes migration `20260930100000_add_engagement` adds three new
-tables without changing existing article rows. Before promoting that commit to
-`main`, take a fresh SQLite backup, then check migration status and the public
-engagement endpoint after deployment. The rollout is currently only on local
-`v2`; it has not been pushed to production.
+tables without changing existing article rows. Promotion to `main` and publication
+of both branches were authorized on 2026-09-30. The cloud instance is currently
+powered off according to the owner, so production deployment is unverified.
+When restoring the instance, take a fresh SQLite backup before applying the
+migration, then check migration status and the public engagement endpoint.
 
 ## Backups
 
