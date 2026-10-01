@@ -1,9 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
-
-type AdvertisementPlaceholderProps = {
-  label?: string;
-};
 
 export function EcranNewsPromo() {
   return (
@@ -11,27 +6,18 @@ export function EcranNewsPromo() {
       href="https://instagram.com/ecrannews"
       target="_blank"
       rel="noopener noreferrer"
-      className="w-full h-[110px] md:h-[120px] flex flex-row items-stretch justify-between bg-[#111] rounded-[32px] p-2 md:p-[10px] gap-2 md:gap-4 cursor-pointer hover:opacity-90 transition-opacity"
+      className="w-full h-[120px] md:h-[140px] flex flex-row items-stretch bg-[#111]"
       aria-label="معرفی رسانه اکران نیوز"
     >
-      <div
-        className="w-[110px] md:w-[140px] shrink-0 bg-white rounded-[24px] p-2 flex items-center justify-center"
-        aria-hidden="true"
-      >
-        <Image
-          src="/ecran-logo.png"
-          alt="لوگو اکران نیوز"
-          width={180}
-          height={180}
-          className="w-full h-full object-contain"
-        />
+      {/* Logo Container - Width exactly matches parent's height to create a perfect square */}
+      <div className="w-[120px] md:w-[140px] shrink-0 bg-white flex items-center justify-center p-2 md:p-3">
+        <Image alt="Ecran News Logo" className="w-full h-auto object-contain" height={140} src="/ecran-logo.png" width={140}/>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center text-right pl-2 pr-2 md:pr-4">
-        <h3 className="text-white font-medium text-base mb-2">اکران نیوز</h3>
-        <p className="text-gray-400 text-xs leading-relaxed">
-          برای پیگیری لحظه‌ای حواشی و اخبار سینما، به صفحه رسمی اکران نیوز در
-          اینستاگرام بپیوندید.
+      {/* Text Container */}
+      <div className="flex-1 flex flex-col items-center justify-center p-3 md:p-4 text-center">
+        <p className="text-white text-center text-xs md:text-sm leading-relaxed font-medium w-full max-w-[280px] mx-auto">
+          برای پیگیری لحظه‌ای حواشی و اخبار سینما، به صفحه رسمی اکران نیوز در اینستاگرام بپیوندید.
         </p>
       </div>
     </a>
@@ -40,11 +26,16 @@ export function EcranNewsPromo() {
 
 export function AdvertisementPlaceholder({
   label = "جایگاه تبلیغات",
-}: AdvertisementPlaceholderProps) {
+}: { label?: string } = {}) {
   return (
-    <aside className="w-full h-[110px] md:h-[120px] flex flex-col items-center justify-center border-[1.5px] border-dashed border-gray-400 bg-[#f8f5ed] rounded-[32px] px-4 text-center gap-2" aria-label={label}>
-      <h3 className="text-lg text-gray-800 font-bold">تبلیغات</h3>
-      <small className="text-gray-500 text-xs">ابعاد و محتوای نهایی پس از دریافت سفارش تبلیغ مشخص می‌شود.</small>
-    </aside>
+    <div
+      className="w-full h-[120px] md:h-[140px] flex flex-col items-center justify-center border-[1.5px] border-dashed border-gray-400 bg-transparent rounded-none px-4 text-center mt-6"
+      aria-label={label}
+    >
+      <h3 className="text-base md:text-lg font-bold text-gray-800 mb-1">تبلیغات</h3>
+      <p className="text-xs md:text-sm text-gray-500">
+        ابعاد و محتوای نهایی پس از دریافت سفارش تبلیغ مشخص میشود.
+      </p>
+    </div>
   );
 }

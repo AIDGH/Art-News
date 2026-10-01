@@ -196,7 +196,6 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
                 sizes="(max-width: 820px) 100vw, 1280px"
               />
               <div className="featured-carousel-overlay" />
-              <span className="featured-carousel-category">تازه‌ها</span>
               <Link
                 className="featured-carousel-hit-area"
                 href={`/articles/${article.slug}`}

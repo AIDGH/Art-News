@@ -4,6 +4,14 @@
 
 ### Changed
 
+- **Promo Blocks & Layout Polish:**
+  - Fixed RTL layout order and height constraints for `EcranNewsPromo` to create a perfect square logo box and centered text.
+  - Matched `AdvertisementPlaceholder` height and sharp corner styling to align with the promo block.
+  - Fixed zero-width non-joiner typo in the promo text ("لحظه‌ای").
+  - Removed the red "تازه‌ها" overlay badge from the main featured news carousel to reduce visual clutter.
+  - Renamed the main news feed section heading from "خبرها" to "تازه‌ها".
+  - Updated the mobile navigation menu version footer from "نسخه ۱.۰" to "نسخه ۱.۱" (and "نسخه ۱.۸").
+  - Replaced the "دسته‌بندی‌ها" text divider with a clean, continuous dashed line (`<hr>`) and tightened its bottom margin for better vertical rhythm.
 - **Homepage Spacing & Visual Hierarchy:** Optimized vertical spacing and padding (using `!important` modifiers where necessary) for the top articles list (`!py-2 md:!py-3`) and their dashed separators (`!my-4 md:!my-5`). Adjusted the position and padding (`!pt-12 !pb-2`) of the main section divider ("دسته‌بندی‌ها") for optimal visual balance.
 - **Category Management & Routing:** Added the "گزارش" (`report`) category to both the frontend mock structure and dynamic routing handlers to prevent 404 errors; ensured all categories dynamically render modern orange badge styling (`bg-orange-100 text-orange-600`).
 - **Footer Refinements:** Reduced the font size of the main brand heading "سینما نمایش" in the footer (`text-2xl md:text-3xl`) and tightened the top padding of the dark footer container (`!pt-8 md:!pt-12`) for a more compact and elegant layout.

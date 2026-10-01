@@ -295,7 +295,7 @@ export function NavigationMenu() {
               {/* Drawer Footer info */}
               <div className="px-6 py-4 border-t border-[var(--line)] bg-[var(--paper)] text-xs text-[var(--ink-soft)] flex items-center justify-between">
                 <span>رسانه سینما و نمایش</span>
-                <span className="font-mono text-[11px]">نسخه ۱.۰</span>
+                <span className="font-mono text-[11px]">نسخه ۱.۸</span>
               </div>
             </aside>
           </>,

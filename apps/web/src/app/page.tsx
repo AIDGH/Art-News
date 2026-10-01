@@ -20,6 +20,8 @@ const homepageSectionSlugs = [
   "television",
   "home-video",
   "world-cinema",
+  "photos",
+  "videos",
 ];
 
 function PremiumArticle({ article }: { article: Article }) {
@@ -108,7 +110,7 @@ export default async function HomePage() {
       </section>
 
       <section className="container compact-home-section">
-        <SectionHeading title="خبرها" />
+        <SectionHeading title="تازه‌ها" />
         <div className="flex flex-col">
           {latestNewsArticles.map((article, index) => (
             <div key={article.slug}>
@@ -119,11 +121,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <div className="container flex items-center !pt-15 !pb-0.1 w-full">
-        <div className="flex-grow border-t-[1.5px] border-gray-300"></div>
-        <span className="shrink-0 mx-4 text-gray-600 font-bold text-base bg-[#f5f1e9] px-4 py-1">دسته‌بندی‌ها</span>
-        <div className="flex-grow border-t-[1.5px] border-gray-300"></div>
-      </div>
+      <hr className="border-t-[1.5px] border-dashed border-gray-300 w-full mt-8 mb-4" />
 
       <section className="container compact-home-section">
         <div className="compact-news-grid">
@@ -160,8 +158,6 @@ export default async function HomePage() {
         className="container compact-media-links"
         aria-label="بخش‌های چندرسانه‌ای"
       >
-        <Link href="/category/photos">عکس</Link>
-        <Link href="/category/videos">فیلم</Link>
         <Link href="/english" lang="en">
           English
         </Link>
