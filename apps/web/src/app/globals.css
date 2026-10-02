@@ -2154,6 +2154,7 @@ img {
   font-weight: 900;
 }
 
+.section-heading h1,
 .section-heading h2 {
   font-family: "Vazirmatn", Tahoma, "Segoe UI", Arial, sans-serif;
   font-size: clamp(1.6rem, 2.6vw, 2.25rem);
@@ -3365,6 +3366,7 @@ img {
     display: none;
   }
 
+  .section-heading h1,
   .section-heading h2 {
     font-size: 1.55rem;
   }

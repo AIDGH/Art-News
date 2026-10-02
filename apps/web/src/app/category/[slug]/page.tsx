@@ -95,9 +95,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main className="container pt-6 md:pt-10 pb-12">
-      <header>
-        <h1 className="!mt-8 md:!mt-12 !mb-8 md:!mb-10 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">{category.title}</h1>
-        <hr className="border-t-[3px] border-slate-900 mt-4 mb-6" />
+      <header className="!mt-8 md:!mt-12 !mb-8 md:!mb-10">
+        <div className="section-heading">
+          <div>
+            <h1>{category.title}</h1>
+          </div>
+        </div>
       </header>
 
       {hasArticles ? (
