@@ -42,6 +42,18 @@ enum CommentStatus {
   REJECTED
 }
 
+enum ContentBlockKind {
+  TEXT
+  IMAGES
+}
+
+enum AdvertisementPlacement {
+  ALL
+  HOME
+  ARTICLE
+  CATEGORY
+}
+
 model User {
   id           String    @id @default(uuid())
   email        String    @unique
@@ -71,6 +83,7 @@ model Article {
   title              String
   lead               String
   body               String
+  contentBlocks      ArticleContentBlock[]
   status             PublicationStatus   @default(DRAFT)
   seoTitle           String?
   seoDescription     String?
@@ -92,6 +105,48 @@ model Article {
   @@index([status, publishedAt])
   @@index([categoryId, status, publishedAt])
   @@index([authorId])
+}
+
+model ArticleContentBlock {
+  id        String             @id @default(uuid())
+  articleId String
+  kind      ContentBlockKind
+  text      String?
+  position  Int
+  article   Article            @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  images    ArticleBlockImage[]
+
+  @@index([articleId, position])
+}
+
+model ArticleBlockImage {
+  id       String              @id @default(uuid())
+  blockId  String
+  mediaId  String
+  position Int
+  block    ArticleContentBlock @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  media    MediaAsset          @relation(fields: [mediaId], references: [id], onDelete: Restrict)
+
+  @@unique([blockId, position])
+  @@index([mediaId])
+}
+
+model Advertisement {
+  id           String                 @id @default(uuid())
+  title        String
+  text         String?
+  targetUrl    String?
+  mediaId      String
+  media        MediaAsset             @relation(fields: [mediaId], references: [id], onDelete: Restrict)
+  placement    AdvertisementPlacement @default(ALL)
+  enabled      Boolean                @default(true)
+  startsAt     DateTime?
+  endsAt       DateTime?
+  displayOrder Int                    @default(0)
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+
+  @@index([enabled, placement, displayOrder])
 }
 
 model ArticleComment {
@@ -163,6 +218,8 @@ model MediaAsset {
   focalPointX     Float?
   focalPointY     Float?
   coveredArticles Article[] @relation("ArticleCover")
+  blockImages     ArticleBlockImage[]
+  advertisements  Advertisement[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 }

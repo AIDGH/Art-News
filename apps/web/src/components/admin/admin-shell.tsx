@@ -45,9 +45,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <nav aria-label="ناوبری پنل">
             <Link className={pathname === "/admin" ? "is-active" : ""} href="/admin">خبرها</Link>
             <Link className={pathname === "/admin/articles/new" ? "is-active" : ""} href="/admin/articles/new">خبر جدید</Link>
-            <Link className={pathname === "/admin/categories" ? "is-active" : ""} href="/admin/categories">دسته‌بندی‌ها</Link>
             <Link className={pathname === "/admin/comments" ? "is-active" : ""} href="/admin/comments">نظرها</Link>
+            <Link className={pathname === "/admin/advertisements" ? "is-active" : ""} href="/admin/advertisements">تبلیغات</Link>
             <Link className={pathname === "/admin/site-settings" ? "is-active" : ""} href="/admin/site-settings">متن‌های سایت</Link>
+            <Link className={pathname === "/admin/categories" ? "is-active" : ""} href="/admin/categories">دسته‌بندی‌ها</Link>
             <Link href="/" target="_blank">مشاهده سایت</Link>
           </nav>
           <div className="admin-account"><span>{user.displayName}</span><button type="button" onClick={logout}>خروج</button></div>

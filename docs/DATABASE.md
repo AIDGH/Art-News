@@ -20,6 +20,25 @@ Git قرار نمی‌گیرد. مهاجرت احتمالی آینده به Post
 
 دسته‌بندی اصلی خبر. هر Article در MVP یک Category اصلی دارد.
 
+### ArticleContentBlock و ArticleBlockImage
+
+هر خبر صفر یا چند بخش مرتب با `kind=TEXT|IMAGES` و `position` دارد. متن در
+خود بخش و عکس‌ها در رابطه مرتب ArticleBlockImage به MediaAsset نگهداری می‌شوند.
+قید یکتای `(blockId, position)` و indexهای ترتیب/رسانه اضافه شدند. حذف بخش،
+رابطه عکس‌ها را cascade حذف می‌کند ولی خود فایل/MediaAsset را حذف نمی‌کند.
+خبرهای قدیمی بدون بخش اضافه، body و cover فعلی خود را حفظ می‌کنند.
+
+### Advertisement
+
+عنوان، متن و لینک اختیاری، mediaId، جایگاه `ALL|HOME|ARTICLE|CATEGORY`، enabled،
+startsAt/endsAt nullable و displayOrder را نگهداری می‌کند. وضعیت مؤثر از ساعت
+فعلی محاسبه می‌شود و در ستون جدا ذخیره نمی‌شود. relation رسانه Restrict است؛
+حذف تبلیغ فقط رکورد تبلیغ را پاک می‌کند. index روی enabled/placement/displayOrder
+برای انتخاب موارد عمومی وجود دارد.
+
+مهاجرت `20261002100000_add_ads_and_article_blocks` این سه جدول را اضافه می‌کند؛
+به ردیف‌های خبر، نظر، لایک یا کاربران موجود دست نمی‌زند. seed دوباره لازم نیست.
+
 ### Tag and ArticleTag
 
 رابطه چندبه‌چند برای موضوعات فرعی.
@@ -27,6 +46,8 @@ Git قرار نمی‌گیرد. مهاجرت احتمالی آینده به Post
 ### MediaAsset
 
 metadata فایل شامل URL، alt، credit، caption، width، height و mime type.
+رابطه‌های blockImages و advertisements نیز دارد؛ IMAGE و VIDEO برای رسانه‌های
+تبلیغاتی استفاده می‌شوند و رسانه ویدیویی در گروه عکس خبر مجاز نیست.
 
 ### ArticleSource
 

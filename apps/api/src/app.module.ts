@@ -11,6 +11,7 @@ import { HealthModule } from "./health/health.module";
 import { EditorialModule } from "./editorial/editorial.module";
 import { SiteSettingsModule } from "./site-settings/site-settings.module";
 import { EngagementModule } from "./engagement/engagement.module";
+import { AdvertisementsModule } from "./advertisements/advertisements.module";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EngagementModule } from "./engagement/engagement.module";
     EditorialModule,
     SiteSettingsModule,
     EngagementModule,
+    AdvertisementsModule,
   ],
 })
 export class AppModule {}

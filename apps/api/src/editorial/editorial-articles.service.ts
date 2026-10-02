@@ -21,6 +21,7 @@ const editorialArticleInclude = {
   tags: { include: { tag: true } },
   sources: { orderBy: { accessedAt: "asc" as const } },
   homepagePlacements: true,
+  contentBlocks: { orderBy: { position: "asc" as const }, include: { images: { orderBy: { position: "asc" as const }, include: { media: true } } } },
 } satisfies Prisma.ArticleInclude;
 
 function slugifyTag(title: string): string {
@@ -82,6 +83,7 @@ export class EditorialArticlesService {
 
   async create(dto: CreateArticleDto, user: EditorialUser) {
     await this.validatePublication(dto.status, dto.publishedAt, dto.coverImageId);
+    await this.validateBlocks(dto.contentBlocks);
     try {
       const article = await this.prisma.$transaction(async (transaction) => {
         const created = await transaction.article.create({
@@ -90,6 +92,7 @@ export class EditorialArticlesService {
             slug: dto.slug.trim(),
             lead: dto.lead.trim(),
             body: dto.body.trim(),
+            contentBlocks: { create: this.blockData(dto.contentBlocks ?? []) },
             status: dto.status,
             seoTitle: dto.seoTitle?.trim() || null,
             seoDescription: dto.seoDescription?.trim() || null,
@@ -129,6 +132,7 @@ export class EditorialArticlesService {
     const publishedAt = dto.publishedAt ?? current.publishedAt?.toISOString();
     const coverImageId = dto.coverImageId ?? current.coverImageId ?? undefined;
     await this.validatePublication(status, publishedAt, coverImageId);
+    await this.validateBlocks(dto.contentBlocks);
 
     try {
       const article = await this.prisma.$transaction(async (transaction) => {
@@ -139,6 +143,7 @@ export class EditorialArticlesService {
             ...(dto.slug !== undefined ? { slug: dto.slug.trim() } : {}),
             ...(dto.lead !== undefined ? { lead: dto.lead.trim() } : {}),
             ...(dto.body !== undefined ? { body: dto.body.trim() } : {}),
+            ...(dto.contentBlocks !== undefined ? { contentBlocks: { deleteMany: {}, create: this.blockData(dto.contentBlocks) } } : {}),
             ...(dto.categoryId !== undefined
               ? { categoryId: dto.categoryId }
               : {}),
@@ -236,8 +241,9 @@ export class EditorialArticlesService {
     ) {
       const media = await this.prisma.mediaAsset.findUnique({
         where: { id: coverImageId },
-        select: { alt: true, credit: true },
+        select: { alt: true, credit: true, kind: true },
       });
+      if (media?.kind !== "IMAGE") throw new BadRequestException("تصویر اصلی باید فایل تصویری باشد");
       if (!media?.alt.trim()) {
         throw new BadRequestException(
           "برای انتشار، متن جایگزین تصویر اصلی الزامی است",
@@ -249,6 +255,32 @@ export class EditorialArticlesService {
         );
       }
     }
+  }
+
+  private async validateBlocks(blocks?: CreateArticleDto["contentBlocks"]) {
+    if (blocks === undefined) return;
+    if (!Array.isArray(blocks)) throw new BadRequestException("بخش‌های مطلب باید فهرست باشند");
+    for (const block of blocks) {
+      if (block.kind === "TEXT" && (!block.text?.trim() || block.mediaIds?.length)) {
+        throw new BadRequestException("بخش متن باید متن داشته باشد و شامل تصویر نباشد");
+      }
+      if (block.kind === "IMAGES" && (!block.mediaIds?.length || block.text?.trim())) {
+        throw new BadRequestException("گروه عکس باید حداقل یک تصویر داشته باشد");
+      }
+    }
+    const ids = [...new Set(blocks.flatMap((block) => block.mediaIds ?? []))];
+    if (!ids.length) return;
+    const count = await this.prisma.mediaAsset.count({ where: { id: { in: ids }, kind: "IMAGE" } });
+    if (count !== ids.length) throw new BadRequestException("یکی از تصاویر مطلب معتبر نیست");
+  }
+
+  private blockData(blocks: NonNullable<CreateArticleDto["contentBlocks"]>) {
+    return blocks.map((block, position) => ({
+      kind: block.kind,
+      text: block.kind === "TEXT" ? block.text!.trim() : null,
+      position,
+      images: { create: (block.mediaIds ?? []).map((mediaId, imagePosition) => ({ mediaId, position: imagePosition })) },
+    }));
   }
 
   private resolvePublishedAt(

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { fetchAdvertisements } from "@/lib/api";
 
 export function EcranNewsPromo() {
   return (
@@ -24,9 +25,21 @@ export function EcranNewsPromo() {
   );
 }
 
-export function AdvertisementPlaceholder({
+export async function AdvertisementPlaceholder({
   label = "جایگاه تبلیغات",
-}: { label?: string } = {}) {
+  placement = "HOME",
+}: { label?: string; placement?: "HOME" | "ARTICLE" | "CATEGORY" } = {}) {
+  const ads = await fetchAdvertisements(placement);
+  if (ads.length) return <div className="advertisement-list" aria-label={label}>
+    {ads.map((ad) => <section className="advertisement-card" key={ad.id}>
+      <span className="advertisement-label">تبلیغات</span>
+      {ad.media.mimeType.startsWith("video/") ? <video controls playsInline preload="none" aria-label={ad.media.alt || ad.title}><source src={ad.media.url} type={ad.media.mimeType} /></video>
+        : ad.targetUrl ? <a href={ad.targetUrl} target="_blank" rel="sponsored noopener noreferrer"><Image src={ad.media.url} alt={ad.media.alt || ad.title} width={1200} height={600} unoptimized /></a>
+          : <Image src={ad.media.url} alt={ad.media.alt || ad.title} width={1200} height={600} unoptimized />}
+      {ad.text ? <p>{ad.text}</p> : null}
+      {ad.targetUrl ? <a className="advertisement-link" href={ad.targetUrl} target="_blank" rel="sponsored noopener noreferrer">مشاهدهٔ {ad.title}</a> : null}
+    </section>)}
+  </div>;
   return (
     <div
       className="w-full h-[120px] md:h-[140px] flex flex-col items-center justify-center border-[1.5px] border-dashed border-gray-400 bg-transparent rounded-none px-4 text-center mt-6"

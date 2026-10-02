@@ -67,6 +67,21 @@ powered off according to the owner, so production deployment is unverified.
 When restoring the instance, take a fresh SQLite backup before applying the
 migration, then check migration status and the public engagement endpoint.
 
+## Advertising and article blocks rollout — 2026-10-02
+
+The owner authorized committing and pushing the feature to both `v2` and `main`.
+Production deployment and the live Nginx upload limit remain unverified.
+Migration `20261002100000_add_ads_and_article_blocks` adds only
+new tables and relations. Before rollout, back up the live SQLite file, run
+`prisma migrate deploy` and generate the client; do not reseed or reset the database.
+Images/GIFs are limited to 8 MiB and MP4/WebM ad videos to 30 MiB. The Next.js proxy
+and example `deploy/nginx.conf` now allow a 32 MiB multipart request. On the live
+server, update `client_max_body_size 32m` in the existing Nginx site with its TLS
+configuration preserved, validate with `nginx -t`, then reload. Do not replace the
+Certbot-managed HTTPS configuration with the plain-HTTP repository template.
+Verify a video upload through HTTPS, ad activation/expiry, and a multi-image article.
+
+
 ## Backups
 
 `cinema-backup.timer` creates a SQLite online backup and a compressed uploads

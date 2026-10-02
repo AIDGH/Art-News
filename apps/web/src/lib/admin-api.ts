@@ -24,12 +24,34 @@ export type MediaAsset = {
   caption: string | null;
 };
 
+export type AdminContentBlock = {
+  id: string;
+  kind: "TEXT" | "IMAGES";
+  text: string | null;
+  images: Array<{ media: MediaAsset }>;
+};
+
+export type AdminAdvertisement = {
+  id: string;
+  title: string;
+  text: string | null;
+  targetUrl: string | null;
+  media: MediaAsset;
+  placement: "ALL" | "HOME" | "ARTICLE" | "CATEGORY";
+  enabled: boolean;
+  startsAt: string | null;
+  endsAt: string | null;
+  displayOrder: number;
+  effectiveStatus: "ACTIVE" | "SCHEDULED" | "EXPIRED" | "DISABLED";
+};
+
 export type AdminArticle = {
   id: string;
   slug: string;
   title: string;
   lead: string;
   body: string;
+  contentBlocks?: AdminContentBlock[];
   status: "DRAFT" | "IN_REVIEW" | "SCHEDULED" | "PUBLISHED" | "ARCHIVED";
   seoTitle: string | null;
   seoDescription: string | null;

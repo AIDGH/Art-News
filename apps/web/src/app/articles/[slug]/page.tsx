@@ -119,9 +119,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         <div className="article-body-layout container-wide">
           <div className="article-body">
-            {article.body.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+            {article.body.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
             ))}
+            {article.contentBlocks?.map((block) => block.kind === "TEXT" ?
+              <div key={block.id}>{block.text?.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+              : <div className={`article-inline-images${block.images.length === 1 ? " is-single" : ""}`} key={block.id}>
+                {block.images.map(({ media }, index) => <figure key={index}>
+                  <Image src={media.url} alt={media.alt} width={1000} height={750} unoptimized sizes="(max-width: 650px) 100vw, 420px" />
+                  {media.caption || media.credit ? <figcaption>{[media.caption, media.credit].filter(Boolean).join(" — ")}</figcaption> : null}
+                </figure>)}
+              </div>)}
             {article.tags && article.tags.length > 0 ? (
               <div className="article-tags" aria-label="برچسب‌های خبر">
                 {article.tags.map((tag) => <span key={tag.slug}>#{tag.title}</span>)}
@@ -141,7 +149,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">
       <section className="container promotion-stack article-promotions">
         <EcranNewsPromo />
-        <AdvertisementPlaceholder label="جایگاه تبلیغات" />
+        <AdvertisementPlaceholder label="جایگاه تبلیغات" placement="ARTICLE" />
       </section>
 
       <section className="container home-section related-section">

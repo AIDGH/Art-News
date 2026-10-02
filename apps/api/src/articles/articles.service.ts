@@ -14,6 +14,7 @@ const publicArticleSelect = {
   title: true,
   lead: true,
   body: true,
+  contentBlocks: { orderBy: { position: "asc" as const }, select: { id: true, kind: true, text: true, images: { orderBy: { position: "asc" as const }, select: { media: { select: { url: true, alt: true, caption: true, credit: true } } } } } },
   seoTitle: true,
   seoDescription: true,
   publishedAt: true,

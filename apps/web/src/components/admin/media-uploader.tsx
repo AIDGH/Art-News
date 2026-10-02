@@ -9,9 +9,10 @@ type MediaUploaderProps = {
   alt: string;
   credit: string;
   onChange: (media: MediaAsset) => void;
+  allowVideo?: boolean;
 };
 
-export function MediaUploader({ value, alt, credit, onChange }: MediaUploaderProps) {
+export function MediaUploader({ value, alt, credit, onChange, allowVideo = false }: MediaUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -21,18 +22,19 @@ export function MediaUploader({ value, alt, credit, onChange }: MediaUploaderPro
 
   useEffect(() => {
     if (!libraryOpen || library.length > 0) return;
-    adminFetch<{ data: MediaAsset[] }>("/editorial/media")
+    adminFetch<{ data: MediaAsset[] }>(`/editorial/media${allowVideo ? "?includeVideo=true" : ""}`)
       .then(({ data }) => setLibrary(data))
       .catch((caught) => setError(caught instanceof Error ? caught.message : "گالری باز نشد"));
-  }, [library.length, libraryOpen]);
+  }, [library.length, libraryOpen, allowVideo]);
 
   const upload = async (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      setError("فقط فایل تصویری انتخاب کنید.");
+    const video = ["video/mp4", "video/webm"].includes(file.type);
+    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type) && !(allowVideo && video)) {
+      setError(allowVideo ? "تصویر، گیف یا ویدیوی MP4/WebM انتخاب کنید." : "فقط فایل تصویری انتخاب کنید.");
       return;
     }
-    if (file.size > 8 * 1024 * 1024) {
-      setError("حجم تصویر باید کمتر از ۸ مگابایت باشد.");
+    if (file.size > (video ? 30 : 8) * 1024 * 1024) {
+      setError(video ? "حجم ویدیو باید حداکثر ۳۰ مگابایت باشد." : "حجم تصویر باید حداکثر ۸ مگابایت باشد.");
       return;
     }
     setUploading(true);
@@ -84,7 +86,7 @@ export function MediaUploader({ value, alt, credit, onChange }: MediaUploaderPro
 
   return (
     <div className="admin-media-control">
-      <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={fileChanged} hidden />
+      <input ref={inputRef} type="file" accept={`image/jpeg,image/png,image/webp,image/gif${allowVideo ? ",video/mp4,video/webm" : ""}`} onChange={fileChanged} hidden />
       <div
         className={`admin-dropzone${isDragging ? " is-dragging" : ""}`}
         onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }}
@@ -99,17 +101,17 @@ export function MediaUploader({ value, alt, credit, onChange }: MediaUploaderPro
       >
         {value ? (
           <div className="admin-cover-preview">
-            <Image src={value.url} alt={alt || value.alt || "تصویر خبر"} fill unoptimized sizes="(max-width: 800px) 100vw, 640px" />
-            <span>برای جایگزینی، تصویر تازه را اینجا رها کنید</span>
+            {value.mimeType.startsWith("video/") ? <video src={value.url} controls playsInline preload="metadata" /> : <Image src={value.url} alt={alt || value.alt || "تصویر خبر"} fill unoptimized sizes="(max-width: 800px) 100vw, 640px" />}
+            <span>برای جایگزینی، فایل تازه را اینجا رها کنید</span>
           </div>
         ) : (
-          <div className="admin-dropzone-empty"><strong>تصویر خبر را اینجا رها کنید</strong><span>یا از دستگاه، گالری و کلیپ‌بورد انتخاب کنید</span></div>
+          <div className="admin-dropzone-empty"><strong>{allowVideo ? "تصویر، گیف یا ویدیوی تبلیغ را اینجا رها کنید" : "تصویر خبر را اینجا رها کنید"}</strong><span>یا از دستگاه، گالری و کلیپ‌بورد انتخاب کنید</span></div>
         )}
       </div>
       <div className="admin-media-actions">
         <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading}>انتخاب از دستگاه</button>
         <button type="button" onClick={() => void pasteFromClipboard()} disabled={uploading}>چسباندن از کلیپ‌بورد</button>
-        <button type="button" onClick={() => setLibraryOpen((current) => !current)} disabled={uploading}>گالری تصاویر</button>
+        <button type="button" onClick={() => setLibraryOpen((current) => !current)} disabled={uploading}>{allowVideo ? "گالری فایل‌ها" : "گالری تصاویر"}</button>
       </div>
       {uploading ? <p className="admin-field-note">در حال بارگذاری تصویر…</p> : null}
       {error ? <div className="admin-alert is-error">{error}</div> : null}
@@ -117,7 +119,7 @@ export function MediaUploader({ value, alt, credit, onChange }: MediaUploaderPro
         <div className="admin-media-library">
           {library.length === 0 ? <p>هنوز تصویری در گالری نیست.</p> : library.map((media) => (
             <button type="button" className={value?.id === media.id ? "is-selected" : ""} onClick={() => { onChange(media); setLibraryOpen(false); }} key={media.id}>
-              <Image src={media.url} alt={media.alt || "تصویر گالری"} fill unoptimized sizes="120px" />
+              {media.mimeType.startsWith("video/") ? <span className="admin-video-label">ویدیو</span> : <Image src={media.url} alt={media.alt || "تصویر گالری"} fill unoptimized sizes="120px" />}
             </button>
           ))}
         </div>

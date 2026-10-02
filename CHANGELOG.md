@@ -2,7 +2,16 @@
 
 ## [Unreleased]
 
+### Added
+
+- Advertising management with image/GIF/video, destination links, optional text, timed placements, status filters, reactivation and deletion.
+- Ordered text and image-group article blocks with a lightweight responsive editor and preserved legacy article content.
+- Additive SQLite migration for advertisements and article blocks; validated video uploads and 32 MiB multipart proxy allowance.
+
 ### Changed
+
+- Moved admin categories immediately before the final public-site link; renamed primary article text labels.
+- Prevented creation defaults from resetting publication status, tags, sources or featured placement during partial article updates.
 
 - **Promo Blocks & Layout Polish:**
   - Fixed RTL layout order and height constraints for `EcranNewsPromo` to create a perfect square logo box and centered text.

@@ -2,6 +2,25 @@ import { Article, type Category } from "./news";
 
 export const API_BASE_URL = (process.env.API_BASE_URL ?? "http://localhost:4001/api/v1").replace(/\/$/, "");
 
+export type PublicAdvertisement = {
+  id: string;
+  title: string;
+  text: string | null;
+  targetUrl: string | null;
+  media: { url: string; mimeType: string; alt: string };
+};
+
+export async function fetchAdvertisements(placement: "HOME" | "ARTICLE" | "CATEGORY"): Promise<PublicAdvertisement[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/advertisements?placement=${placement}`, { cache: "no-store" });
+    if (!response.ok) return [];
+    const json = await response.json() as { data: PublicAdvertisement[] };
+    return json.data;
+  } catch {
+    return [];
+  }
+}
+
 export type SiteSettings = {
   footerDescription: string;
   aboutBody: string;
@@ -18,6 +37,7 @@ type ApiArticle = {
   title: string;
   lead: string;
   body: string;
+  contentBlocks?: Article["contentBlocks"];
   category: Category;
   coverImage?: { url: string; alt: string; credit?: string | null } | null;
   publishedAt: string;
@@ -43,9 +63,10 @@ export function mapApiArticleToUi(apiArticle: ApiArticle): Article {
       month: "long",
       day: "numeric",
     }).format(new Date(apiArticle.publishedAt)),
-    readingTime: `${Math.max(1, Math.ceil(apiArticle.body.trim().split(/\s+/).length / 220)).toLocaleString("fa-IR")} دقیقه`,
+    readingTime: `${Math.max(1, Math.ceil([apiArticle.body, ...(apiArticle.contentBlocks ?? []).map((block) => block.text ?? "")].join(" ").trim().split(/\s+/).length / 220)).toLocaleString("fa-IR")} دقیقه`,
     author: apiArticle.author?.displayName || apiArticle.author?.username || "",
     body: (apiArticle.body || "").split(/\n\s*\n/).filter(Boolean),
+    contentBlocks: apiArticle.contentBlocks ?? [],
     seoTitle: apiArticle.seoTitle || undefined,
     seoDescription: apiArticle.seoDescription || undefined,
     tags: apiArticle.tags?.map(({ tag }) => tag) || [],

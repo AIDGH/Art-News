@@ -19,6 +19,7 @@ import {
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { PublicationStatus } from "../../generated/prisma/enums";
 import { ArticleSourceDto } from "./article-source.dto";
+import { ContentBlockDto } from "./content-block.dto";
 
 export class CreateArticleDto {
   @ApiProperty()
@@ -45,6 +46,14 @@ export class CreateArticleDto {
   @MinLength(20)
   @MaxLength(200000)
   body!: string;
+
+  @ApiPropertyOptional({ type: [ContentBlockDto] })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(50)
+  @ValidateNested({ each: true })
+  @Type(() => ContentBlockDto)
+  contentBlocks?: ContentBlockDto[];
 
   @ApiProperty()
   @IsUUID()

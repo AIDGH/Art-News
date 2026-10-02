@@ -6,6 +6,7 @@ const internalApiBaseUrl = (
 ).replace(/\/$/, "");
 
 const nextConfig: NextConfig = {
+  experimental: { proxyClientMaxBodySize: "32mb" },
   turbopack: {
     root: path.resolve(process.cwd(), "../.."),
   },

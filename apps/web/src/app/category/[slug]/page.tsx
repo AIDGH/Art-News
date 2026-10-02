@@ -149,7 +149,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
       <section className="promotion-stack category-promotions">
         <EcranNewsPromo />
-        <AdvertisementPlaceholder label="تبلیغات این بخش" />
+        <AdvertisementPlaceholder label="تبلیغات این بخش" placement="CATEGORY" />
       </section>
     </main>
   );

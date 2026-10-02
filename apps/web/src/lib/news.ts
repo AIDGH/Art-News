@@ -18,6 +18,7 @@ export type Article = {
   author: string;
   featured?: boolean;
   body: string[];
+  contentBlocks?: Array<{ id: string; kind: "TEXT" | "IMAGES"; text: string | null; images: Array<{ media: { url: string; alt: string; caption: string | null; credit: string | null } }> }>;
   seoTitle?: string;
   seoDescription?: string;
   tags?: Array<{ slug: string; title: string }>;

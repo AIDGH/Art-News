@@ -10,6 +10,7 @@ import {
   type MediaAsset,
 } from "@/lib/admin-api";
 import { MediaUploader } from "./media-uploader";
+import { ArticleBlocksEditor, type ContentBlockForm } from "./article-blocks-editor";
 
 type ArticleEditorProps = { articleId?: string };
 type SourceForm = { url: string; title: string; publisher: string; author: string; publishedAt: string };
@@ -47,6 +48,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
   const [slugTouched, setSlugTouched] = useState(false);
   const [lead, setLead] = useState("");
   const [body, setBody] = useState("");
+  const [contentBlocks, setContentBlocks] = useState<ContentBlockForm[]>([]);
   const [categoryId, setCategoryId] = useState("");
   const [status, setStatus] = useState<AdminArticle["status"]>("DRAFT");
   const [publishedAt, setPublishedAt] = useState("");
@@ -83,6 +85,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
         setSlugTouched(true);
         setLead(article.lead);
         setBody(article.body);
+        setContentBlocks((article.contentBlocks ?? []).map((block) => ({ key: block.id, kind: block.kind, text: block.text ?? "", images: block.images.map(({ media }) => media) })));
         setCategoryId(article.category.id);
         setStatus(article.status);
         setPublishedAt(toLocalInput(article.publishedAt));
@@ -108,7 +111,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
       .finally(() => setLoading(false));
   }, [articleId]);
 
-  const wordCount = useMemo(() => body.trim() ? body.trim().split(/\s+/).length : 0, [body]);
+  const wordCount = useMemo(() => [body, ...contentBlocks.filter((block) => block.kind === "TEXT").map((block) => block.text)].join(" ").trim().split(/\s+/).filter(Boolean).length, [body, contentBlocks]);
 
   const save = async (event: FormEvent) => {
     event.preventDefault();
@@ -116,6 +119,14 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
     setError("");
     setNotice("");
     try {
+      for (const block of contentBlocks) {
+        if (block.kind === "TEXT" && !block.text.trim()) throw new Error("متن بخش‌های اضافه را تکمیل کنید یا بخش خالی را حذف کنید.");
+        if (block.kind === "IMAGES" && (!block.images.length || block.images.some((image) => !image))) throw new Error("عکس‌های هر گروه را انتخاب کنید یا جایگاه خالی را حذف کنید.");
+      }
+      const blockImages = [...new Map(contentBlocks.flatMap((block) => block.images.filter((media): media is MediaAsset => Boolean(media))).map((media) => [media.id, media])).values()];
+      for (const media of blockImages) {
+        await adminFetch(`/editorial/media/${media.id}`, { method: "PATCH", body: JSON.stringify({ alt: media.alt, credit: media.credit ?? "", caption: media.caption ?? "" }) });
+      }
       if (coverImage) {
         await adminFetch(`/editorial/media/${coverImage.id}`, {
           method: "PATCH",
@@ -127,6 +138,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
         slug,
         lead,
         body,
+        contentBlocks: contentBlocks.map((block) => block.kind === "TEXT" ? { kind: block.kind, text: block.text } : { kind: block.kind, mediaIds: block.images.map((media) => media!.id) }),
         categoryId,
         coverImageId: coverImage?.id,
         status,
@@ -184,11 +196,11 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
       <div className="admin-editor-grid">
         <div className="admin-editor-main">
           <section className="admin-card">
-            <div className="admin-card-heading"><span>۱</span><div><h2>متن خبر</h2><p>تیتر، خلاصه و متن کامل مطلب</p></div></div>
+            <div className="admin-card-heading"><span>۱</span><div><h2>متن اصلی خبر</h2><p>تیتر، خلاصه و متن اصلی مطلب</p></div></div>
             <label className="admin-field"><span>تیتر خبر</span><input value={title} onChange={(event) => { setTitle(event.target.value); if (!slugTouched) setSlug(slugify(event.target.value)); }} maxLength={220} required /></label>
             <label className="admin-field"><span>شناسه نشانی (Slug)</span><input dir="ltr" value={slug} onChange={(event) => { setSlugTouched(true); setSlug(slugify(event.target.value)); }} maxLength={220} required /><small>در نشانی خبر استفاده می‌شود و بهتر است بعد از انتشار تغییر نکند.</small></label>
             <label className="admin-field"><span>لید یا خلاصه</span><textarea rows={4} value={lead} onChange={(event) => setLead(event.target.value)} maxLength={600} required /><small>{lead.length.toLocaleString("fa-IR")} از ۶۰۰ نویسه</small></label>
-            <label className="admin-field"><span>متن کامل خبر</span><textarea className="admin-body-editor" rows={18} value={body} onChange={(event) => setBody(event.target.value)} required /><small>{wordCount.toLocaleString("fa-IR")} واژه — برای پاراگراف جدید یک خط خالی بگذارید. کپی و پیست متن پشتیبانی می‌شود.</small></label>
+            <label className="admin-field"><span>متن اصلی خبر</span><textarea className="admin-body-editor" rows={12} value={body} onChange={(event) => setBody(event.target.value)} required /><small>{wordCount.toLocaleString("fa-IR")} واژه — برای پاراگراف جدید یک خط خالی بگذارید. کپی و پیست متن پشتیبانی می‌شود.</small></label>
           </section>
 
           <section className="admin-card">
@@ -200,6 +212,8 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
             </div>
             <label className="admin-field"><span>زیرنویس تصویر</span><input value={imageCaption} onChange={(event) => setImageCaption(event.target.value)} placeholder="اختیاری" /></label>
           </section>
+
+          <ArticleBlocksEditor blocks={contentBlocks} onChange={setContentBlocks} />
 
           <section className="admin-card">
             <div className="admin-card-heading"><span>۳</span><div><h2>منبع و برچسب‌ها</h2><p>اطلاعات لازم برای پیگیری و دسته‌بندی محتوا</p></div></div>

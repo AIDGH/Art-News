@@ -25,6 +25,7 @@ GET /articles/:slug
 GET /categories
 GET /categories/:slug/articles
 GET /site-settings
+GET /advertisements?placement=HOME|ARTICLE|CATEGORY|ALL
 GET /articles/:slug/engagement
 POST /articles/:slug/engagement/comments
 POST /articles/:slug/engagement/likes
@@ -73,14 +74,46 @@ PUT    /editorial/site-settings
 GET    /editorial/media
 POST   /editorial/media
 PATCH  /editorial/media/:id
+GET    /editorial/advertisements?status=active|inactive
+POST   /editorial/advertisements
+PATCH  /editorial/advertisements/:id
+POST   /editorial/advertisements/:id/activate
+DELETE /editorial/advertisements/:id
 ```
 
 ساخت و ویرایش خبر شامل title، slug، lead، body، categoryId، coverImageId،
 status، publishedAt، SEO، tags، sources، featured و featuredOrder است.
 آپلود تصویر multipart با نام فیلد `file` انجام می‌شود؛ JPEG، PNG، WebP و GIF تا
-حداکثر ۸ مگابایت پذیرفته می‌شوند.
+حداکثر ۸ MiB پذیرفته می‌شوند؛ MP4 و WebM تبلیغات تا ۳۰ MiB با بررسی signature
+پذیرفته می‌شوند. `GET /editorial/media?includeVideo=true` ویدیوها را هم برمی‌گرداند؛
+حالت پیش‌فرض فقط تصویر است. ویدیو نمی‌تواند تصویر اصلی یا عکس داخل خبر باشد.
 تنظیمات سایت شامل `footerDescription` و `aboutBody` است؛ متن فوتر اجباری و متن
 درباره ما می‌تواند خالی باشد.
+
+`contentBlocks` اختیاری در ساخت/ویرایش خبر آرایه مرتب تا ۵۰ بخش است:
+
+```json
+[
+  { "kind": "IMAGES", "mediaIds": ["media-uuid-1", "media-uuid-2"] },
+  { "kind": "TEXT", "text": "متن دوم خبر" }
+]
+```
+
+هر گروه ۱ تا ۷ عکس دارد و متن هر بخش حداکثر ۵۰٬۰۰۰ نویسه است. پاسخ عمومی و
+پنل بخش‌ها و عکس‌ها را به ترتیب ذخیره‌شده برمی‌گرداند. حذف فیلد از PATCH بخش‌ها
+را حفظ می‌کند؛ `[]` آن‌ها را پاک می‌کند. `null` یا گروه خالی نامعتبر است.
+PATCH بدون status، tags، sources یا featured این اطلاعات قبلی را نیز حفظ می‌کند؛
+defaultهای مخصوص ساخت خبر دیگر به ویرایش جزئی اعمال نمی‌شوند.
+
+قرارداد تبلیغ: `title` و `mediaId` الزامی؛ `text`، `targetUrl`، `startsAt` و
+`endsAt` اختیاری/nullable هستند. مقصد فقط HTTP/HTTPS است. `placement` پیش‌فرض
+`ALL`، `enabled` پیش‌فرض true و `displayOrder` پیش‌فرض صفر (۰ تا ۱۰۰۰) است.
+تاریخ‌ها ISO8601 و پایان، در صورت وجود هر دو تاریخ، بعد از شروع است. پاسخ پنل
+`effectiveStatus` از نوع `ACTIVE`/`SCHEDULED`/`EXPIRED`/`DISABLED` دارد؛ فیلتر
+inactive سه وضعیت غیر ACTIVE را شامل می‌شود. فعال‌سازی اکنون شروع را تغییر
+می‌دهد و پایانِ گذشته را حذف می‌کند. DELETE فقط رکورد تبلیغ را حذف می‌کند نه فایل.
+GET عمومی با `Cache-Control: no-store` فقط موارد enabled و رسیده به شروع و
+نرسیده به پایان را می‌دهد؛ جایگاه خاص، موارد `ALL` را نیز شامل می‌شود.
 
 نظر عمومی با `{ "name": "...", "body": "..." }` ثبت می‌شود و ابتدا
 `PENDING` است. پنل با `{ "status": "APPROVED" }` یا `REJECTED` تصمیم می‌گیرد.

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -30,13 +31,13 @@ export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Get()
-  @ApiOperation({ summary: "List recent editorial images" })
-  findAll() {
-    return this.mediaService.findAll();
+  @ApiOperation({ summary: "List recent images, optionally including advertising videos" })
+  findAll(@Query("includeVideo") includeVideo?: string) {
+    return this.mediaService.findAll(includeVideo === "true");
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Update editorial image metadata" })
+  @ApiOperation({ summary: "Update media metadata" })
   updateMetadata(
     @Param("id") id: string,
     @Body() body: UpdateMediaDto,
@@ -46,17 +47,17 @@ export class MediaController {
 
   @Post()
   @ApiConsumes("multipart/form-data")
-  @ApiOperation({ summary: "Upload an editorial image" })
+  @ApiOperation({ summary: "Upload an image, GIF, or advertising video" })
   @UseInterceptors(
     FileInterceptor("file", {
-      limits: { fileSize: 8 * 1024 * 1024 },
+      limits: { fileSize: 30 * 1024 * 1024 },
       fileFilter: (_request, file, callback) => {
-        const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+        const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif", "video/mp4", "video/webm"];
         const isAllowed = allowed.includes(file.mimetype);
         callback(
           isAllowed
             ? null
-            : new BadRequestException("فرمت تصویر پشتیبانی نمی‌شود"),
+            : new BadRequestException("فرمت فایل پشتیبانی نمی‌شود"),
           isAllowed,
         );
       },
@@ -67,7 +68,7 @@ export class MediaController {
     @Body("alt") alt?: string,
     @Body("credit") credit?: string,
   ) {
-    if (!file) throw new BadRequestException("فایل تصویر الزامی است");
+    if (!file) throw new BadRequestException("فایل رسانه الزامی است");
     return this.mediaService.uploadImage(file, alt, credit);
   }
 }

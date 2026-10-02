@@ -62,7 +62,8 @@ fallbackهای سیستمی فقط برای حالت خطای asset باقی م�
 بسته‌شدن Drawer با کلیک بیرون، Escape یا انتخاب لینک را انجام دهد. مهر اعتماد
 رسانه نیز Client Component است چون script
 رسمی ارائه‌دهنده را پس از mount بارگذاری و initialize می‌کند. بنر اکران نیوز و
-Placeholder تبلیغات Componentهای مشترک و بدون داده runtime هستند.
+تبلیغات Componentهای مشترک هستند؛ بنر اکران نیوز ثابت است ولی جایگاه آگهی
+Server Component با درخواست `cache: no-store` موارد فعال را از API می‌گیرد.
 فرم نظر و دکمه‌های لایک در صفحه خبر Client Component هستند و از مسیر
 `/api/v1/articles/:slug/engagement` به API درخواست می‌دهند. فهرست عمومی فقط
 نظرهای تأییدشده را دریافت می‌کند؛ صف بررسی در پنل با نشست مدیر خوانده می‌شود.
@@ -97,6 +98,7 @@ CategoriesModule
 EditorialModule
 SiteSettingsModule
 EngagementModule
+AdvertisementsModule
 ```
 
 ## Rendering Strategy
@@ -113,6 +115,12 @@ EngagementModule
 - متن معرفی فوتر و بدنه صفحه درباره ما از `SiteSettingsModule` و رکورد singleton
   دیتابیس خوانده می‌شوند؛ خواندن عمومی است و تغییر فقط با نشست پنل انجام می‌شود.
 - صفحه خبر metadata و JSON-LD اختصاصی تولید می‌کند.
+- ArticleContentBlock/ArticleBlockImage توالی متن و گروه عکس را پس از محتوای
+  اصلی نگهداری می‌کنند؛ پنل امکان افزودن، حذف و جابه‌جایی دارد. body اصلی برای
+  سازگاری با خبرهای موجود حفظ شده است و زمان مطالعه متن همه بخش‌ها را شامل می‌شود.
+- تبلیغات بر اساس ساعت سرور، enabled و جایگاه فیلتر می‌شوند؛ queue یا cron
+  لازم نیست. خواندن تبلیغات بدون cache، routeهای دارای جایگاه را پویا می‌کند؛
+  سایر داده‌های خبر همچنان revalidation کوتاه دارند.
 - استفاده سراسری از `force-dynamic` انجام نمی‌شود مگر route واقعاً به آن نیاز
   داشته باشد.
 
@@ -122,6 +130,10 @@ EngagementModule
   `apps/web/public/images/articles/` نگهداری می‌شوند تا preview به سرویس remote
   یا image proxy وابسته نباشد.
 - uploadهای runtime در Git نگهداری نمی‌شوند.
+- آپلود مشترک JPEG/PNG/WebP/GIF تا ۸ MiB و MP4/WebM تبلیغ تا ۳۰ MiB را با
+  signature بررسی می‌کند. گالری عکس خبر ویدیوها را نشان نمی‌دهد؛ گالری تبلیغ
+  opt-in با includeVideo=true است. ویدیو عمومی کنترل پخش دارد و خودکار دانلود
+  یا پخش نمی‌شود. سقف proxy فرانت و نمونه Nginx برای multipart برابر ۳۲ MiB است.
 - در توسعه، upload پنل در `apps/web/public/uploads/` ذخیره می‌شود و مستقیماً از
   Next.js سرو می‌شود.
 - production به object storage/CDN نیاز دارد.
