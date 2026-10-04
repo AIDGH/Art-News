@@ -3,10 +3,7 @@ import { fetchAdvertisements } from "@/lib/api";
 
 export function EcranNewsPromo() {
   return (
-    <a
-      href="https://instagram.com/ecrannews"
-      target="_blank"
-      rel="noopener noreferrer"
+    <div
       className="w-full h-[120px] md:h-[140px] flex flex-row items-stretch bg-[#111]"
       aria-label="معرفی رسانه اکران نیوز"
     >
@@ -17,11 +14,11 @@ export function EcranNewsPromo() {
 
       {/* Text Container */}
       <div className="flex-1 flex flex-col items-center justify-center p-3 md:p-4 text-center">
-        <p className="text-white text-center text-xs md:text-sm leading-relaxed font-medium w-full max-w-[280px] mx-auto">
-          برای پیگیری لحظه‌ای حواشی و اخبار سینما، به صفحه رسمی اکران نیوز در اینستاگرام بپیوندید.
+        <p className="text-white text-center text-xs md:text-sm leading-relaxed font-medium w-full max-w-[280px] md:max-w-none mx-auto md:whitespace-nowrap">
+          🔶 رسانه معتبر خبر، نقد فیلم، بازیگری، تلویزیون، سریال، نمایش خانگی و تئاتر
         </p>
       </div>
-    </a>
+    </div>
   );
 }
 

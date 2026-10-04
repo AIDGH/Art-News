@@ -201,10 +201,7 @@ export function NavigationMenu() {
               {/* Drawer Header */}
               <div className="mobile-menu-header flex items-center justify-between border-b-2 border-[var(--ink)] bg-[var(--surface)]">
                 <div className="flex flex-col">
-                  <span className="block text-xs font-bold tracking-wider text-[var(--accent)]">
-                    منوی اصلی
-                  </span>
-                  <strong className="block text-xl md:text-2xl font-black text-[var(--ink)] mt-0.5">
+                  <strong className="block text-xl md:text-2xl font-black text-[var(--ink)]">
                     سینما نمایش
                   </strong>
                 </div>
