@@ -1,4 +1,15 @@
 import { Article, type Category } from "./news";
+import type { MediaPost, MediaPostPage } from "./media-posts";
+
+export async function fetchMediaPosts(kind: MediaPost["kind"]): Promise<{ page: MediaPostPage; failed: boolean }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/media-posts?kind=${kind}`, { cache: "no-store" });
+    if (!response.ok) throw new Error("Media feed unavailable");
+    return { page: await response.json() as MediaPostPage, failed: false };
+  } catch {
+    return { page: { data: [], meta: { page: 1, pageSize: 12, total: 0, hasMore: false } }, failed: true };
+  }
+}
 
 export const API_BASE_URL = (process.env.API_BASE_URL ?? "http://localhost:4001/api/v1").replace(/\/$/, "");
 

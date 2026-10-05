@@ -4,6 +4,11 @@
 
 ### Added
 
+- Standalone photo/video posts with ordered albums, covers, draft/publish/archive workflow, a paginated admin panel and fullscreen public reels in the existing photo/film sections.
+- Incremental media-post migration and validation/publication tests. Existing articles and shared media are preserved.
+- Fixed desktop promotion overflow and removed empty advertising placeholders.
+- Inset the Ecran News logo from the banner's right edge and removed the diamond emoji.
+
 - Advertising management with image/GIF/video, destination links, optional text, timed placements, status filters, reactivation and deletion.
 - Ordered text and image-group article blocks with a lightweight responsive editor and preserved legacy article content.
 - Additive SQLite migration for advertisements and article blocks; validated video uploads and 32 MiB multipart proxy allowance.

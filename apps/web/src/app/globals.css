@@ -91,7 +91,7 @@ body:has(.admin-root) .public-site-footer {
   width: min(calc(100% - 40px), 1380px);
   min-height: 76px;
   margin-inline: auto;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 34px;
 }
@@ -114,9 +114,13 @@ body:has(.admin-root) .public-site-footer {
   display: flex;
   align-items: stretch;
   gap: 6px;
+  min-width: 0;
+  overflow-x: auto;
 }
 
 .admin-topbar nav a {
+  flex-shrink: 0;
+  white-space: nowrap;
   padding: 12px 14px;
   border-radius: 9px;
   color: #625e57;
@@ -1705,8 +1709,51 @@ img {
 
 .promotion-stack {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   padding-block: 12px 54px;
   gap: 14px;
+}
+
+.ecran-banner {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 120px;
+  padding-inline-start: 12px;
+  align-items: center;
+  background: #111;
+}
+.ecran-banner-logo {
+  flex: 0 0 120px;
+  width: 120px;
+  height: 120px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+.ecran-banner-text {
+  min-width: 0;
+  flex: 1;
+  padding: 16px;
+  color: white;
+  text-align: center;
+  font-size: .85rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.ecran-banner-text p { white-space: normal; }
+.advertisement-list, .advertisement-card { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+@media (min-width: 761px) {
+  .ecran-banner { min-height: 140px; }
+  .ecran-banner-logo { flex-basis: 140px; width: 140px; height: 140px; padding: 12px; }
+  .ecran-banner-text { font-size: .9rem; }
+}
+@media (min-width: 1101px) {
+  .article-sidebar .ecran-banner-logo { flex-basis: 104px; width: 104px; height: 104px; }
+  .article-sidebar .ecran-banner { min-height: 120px; }
+  .article-sidebar .ecran-banner-text { padding: 12px; font-size: .8rem; }
 }
 
 .promotion-stack-compact {

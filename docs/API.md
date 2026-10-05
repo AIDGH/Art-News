@@ -125,6 +125,22 @@ Secure دارد. حذف کوکی یا مرورگر دیگر می‌تواند ه
 
 ## Response Shape
 
+### Standalone media posts — 2026-10-05
+
+- `GET /media-posts?kind=PHOTOS|VIDEOS&page=1&pageSize=12`: عمومی، no-store، فقط PUBLISHED با زمان رسیده؛ status ارسالی این شرط را تغییر نمی‌دهد.
+- `GET /editorial/media-posts`: نشست لازم؛ فیلتر kind و status و صفحه‌بندی.
+- `POST /editorial/media-posts`: ساخت؛ `PUT /editorial/media-posts/:id`: ویرایش کامل.
+- `PATCH /editorial/media-posts/:id/status`: `{status: "DRAFT" | "PUBLISHED" | "ARCHIVED"}`.
+- `DELETE /editorial/media-posts/:id`: حذف پست و روابط بدون حذف فایل مشترک.
+
+بدنه ساخت/ویرایش: title (۲ تا ۲۰۰ نویسه trimشده)، description اختیاری تا ۳۰۰۰،
+kind، status، coverId (UUID تصویر) و mediaIds (۱ تا ۷ UUID یکتا به ترتیب).
+PHOTOS فقط تصویر و VIDEOS حداقل یک ویدیو دارد. فایل ناشناخته، کاور ویدیویی یا
+نوع ناسازگار با 400 رد می‌شود. پاسخ cover و items مرتب با media دارد. meta:
+`{page, pageSize, total, hasMore}`؛ pageSize حداکثر ۳۰. تغییر وضعیت زمان اولین
+انتشار و فایل‌ها را حفظ می‌کند. upload همان `/editorial/media` با سقف تصویر
+۸ MiB و MP4/WebM سی MiB است.
+
 پاسخ جزئیات:
 
 ```json

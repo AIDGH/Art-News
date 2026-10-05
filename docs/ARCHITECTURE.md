@@ -41,6 +41,13 @@ Art-News/
 
 ## Frontend
 
+از ۲۰۲۶-۱۰-۰۵ ماژول media-posts آلبوم مستقل از خبر را مدیریت می‌کند. صفحات
+عکس/فیلم صفحه اول API عمومی را سمت سرور می‌گیرند؛ MediaGallery گرید، دریافت
+بیشتر و dialog ریلز را مدیریت می‌کند. گرید فقط کاور دارد و تنها ویدیوی فعال
+player دارد. سیستم ورود/دیدگاه هتل‌یاب کپی نشده است. استایل گالری و پنل در
+`components/media-gallery.css` است. بنر اکران نیوز متن wrapشونده و grid دارای
+minmax(0,1fr) دارد؛ جایگاه بدون تبلیغ فعال null برمی‌گرداند.
+
 مسئولیت‌ها:
 
 - rendering صفحات عمومی و پنل سینما نمایش؛
@@ -130,7 +137,7 @@ AdvertisementsModule
   `apps/web/public/images/articles/` نگهداری می‌شوند تا preview به سرویس remote
   یا image proxy وابسته نباشد.
 - uploadهای runtime در Git نگهداری نمی‌شوند.
-- آپلود مشترک JPEG/PNG/WebP/GIF تا ۸ MiB و MP4/WebM تبلیغ تا ۳۰ MiB را با
+- آپلود مشترک JPEG/PNG/WebP/GIF تا ۸ MiB و MP4/WebM تبلیغ/گالری تا ۳۰ MiB را با
   signature بررسی می‌کند. گالری عکس خبر ویدیوها را نشان نمی‌دهد؛ گالری تبلیغ
   opt-in با includeVideo=true است. ویدیو عمومی کنترل پخش دارد و خودکار دانلود
   یا پخش نمی‌شود. سقف proxy فرانت و نمونه Nginx برای multipart برابر ۳۲ MiB است.

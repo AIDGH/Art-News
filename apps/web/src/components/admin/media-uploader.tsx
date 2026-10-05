@@ -10,10 +10,12 @@ type MediaUploaderProps = {
   credit: string;
   onChange: (media: MediaAsset) => void;
   allowVideo?: boolean;
+  onUploadingChange?: (uploading: boolean) => void;
 };
 
-export function MediaUploader({ value, alt, credit, onChange, allowVideo = false }: MediaUploaderProps) {
+export function MediaUploader({ value, alt, credit, onChange, allowVideo = false, onUploadingChange }: MediaUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const uploadingRef = useRef(false);
   const [uploading, setUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState("");
@@ -28,6 +30,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
   }, [library.length, libraryOpen, allowVideo]);
 
   const upload = async (file: File) => {
+    if (uploadingRef.current) return;
     const video = ["video/mp4", "video/webm"].includes(file.type);
     if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type) && !(allowVideo && video)) {
       setError(allowVideo ? "تصویر، گیف یا ویدیوی MP4/WebM انتخاب کنید." : "فقط فایل تصویری انتخاب کنید.");
@@ -37,7 +40,9 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
       setError(video ? "حجم ویدیو باید حداکثر ۳۰ مگابایت باشد." : "حجم تصویر باید حداکثر ۸ مگابایت باشد.");
       return;
     }
+    uploadingRef.current = true;
     setUploading(true);
+    onUploadingChange?.(true);
     setError("");
     const body = new FormData();
     body.append("file", file);
@@ -50,7 +55,9 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "آپلود تصویر انجام نشد");
     } finally {
+      uploadingRef.current = false;
       setUploading(false);
+      onUploadingChange?.(false);
     }
   };
 
@@ -105,7 +112,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
             <span>برای جایگزینی، فایل تازه را اینجا رها کنید</span>
           </div>
         ) : (
-          <div className="admin-dropzone-empty"><strong>{allowVideo ? "تصویر، گیف یا ویدیوی تبلیغ را اینجا رها کنید" : "تصویر خبر را اینجا رها کنید"}</strong><span>یا از دستگاه، گالری و کلیپ‌بورد انتخاب کنید</span></div>
+          <div className="admin-dropzone-empty"><strong>{allowVideo ? "تصویر، گیف یا ویدیو را اینجا رها کنید" : "تصویر را اینجا رها کنید"}</strong><span>یا از دستگاه، گالری و کلیپ‌بورد انتخاب کنید</span></div>
         )}
       </div>
       <div className="admin-media-actions">
@@ -113,7 +120,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
         <button type="button" onClick={() => void pasteFromClipboard()} disabled={uploading}>چسباندن از کلیپ‌بورد</button>
         <button type="button" onClick={() => setLibraryOpen((current) => !current)} disabled={uploading}>{allowVideo ? "گالری فایل‌ها" : "گالری تصاویر"}</button>
       </div>
-      {uploading ? <p className="admin-field-note">در حال بارگذاری تصویر…</p> : null}
+      {uploading ? <p className="admin-field-note" role="status">در حال بارگذاری فایل…</p> : null}
       {error ? <div className="admin-alert is-error">{error}</div> : null}
       {libraryOpen ? (
         <div className="admin-media-library">

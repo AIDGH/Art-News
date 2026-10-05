@@ -6,7 +6,8 @@ import {
   AdvertisementPlaceholder,
   EcranNewsPromo,
 } from "@/components/promotion-blocks";
-import { fetchArticles, fetchCategoryBySlug } from "@/lib/api";
+import { fetchArticles, fetchCategoryBySlug, fetchMediaPosts } from "@/lib/api";
+import { MediaGallery } from "@/components/media-gallery";
 import type { Article } from "@/lib/news";
 
 type CategoryPageProps = {
@@ -92,6 +93,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const hasArticles = categoryArticles.length > 0;
+  const mediaKind = slug === "photos" ? "PHOTOS" : slug === "videos" ? "VIDEOS" : null;
+  const mediaPosts = mediaKind ? await fetchMediaPosts(mediaKind) : null;
 
   return (
     <main className="container pt-6 md:pt-10 pb-12">
@@ -102,6 +105,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </div>
       </header>
+
+      {mediaKind && mediaPosts ? <MediaGallery key={mediaKind} kind={mediaKind} initial={mediaPosts.page} failed={mediaPosts.failed} /> : null}
 
       {hasArticles ? (
         <section className="flex flex-col gap-6 mt-6" aria-label={`خبرهای ${category.title}`}>
@@ -138,14 +143,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             );
           })}
         </section>
-      ) : (
+      ) : !mediaKind ? (
         <section className="category-empty" aria-live="polite">
           <span>آرشیو این بخش به‌زودی تکمیل می‌شود</span>
           <h2>هنوز خبری در «{category.title}» منتشر نشده است.</h2>
           <p>به‌محض انتشار اولین مطلب، همین صفحه بدون تغییر آدرس به‌روز می‌شود.</p>
           <Link href="/">بازگشت به صفحه نخست</Link>
         </section>
-      )}
+      ) : null}
 
       <section className="promotion-stack category-promotions">
         <EcranNewsPromo />

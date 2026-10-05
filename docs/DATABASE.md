@@ -7,6 +7,16 @@ Git قرار نمی‌گیرد. مهاجرت احتمالی آینده به Post
 
 ## Core Models
 
+### MediaPost و MediaPostItem — 2026-10-05
+
+محتوای مستقل از Article با title، description اختیاری، kind=`PHOTOS|VIDEOS`،
+status=`DRAFT|PUBLISHED|ARCHIVED`، coverId تصویری اجباری و publishedAt.
+MediaPostItem فایل‌ها را با position و قید یکتای `(postId, position)` نگه می‌دارد.
+تغییر آلبوم nested write اتمیک است. حذف پست رابطه‌ها را Cascade حذف می‌کند ولی
+MediaAsset مشترک Restrict است. index عمومی kind/status/publishedAt و index رسانه
+وجود دارند. migration `20261005100000_add_media_posts` فقط دو جدول جدید می‌سازد؛
+به خبرها دست نمی‌زند و seed/reset مجدد لازم نیست.
+
 ### User
 
 عضو سینما نمایش با roleهای `AUTHOR`، `EDITOR` و `ADMIN`.

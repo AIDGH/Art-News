@@ -54,6 +54,39 @@ enum AdvertisementPlacement {
   CATEGORY
 }
 
+enum MediaPostKind {
+  PHOTOS
+  VIDEOS
+}
+
+model MediaPost {
+  id          String            @id @default(uuid())
+  title       String
+  description String?
+  kind        MediaPostKind
+  status      PublicationStatus @default(DRAFT)
+  coverId     String
+  cover       MediaAsset        @relation("MediaPostCover", fields: [coverId], references: [id], onDelete: Restrict)
+  items       MediaPostItem[]
+  publishedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([kind, status, publishedAt])
+}
+
+model MediaPostItem {
+  id       String    @id @default(uuid())
+  postId   String
+  mediaId  String
+  position Int
+  post     MediaPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  media    MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Restrict)
+
+  @@unique([postId, position])
+  @@index([mediaId])
+}
+
 model User {
   id           String    @id @default(uuid())
   email        String    @unique
@@ -220,6 +253,8 @@ model MediaAsset {
   coveredArticles Article[] @relation("ArticleCover")
   blockImages     ArticleBlockImage[]
   advertisements  Advertisement[]
+  mediaPostCovers  MediaPost[] @relation("MediaPostCover")
+  mediaPostItems   MediaPostItem[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 }

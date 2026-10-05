@@ -1,5 +1,22 @@
 # Cinema Namayesh Deployment
 
+## Multimedia rollout — 2026-10-05
+
+Migration `20261005100000_add_media_posts` adds two tables only. Back up SQLite
+and uploads, then run `prisma migrate deploy`; do not reset or reseed. Verify
+`/api/v1/media-posts`, admin draft/publish, and `/category/photos` and
+`/category/videos`. Existing 8 MiB image and 30 MiB video limits apply; keep
+Nginx request limit at least 32 MiB. The owner authorized committing and pushing
+all gallery changes and the Ecran banner spacing fix to v2 and main on October 5.
+Deployment verification is pending the push.
+
+Pre-deploy checks on October 5: API, web and deploy timer active at `6e2f0b1`;
+12 articles and 2 users present. Backup service succeeded, producing
+`cinema-20261005T185442Z.db` and the paired uploads archive. Live Nginx limits
+were raised from 10m to 32m after preserving its configuration at
+`/root/cinema-nginx-before-media-20261005.conf`; `nginx -t` and reload succeeded,
+with the existing HTTPS configuration retained.
+
 ## Main-domain HTTPS — 2026-09-28
 
 - Public DNS uses `ns1.f95.com` and `ns2.f95.com`; apex and `www` resolve directly to `95.38.160.189`. CDN proxy activation has not been verified.

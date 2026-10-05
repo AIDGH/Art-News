@@ -9,7 +9,6 @@ import {
 import { SectionHeading } from "@/components/section-heading";
 import { type Article } from "@/lib/news";
 import { fetchArticles, fetchFeaturedArticles } from "@/lib/api";
-import { ArticleCard } from "@/components/article-card";
 
 const homepageSectionSlugs = [
   "news",
@@ -158,6 +157,8 @@ export default async function HomePage() {
         className="container compact-media-links"
         aria-label="بخش‌های چندرسانه‌ای"
       >
+        <Link href="/category/photos">عکس</Link>
+        <Link href="/category/videos">فیلم</Link>
         <Link href="/english" lang="en">
           English
         </Link>
