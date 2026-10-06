@@ -63,6 +63,7 @@ model MediaPost {
   id          String            @id @default(uuid())
   title       String
   description String?
+  targetUrl   String?
   kind        MediaPostKind
   status      PublicationStatus @default(DRAFT)
   coverId     String

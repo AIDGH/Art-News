@@ -1,5 +1,29 @@
 # Cinema Namayesh Deployment
 
+## Runtime upload access — 2026-10-06
+
+The uploaded test PNG and MP4 existed, but Nginx returned 404 because
+`/var/lib/cinema-namayesh` had mode 0700 and lacked traversal access for
+`www-data`. Grant that user traversal only on the state directory and read/traverse
+access only to uploads, with an inherited ACL for future files:
+
+```bash
+setfacl -m u:www-data:--x /var/lib/cinema-namayesh
+setfacl -R -m u:www-data:rX /var/lib/cinema-namayesh/uploads
+setfacl -m d:u:www-data:r-x /var/lib/cinema-namayesh/uploads
+```
+
+Applied live: PNG returned 200 and the MP4 range request returned 206 with
+`Content-Type: video/mp4` and a correct Content-Range. `www-data` cannot read
+the SQLite database. The repository deploy script repeats these limited ACLs.
+Installing that updated script at `/usr/local/sbin/deploy-cinema-namayesh` was
+not completed because subsequent SSH/SCP connections timed out. The live ACL
+fix itself succeeded and is persistent, including defaults for future uploads.
+Gallery cover rendering bypasses Next image optimization for runtime uploads.
+Migration `20261006170000_add_media_post_link` adds nullable `MediaPost.targetUrl`
+without changing existing posts. Normal main deployment applies it; no reseed/reset.
+Per owner preference, do not wait for or poll deployment after committing/pushing.
+
 ## Multimedia rollout — 2026-10-05
 
 Migration `20261005100000_add_media_posts` adds two tables only. Back up SQLite

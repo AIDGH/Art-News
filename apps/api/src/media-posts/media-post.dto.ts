@@ -1,5 +1,5 @@
 import { Transform, Type } from "class-transformer";
-import { ArrayMaxSize, ArrayMinSize, ArrayUnique, IsArray, IsEnum, IsIn, IsInt, IsOptional, IsString, IsUUID, Max, MaxLength, Min, MinLength } from "class-validator";
+import { ArrayMaxSize, ArrayMinSize, ArrayUnique, IsArray, IsEnum, IsIn, IsInt, IsOptional, IsString, IsUUID, IsUrl, Max, MaxLength, Min, MinLength } from "class-validator";
 import { MediaPostKind } from "../generated/prisma/enums";
 
 export class MediaPostStatusDto {
@@ -18,6 +18,12 @@ export class SaveMediaPostDto extends MediaPostStatusDto {
   @IsString()
   @MaxLength(3000)
   description?: string | null;
+
+  @Transform(({ value }) => typeof value === "string" ? value.trim() || null : value)
+  @IsOptional()
+  @IsUrl({ protocols: ["http", "https"], require_protocol: true }, { message: "لینک باید یک آدرس کامل با http یا https باشد." })
+  @MaxLength(2000)
+  targetUrl?: string | null;
 
   @IsEnum(MediaPostKind)
   kind!: MediaPostKind;

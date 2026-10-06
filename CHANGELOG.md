@@ -15,6 +15,8 @@
 
 ### Changed
 
+- Fixed public upload access for Nginx and bypassed image optimization for runtime gallery covers; added inherited upload ACLs to deployment.
+- Added optional HTTP/HTTPS source links to photo/video posts, their editor, gallery cards and reels, with an additive nullable-column migration.
 - Removed the photo and film shortcut boxes above the homepage footer, retaining English and all gallery routes/navigation.
 - Moved admin categories immediately before the final public-site link; renamed primary article text labels.
 - Prevented creation defaults from resetting publication status, tags, sources or featured placement during partial article updates.

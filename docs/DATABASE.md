@@ -11,6 +11,8 @@ Git قرار نمی‌گیرد. مهاجرت احتمالی آینده به Post
 
 محتوای مستقل از Article با title، description اختیاری، kind=`PHOTOS|VIDEOS`،
 status=`DRAFT|PUBLISHED|ARCHIVED`، coverId تصویری اجباری و publishedAt.
+فیلد nullable `targetUrl` برای لینک پست اصلی با migration افزایشی
+`20261006170000_add_media_post_link` اضافه شده است؛ پست‌های قبلی مقدار null دارند.
 MediaPostItem فایل‌ها را با position و قید یکتای `(postId, position)` نگه می‌دارد.
 تغییر آلبوم nested write اتمیک است. حذف پست رابطه‌ها را Cascade حذف می‌کند ولی
 MediaAsset مشترک Restrict است. index عمومی kind/status/publishedAt و index رسانه

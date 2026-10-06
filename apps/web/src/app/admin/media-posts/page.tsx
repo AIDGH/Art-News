@@ -9,7 +9,7 @@ import type { MediaPost, MediaPostPage } from "@/lib/media-posts";
 import "@/components/media-gallery.css";
 
 const statuses = { DRAFT: "پیش‌نویس", PUBLISHED: "منتشرشده", ARCHIVED: "بایگانی" };
-const empty = { title: "", description: "", kind: "PHOTOS" as MediaPost["kind"], status: "DRAFT" as MediaPost["status"] };
+const empty = { title: "", description: "", targetUrl: "", kind: "PHOTOS" as MediaPost["kind"], status: "DRAFT" as MediaPost["status"] };
 
 export default function MediaPostsPage() {
   const [result, setResult] = useState<MediaPostPage | null>(null);
@@ -41,7 +41,7 @@ export default function MediaPostsPage() {
   const reload = () => { setLoading(true); setRefresh((value) => value + 1); };
   const edit = (post?: MediaPost) => {
     setEditing(post?.id ?? null); setError(""); setNotice(""); setOpen(true);
-    setForm(post ? { title: post.title, description: post.description ?? "", kind: post.kind, status: post.status } : empty);
+    setForm(post ? { title: post.title, description: post.description ?? "", targetUrl: post.targetUrl ?? "", kind: post.kind, status: post.status } : empty);
     setCover(post?.cover ?? null); setMedia(post?.items.map((item) => item.media) ?? []);
     setPickerKey((value) => value + 1);
     requestAnimationFrame(() => heading.current?.focus());
@@ -66,7 +66,7 @@ export default function MediaPostsPage() {
     setBusy(true);
     try {
       await adminFetch(editing ? `/editorial/media-posts/${editing}` : "/editorial/media-posts", {
-        method: editing ? "PUT" : "POST", body: JSON.stringify({ ...form, coverId: cover.id, mediaIds: media.map((item) => item.id) }),
+        method: editing ? "PUT" : "POST", body: JSON.stringify({ ...form, targetUrl: form.targetUrl.trim() || null, coverId: cover.id, mediaIds: media.map((item) => item.id) }),
       });
       setNotice(form.status === "PUBLISHED" ? "محتوا منتشر شد؛ در بخش عکس یا فیلم سایت قابل مشاهده است." : "محتوا ذخیره شد و در سایت عمومی نمایش داده نمی‌شود.");
       setOpen(false); reload();
@@ -101,6 +101,7 @@ export default function MediaPostsPage() {
           <label className="admin-field"><span>وضعیت انتشار</span><select value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value as MediaPost["status"] })}>{Object.entries(statuses).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
         </div>
         <label className="admin-field"><span>توضیح (اختیاری)</span><textarea rows={3} maxLength={3000} value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} /></label>
+        <label className="admin-field"><span>لینک پست اصلی (اختیاری)</span><input type="url" dir="ltr" maxLength={2000} placeholder="https://www.instagram.com/p/..." value={form.targetUrl} onChange={(event) => setForm({ ...form, targetUrl: event.target.value })} /><small className="admin-field-note">لینک اینستاگرام یا صفحهٔ اصلی محتوا؛ دکمهٔ مشاهدهٔ پست در سایت نمایش داده می‌شود.</small></label>
         <h3>فایل‌های محتوا ({media.length.toLocaleString("fa-IR")} از ۷)</h3>
         <p className="admin-field-note">تصویر یا گیف تا ۸ مگابایت؛ ویدیوی MP4/WebM تا ۳۰ مگابایت. ترتیب زیر همان ترتیب ورق‌زدن در سایت است.</p>
         <ol className="admin-media-post-items">{media.map((asset, index) => <li key={asset.id}>

@@ -19,6 +19,10 @@ if [[ "$target_revision" == "$deployed_revision" ]]; then
   exit 0
 fi
 
+setfacl -m u:www-data:--x "$STATE_DIR"
+setfacl -R -m u:www-data:rX "$STATE_DIR/uploads"
+setfacl -m d:u:www-data:r-x "$STATE_DIR/uploads"
+
 release_dir="$RELEASES_DIR/$target_revision"
 previous_release=""
 if [[ -L "$CURRENT_LINK" ]]; then

@@ -40,6 +40,28 @@ describe("Media posts", () => {
     }));
   });
 
+  it("saves the source link and allows clearing it on edit", async () => {
+    await service.save({ ...dto, targetUrl: " https://www.instagram.com/p/test/ " });
+    expect(prisma.mediaPost.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ targetUrl: "https://www.instagram.com/p/test/" }),
+    }));
+    await service.save({ ...dto, targetUrl: null }, "post");
+    expect(prisma.mediaPost.update).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ targetUrl: null }),
+    }));
+  });
+
+  it("accepts optional HTTP source links and rejects unsafe or incomplete URLs", async () => {
+    for (const targetUrl of [undefined, null, "", "  ", " https://www.instagram.com/p/test/ ", "http://example.com/post"]) {
+      const value = plainToInstance(SaveMediaPostDto, { ...dto, targetUrl });
+      expect(await validate(value)).toEqual([]);
+      if (typeof targetUrl === "string" && !targetUrl.trim()) expect(value.targetUrl).toBeNull();
+    }
+    for (const targetUrl of ["javascript:alert(1)", "data:text/html,test", "ftp://example.com/file", "/post", "instagram.com/p/test", "https://example.com/" + "x".repeat(2000)]) {
+      expect((await validate(plainToInstance(SaveMediaPostDto, { ...dto, targetUrl }))).length).toBeGreaterThan(0);
+    }
+  });
+
   it("atomically replaces an album in the requested order while preserving its publication date", async () => {
     prisma.mediaAsset.findMany.mockResolvedValue([{ id: image, kind: "IMAGE" }, { id: video, kind: "VIDEO" }]);
     await service.save({ ...dto, kind: "VIDEOS", status: "PUBLISHED", mediaIds: [video, image] }, "post");

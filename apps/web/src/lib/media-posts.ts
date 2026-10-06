@@ -4,6 +4,7 @@ export type MediaPost = {
   id: string;
   title: string;
   description: string | null;
+  targetUrl: string | null;
   kind: "PHOTOS" | "VIDEOS";
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
   cover: MediaAsset;

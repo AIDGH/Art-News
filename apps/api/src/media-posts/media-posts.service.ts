@@ -36,6 +36,7 @@ export class MediaPostsService {
     if (dto.kind === "VIDEOS" && !kinds.includes("VIDEO")) throw new BadRequestException("برای بخش فیلم دست‌کم یک ویدیو انتخاب کنید.");
     const data = {
       title: dto.title.trim(), description: dto.description?.trim() || null,
+      targetUrl: dto.targetUrl?.trim() || null,
       kind: dto.kind, coverId: dto.coverId, status: dto.status,
       publishedAt: dto.status === "PUBLISHED" ? current?.publishedAt ?? new Date() : current?.publishedAt ?? null,
     };

@@ -1,4 +1,9 @@
 .media-gallery { padding-block: 0 28px; }
+.media-cover-entry { min-width: 0; }
+.media-cover-card { width: 100%; }
+.media-post-source { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--accent-dark); font-size: .85rem; text-decoration: underline; text-underline-offset: 4px; }
+.media-post-source:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.reel-caption .media-post-source { color: #ffb98c; }
 .media-cover-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 18px; }
 .media-cover-card { min-width: 0; border: 0; padding: 0; color: inherit; background: none; text-align: start; cursor: pointer; }
 .media-cover-image { position: relative; display: block; aspect-ratio: 3/4; overflow: hidden; border-radius: 8px; background: #242424; }
