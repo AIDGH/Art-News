@@ -13,6 +13,27 @@ export async function fetchMediaPosts(kind: MediaPost["kind"]): Promise<{ page: 
 
 export const API_BASE_URL = (process.env.API_BASE_URL ?? "http://localhost:4001/api/v1").replace(/\/$/, "");
 
+export type LatestCategoryContent = {
+  category: Category;
+  contentType: "ARTICLE" | "MEDIA";
+  slug: string;
+  title: string;
+  publishedAt: string;
+  coverImage: { url: string; alt: string } | null;
+};
+
+export async function fetchLatestCategoryContent(): Promise<LatestCategoryContent[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/categories/latest`, { cache: "no-store" });
+    if (!response.ok) throw new Error("Latest category content unavailable");
+    const result = await response.json() as { data: LatestCategoryContent[] };
+    return result.data;
+  } catch (error) {
+    console.error("Error fetching latest category content:", error);
+    return [];
+  }
+}
+
 export type PublicAdvertisement = {
   id: string;
   title: string;
@@ -65,7 +86,7 @@ export function mapApiArticleToUi(apiArticle: ApiArticle): Article {
     title: apiArticle.title,
     lead: apiArticle.lead,
     category: apiArticle.category,
-    imageUrl: apiArticle.coverImage?.url || "/images/placeholder.jpg",
+    imageUrl: apiArticle.coverImage?.url || "/images/placeholder.svg",
     imageAlt: apiArticle.coverImage?.alt || "",
     imageCredit: apiArticle.coverImage?.credit || "",
     publishedAt: apiArticle.publishedAt,
@@ -106,7 +127,10 @@ export async function fetchCategoryBySlug(slug: string): Promise<Category | unde
     const response = await fetch(`${API_BASE_URL}/categories`, { next: { revalidate: 60 } });
     if (!response.ok) return undefined;
     const json = (await response.json()) as { data?: Array<Category & { articleCount: number }> };
-    return json.data?.find((category) => category.slug === slug);
+    const category = json.data?.find((category) => category.slug === slug);
+    if (category || slug !== "report") return category;
+    const legacyReport = json.data?.find((category) => category.slug === "screenings");
+    return legacyReport ? { ...legacyReport, slug: "report" } : undefined;
   } catch (error) {
     console.error(`Error fetching category ${slug}:`, error);
     return undefined;

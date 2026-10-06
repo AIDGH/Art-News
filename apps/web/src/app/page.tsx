@@ -8,7 +8,9 @@ import {
 } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { type Article } from "@/lib/news";
-import { fetchArticles, fetchFeaturedArticles } from "@/lib/api";
+import { fetchArticles, fetchFeaturedArticles, fetchLatestCategoryContent } from "@/lib/api";
+
+export const dynamic = "force-dynamic";
 
 const homepageSectionSlugs = [
   "news",
@@ -57,33 +59,22 @@ function PremiumArticle({ article }: { article: Article }) {
 }
 
 export default async function HomePage() {
-  const [uiArticles, selectedFeaturedArticles] = await Promise.all([
+  const [uiArticles, selectedFeaturedArticles, latestCategoryContent] = await Promise.all([
     fetchArticles(),
     fetchFeaturedArticles(),
+    fetchLatestCategoryContent(),
   ]);
   const featuredArticles = selectedFeaturedArticles.length > 0
     ? selectedFeaturedArticles
     : uiArticles.slice(0, 4);
   const sectionArticles = homepageSectionSlugs
-    .map((slug) => uiArticles.find((a) => a.category.slug === slug))
-    .filter((article) => article !== undefined) as Article[];
-
-  if (!sectionArticles.find((a) => a.category.slug === "report")) {
-    sectionArticles.splice(3, 0, {
-      slug: "dummy-report",
-      title: "گزارشی از پردیس سینمایی ملت",
-      lead: "پوشش ویژه اخبار و حواشی پردیس سینمایی",
-      category: { slug: "report", title: "گزارش", description: "" },
-      imageUrl: "/images/articles/night-photography-exhibition.webp",
-      imageAlt: "",
-      imageCredit: "",
-      publishedAt: new Date().toISOString(),
-      publishedLabel: "امروز",
-      readingTime: "۳ دقیقه",
-      author: "سینما نمایش",
-      body: [],
-    });
-  }
+    .map((slug) => {
+      const latest = latestCategoryContent
+        .filter((item) => item.category.slug === slug || (slug === "report" && item.category.slug === "screenings"))
+        .sort((first, second) => Date.parse(second.publishedAt) - Date.parse(first.publishedAt))[0];
+      return latest ? { ...latest, category: { ...latest.category, slug } } : undefined;
+    })
+    .filter((item) => item !== undefined);
 
   const latestNewsArticles = [...uiArticles]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
@@ -124,32 +115,36 @@ export default async function HomePage() {
 
       <section className="container compact-home-section">
         <div className="compact-news-grid">
-          {sectionArticles.map((article) => (
-            <article className="compact-news-item" key={article.slug}>
-              <Link
-                className="compact-news-image"
-                href={`/articles/${article.slug}`}
-              >
-                <Image
-                  src={article.imageUrl}
-                  alt={article.imageAlt}
-                  fill
-                  sizes="(max-width: 700px) 34vw, 210px"
-                />
-              </Link>
-              <div>
-                <Link href={`/category/${article.category.slug}`}>
-                  <span className="inline-block bg-orange-100 text-orange-600 text-xs font-bold px-3 py-1 rounded-md mb-2">
-                    {article.category.title}
-                  </span>
+          {sectionArticles.map((article) => {
+            const href = article.contentType === "MEDIA"
+              ? `/category/${article.category.slug}`
+              : `/articles/${article.slug}`;
+            const publishedLabel = new Intl.DateTimeFormat("fa-IR", {
+              year: "numeric", month: "long", day: "numeric",
+            }).format(new Date(article.publishedAt));
+            return (
+              <article className="compact-news-item" key={article.category.slug}>
+                <Link className="compact-news-image" href={href}>
+                  <Image
+                    src={article.coverImage?.url || "/images/placeholder.svg"}
+                    alt={article.coverImage?.alt || article.title}
+                    fill
+                    unoptimized
+                    sizes="(max-width: 700px) 34vw, 210px"
+                  />
                 </Link>
-                <h2>
-                  <Link href={`/articles/${article.slug}`}>{article.title}</Link>
-                </h2>
-                <span>{article.publishedLabel}</span>
-              </div>
-            </article>
-          ))}
+                <div>
+                  <Link href={`/category/${article.category.slug}`}>
+                    <span className="inline-block bg-orange-100 text-orange-600 text-xs font-bold px-3 py-1 rounded-md mb-2">
+                      {article.category.title}
+                    </span>
+                  </Link>
+                  <h2><Link href={href}>{article.title}</Link></h2>
+                  <span>{publishedLabel}</span>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 

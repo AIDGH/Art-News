@@ -20,10 +20,11 @@ const cinemaCategorySlugs = [
   "reviews-notes",
   "interviews",
   "report",
+  "screenings",
 ];
 
 async function fetchCategoryArticles(slug: string): Promise<Article[]> {
-  const slugs = slug === "cinema" ? cinemaCategorySlugs : [slug];
+  const slugs = slug === "cinema" ? cinemaCategorySlugs : slug === "report" ? ["report", "screenings"] : [slug];
   const articleGroups = await Promise.all(
     slugs.map((category) => fetchArticles({ category, pageSize: 15 })),
   );
@@ -71,26 +72,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   if (!category) notFound();
 
-  let categoryArticles = await fetchCategoryArticles(slug);
-  
-  if (slug === "report") {
-    categoryArticles = [
-      {
-        slug: "dummy-report",
-        title: "گزارشی از پردیس سینمایی ملت",
-        lead: "پوشش ویژه اخبار و حواشی پردیس سینمایی",
-        category,
-        imageUrl: "/images/articles/night-photography-exhibition.webp",
-        imageAlt: "",
-        imageCredit: "",
-        publishedAt: new Date().toISOString(),
-        publishedLabel: "امروز",
-        readingTime: "۳ دقیقه",
-        author: "سینما نمایش",
-        body: [],
-      }
-    ];
-  }
+  const categoryArticles = await fetchCategoryArticles(slug);
 
   const hasArticles = categoryArticles.length > 0;
   const mediaKind = slug === "photos" ? "PHOTOS" : slug === "videos" ? "VIDEOS" : null;

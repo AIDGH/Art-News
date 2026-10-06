@@ -23,6 +23,7 @@ GET /articles
 GET /articles/featured
 GET /articles/:slug
 GET /categories
+GET /categories/latest
 GET /categories/:slug/articles
 GET /site-settings
 GET /advertisements?placement=HOME|ARTICLE|CATEGORY|ALL
@@ -34,6 +35,14 @@ POST /articles/:slug/engagement/comments/:commentId/likes
 
 فهرست Article رکوردهای `PUBLISHED` و خبرهای `SCHEDULED` رسیده به زمان
 `publishedAt <= now` را برمی‌گرداند.
+
+`GET /categories/latest` آرایه `data` از تازه‌ترین محتوای هر دسته با
+`category`، `contentType: ARTICLE|MEDIA`، `slug` (شناسه آلبوم برای MEDIA)،
+`title`، `publishedAt` و `coverImage: {url, alt}|null` برمی‌گرداند.
+انتخاب خبر داخل هر دسته مستقل از صفحه‌بندی کلی است؛ فقط خبر منتشرشده یا
+زمان‌بندی‌شده‌ای که موعدش رسیده لحاظ می‌شود. در `photos` و `videos` جدیدترین
+آلبوم منتشرشده نیز با جدیدترین خبر مقایسه می‌شود؛ در تاریخ برابر آلبوم اولویت
+دارد. دسته بدون محتوای عمومی حذف می‌شود. متن کامل یا فایل ویدیو دریافت نمی‌شود.
 
 پارامترهای `GET /articles`:
 

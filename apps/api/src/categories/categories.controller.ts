@@ -20,6 +20,13 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
+  @Get("latest")
+  @ApiOperation({ summary: "Get the latest published article or media post per category" })
+  @ApiOkResponse({ description: "Category cards with covers and publication dates; empty categories are omitted" })
+  findLatest() {
+    return this.categoriesService.findLatest();
+  }
+
   @Get(":slug/articles")
   @ApiOperation({ summary: "List published articles in a category" })
   @ApiParam({ name: "slug", example: "visual-arts" })

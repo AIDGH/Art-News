@@ -15,6 +15,8 @@
 
 ### Changed
 
+- Homepage category cards now query the latest published content per category independently of the global article page, including photo/video uploads with their own covers and dates. Removed hardcoded report articles from the homepage and report archive.
+
 - Fixed public upload access for Nginx and bypassed image optimization for runtime gallery covers; added inherited upload ACLs to deployment.
 - Added optional HTTP/HTTPS source links to photo/video posts, their editor, gallery cards and reels, with an additive nullable-column migration.
 - Removed the photo and film shortcut boxes above the homepage footer, retaining English and all gallery routes/navigation.
