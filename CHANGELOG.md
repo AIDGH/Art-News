@@ -4,6 +4,8 @@
 
 ### Added
 
+- Confirmed permanent article deletion from the admin list and editor through an authenticated DELETE endpoint, preserving shared uploaded files and retaining archive as the reversible alternative.
+
 - Standalone photo/video posts with ordered albums, covers, draft/publish/archive workflow, a paginated admin panel and fullscreen public reels in the existing photo/film sections.
 - Incremental media-post migration and validation/publication tests. Existing articles and shared media are preserved.
 - Fixed desktop promotion overflow and removed empty advertising placeholders.

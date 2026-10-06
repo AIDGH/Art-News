@@ -21,6 +21,24 @@ export default function AdminDashboardPage() {
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [notice, setNotice] = useState("");
+
+  const removeArticle = async (article: AdminArticle) => {
+    if (!window.confirm(`خبر «${article.title}» برای همیشه حذف شود؟ نظرات و لایک‌های آن هم حذف می‌شوند و این کار قابل بازگشت نیست. برای توقف موقت نمایش، از بایگانی استفاده کنید.`)) return;
+    setDeletingId(article.id);
+    setError("");
+    setNotice("");
+    try {
+      await adminFetch(`/editorial/articles/${article.id}`, { method: "DELETE" });
+      setArticles((current) => current.filter((item) => item.id !== article.id));
+      setNotice("خبر حذف شد.");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "حذف خبر انجام نشد");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -78,6 +96,7 @@ export default function AdminDashboardPage() {
         <button type="submit">جست‌وجو</button>
       </form>
       {error ? <div className="admin-alert is-error">{error}</div> : null}
+      {notice ? <div className="admin-alert" role="status">{notice}</div> : null}
       <section className="admin-table-card">
         {loading ? <div className="admin-empty">در حال دریافت خبرها…</div> : articles.length === 0 ? <div className="admin-empty">خبری با این فیلتر پیدا نشد.</div> : (
           <div className="admin-table-scroll"><table><thead><tr><th>خبر</th><th>دسته‌بندی</th><th>وضعیت</th><th>آخرین تغییر</th><th /></tr></thead><tbody>
@@ -86,7 +105,7 @@ export default function AdminDashboardPage() {
               <td>{article.category.title}</td>
               <td><span className={`admin-status is-${article.status.toLowerCase()}`}>{statusLabels[article.status]}</span></td>
               <td>{new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(article.updatedAt))}</td>
-              <td><Link href={`/admin/articles/${article.id}/edit`}>ویرایش</Link></td>
+              <td><div className="admin-block-actions"><Link href={`/admin/articles/${article.id}/edit`}>ویرایش</Link><button type="button" className="admin-danger-button" disabled={deletingId !== null} onClick={() => void removeArticle(article)}>{deletingId === article.id ? "در حال حذف…" : "حذف"}</button></div></td>
             </tr>)}
           </tbody></table></div>
         )}

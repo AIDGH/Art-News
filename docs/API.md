@@ -75,6 +75,7 @@ GET    /editorial/articles/:id
 POST   /editorial/articles
 PATCH  /editorial/articles/:id
 POST   /editorial/articles/:id/archive
+DELETE /editorial/articles/:id
 GET    /editorial/categories
 POST   /editorial/categories
 PATCH  /editorial/categories/:id
@@ -92,6 +93,10 @@ DELETE /editorial/advertisements/:id
 
 ساخت و ویرایش خبر شامل title، slug، lead، body، categoryId، coverImageId،
 status، publishedAt، SEO، tags، sources، featured و featuredOrder است.
+حذف دائمی خبر به نشست معتبر نیاز دارد؛ پاسخ `{data: {id}}` است و شناسه ناموجود
+۴۰۴ می‌دهد. روابط وابسته شامل نظرات/لایک‌ها، منابع، بخش‌ها و انتخاب اسلایدر
+به‌صورت cascade حذف می‌شوند. فایل‌های آپلود، تگ‌ها و دسته‌بندی مشترک حذف نمی‌شوند.
+این عملیات برگشت‌پذیر نیست؛ بایگانی همچنان گزینه توقف موقت نمایش است.
 آپلود تصویر multipart با نام فیلد `file` انجام می‌شود؛ JPEG، PNG، WebP و GIF تا
 حداکثر ۸ MiB پذیرفته می‌شوند؛ MP4 و WebM تبلیغات تا ۳۰ MiB با بررسی signature
 پذیرفته می‌شوند. `GET /editorial/media?includeVideo=true` ویدیوها را هم برمی‌گرداند؛

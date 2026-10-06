@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -50,5 +51,11 @@ export class EditorialArticlesController {
   @ApiOperation({ summary: "Archive an article" })
   archive(@Param("id") id: string) {
     return this.articlesService.archive(id);
+  }
+
+  @Delete(":id")
+  @ApiOperation({ summary: "Permanently delete an article; shared media files are preserved" })
+  remove(@Param("id") id: string) {
+    return this.articlesService.remove(id);
   }
 }

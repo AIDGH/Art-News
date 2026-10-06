@@ -167,6 +167,21 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
     }
   };
 
+  const remove = async () => {
+    if (!articleId || !window.confirm(`خبر «${title}» برای همیشه حذف شود؟ نظرات و لایک‌های آن هم حذف می‌شوند و این کار قابل بازگشت نیست. برای توقف موقت نمایش، از بایگانی استفاده کنید.`)) return;
+    setSaving(true);
+    setError("");
+    try {
+      await adminFetch(`/editorial/articles/${articleId}`, { method: "DELETE" });
+      router.replace("/admin");
+      router.refresh();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "حذف خبر انجام نشد");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const archive = async () => {
     if (!articleId || !window.confirm("این خبر بایگانی شود؟")) return;
     setSaving(true);
@@ -248,6 +263,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
             {featured ? <label className="admin-field"><span>ترتیب در اسلایدر</span><input type="number" min={0} max={20} value={featuredOrder} onChange={(event) => setFeaturedOrder(Number(event.target.value))} /></label> : null}
             <button className="admin-primary-button admin-save-wide" type="submit" disabled={saving}>{saving ? "در حال ذخیره…" : status === "PUBLISHED" ? "ذخیره و انتشار" : "ذخیره تغییرات"}</button>
             {articleId ? <button className="admin-danger-button" type="button" onClick={() => void archive()} disabled={saving}>بایگانی خبر</button> : null}
+            {articleId ? <button className="admin-danger-button" type="button" onClick={() => void remove()} disabled={saving}>حذف دائمی خبر</button> : null}
           </section>
           <section className="admin-card admin-checklist"><h2>چک‌لیست انتشار</h2><ul><li className={title ? "is-done" : ""}>تیتر خبر</li><li className={lead.length >= 10 ? "is-done" : ""}>لید کامل</li><li className={body.length >= 20 ? "is-done" : ""}>متن خبر</li><li className={coverImage ? "is-done" : ""}>تصویر اصلی</li><li className={imageAlt ? "is-done" : ""}>متن جایگزین تصویر</li><li className={categoryId ? "is-done" : ""}>دسته‌بندی</li></ul></section>
         </aside>

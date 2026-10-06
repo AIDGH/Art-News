@@ -219,6 +219,18 @@ export class EditorialArticlesService {
     return { data: article };
   }
 
+  async remove(id: string) {
+    try {
+      await this.prisma.article.delete({ where: { id } });
+      return { data: { id } };
+    } catch (error) {
+      if (typeof error === "object" && error !== null && "code" in error && error.code === "P2025") {
+        throw new NotFoundException("خبر پیدا نشد");
+      }
+      throw error;
+    }
+  }
+
   private async validatePublication(
     status: PublicationStatus,
     publishedAt?: string,
