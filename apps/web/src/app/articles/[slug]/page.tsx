@@ -85,82 +85,82 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }}
       />
       <div className="article-desktop-layout">
-      <article>
-        <header className="article-header container-narrow">
-          <Link
-            className="category-label"
-            href={`/category/${article.category.slug}`}
-          >
-            {article.category.title}
-          </Link>
-          <h1>{article.title}</h1>
-          <p className="article-lead">{article.lead}</p>
-          <div className="article-byline">
-            <div>
-              <strong>{article.author}</strong>
-              <span>{article.publishedLabel}</span>
-            </div>
-            <span>{article.readingTime} برای مطالعه</span>
-          </div>
-        </header>
-
-        <figure className="article-figure container-wide">
-          <div>
-            <Image
-              src={article.imageUrl}
-              alt={article.imageAlt}
-              fill
-              priority
-              sizes="(max-width: 1100px) 100vw, 800px"
-            />
-          </div>
-          {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
-        </figure>
-
-        <div className="article-body-layout container-wide">
-          <div className="article-body">
-            {article.body.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-            {article.contentBlocks?.map((block) => block.kind === "TEXT" ?
-              <div key={block.id}>{block.text?.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
-              : <div className={`article-inline-images${block.images.length === 1 ? " is-single" : ""}`} key={block.id}>
-                {block.images.map(({ media }, index) => <figure key={index}>
-                  <Image src={media.url} alt={media.alt} width={1000} height={750} unoptimized sizes="(max-width: 650px) 100vw, 420px" />
-                  {media.caption || media.credit ? <figcaption>{[media.caption, media.credit].filter(Boolean).join(" — ")}</figcaption> : null}
-                </figure>)}
-              </div>)}
-            {article.tags && article.tags.length > 0 ? (
-              <div className="article-tags" aria-label="برچسب‌های خبر">
-                {article.tags.map((tag) => <span key={tag.slug}>#{tag.title}</span>)}
+        <article>
+          <header className="article-header container-narrow">
+            <Link
+              className="category-label"
+              href={`/category/${article.category.slug}`}
+            >
+              {article.category.title}
+            </Link>
+            <h1>{article.title}</h1>
+            <p className="article-lead">{article.lead}</p>
+            <div className="article-byline">
+              <div>
+                <strong>{article.author}</strong>
+                <span>{article.publishedLabel}</span>
               </div>
-            ) : null}
-            {article.sources && article.sources.length > 0 ? (
-              <section className="article-sources">
-                <h2>منابع خبر</h2>
-                <ul>{article.sources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.title || source.publisher || source.url}</a></li>)}</ul>
-              </section>
-            ) : null}
+              <span>{article.readingTime} برای مطالعه</span>
+            </div>
+          </header>
+
+          <figure className="article-figure container-wide">
+            <div>
+              <Image
+                src={article.imageUrl}
+                alt={article.imageAlt}
+                fill
+                priority
+                sizes="(max-width: 1100px) 100vw, 800px"
+              />
+            </div>
+            {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
+          </figure>
+
+          <div className="article-body-layout container-wide">
+            <div className="article-body">
+              {article.body.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+              {article.contentBlocks?.map((block) => block.kind === "TEXT" ?
+                <div key={block.id}>{block.text?.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+                : <div className={`article-inline-images${block.images.length === 1 ? " is-single" : ""}`} key={block.id}>
+                  {block.images.map(({ media }, index) => <figure key={index}>
+                    <Image src={media.url} alt={media.alt} width={1000} height={750} unoptimized sizes="(max-width: 650px) 100vw, 420px" />
+                    {media.caption || media.credit ? <figcaption>{[media.caption, media.credit].filter(Boolean).join(" — ")}</figcaption> : null}
+                  </figure>)}
+                </div>)}
+              {article.tags && article.tags.length > 0 ? (
+                <div className="article-tags" aria-label="برچسب‌های خبر">
+                  {article.tags.map((tag) => <span key={tag.slug}>#{tag.title}</span>)}
+                </div>
+              ) : null}
+              {article.sources && article.sources.length > 0 ? (
+                <section className="article-sources">
+                  <h2>منابع خبر</h2>
+                  <ul>{article.sources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.title || source.publisher || source.url}</a></li>)}</ul>
+                </section>
+              ) : null}
+            </div>
           </div>
-        </div>
-        <ArticleEngagement slug={article.slug} />
-      </article>
+          <ArticleEngagement slug={article.slug} />
+        </article>
 
-      <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">
-      <section className="container promotion-stack article-promotions">
-        <EcranNewsPromo />
-        <AdvertisementPlaceholder label="جایگاه تبلیغات" placement="ARTICLE" />
-      </section>
+        <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">
+          <section className="container promotion-stack article-promotions">
+            <EcranNewsPromo variant="sidebar" />
+            <AdvertisementPlaceholder label="جایگاه تبلیغات" placement="ARTICLE" />
+          </section>
 
-      <section className="container home-section related-section">
-        <SectionHeading title="مطالب مرتبط" />
-        <div className="three-card-grid">
-          {related.map((item) => (
-            <ArticleCard article={item} key={item.slug} excerptClassName="!line-clamp-2 text-sm text-gray-600 dark:text-gray-400 mt-2" />
-          ))}
-        </div>
-      </section>
-      </aside>
+          <section className="container home-section related-section">
+            <SectionHeading title="مطالب مرتبط" />
+            <div className="three-card-grid">
+              {related.map((item) => (
+                <ArticleCard article={item} key={item.slug} excerptClassName="!line-clamp-2 text-sm text-gray-600 dark:text-gray-400 mt-2" />
+              ))}
+            </div>
+          </section>
+        </aside>
       </div>
     </main>
   );
