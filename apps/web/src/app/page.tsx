@@ -157,8 +157,6 @@ export default async function HomePage() {
         className="container compact-media-links"
         aria-label="بخش‌های چندرسانه‌ای"
       >
-        <Link href="/category/photos">عکس</Link>
-        <Link href="/category/videos">فیلم</Link>
         <Link href="/english" lang="en">
           English
         </Link>

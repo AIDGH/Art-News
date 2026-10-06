@@ -15,6 +15,7 @@
 
 ### Changed
 
+- Removed the photo and film shortcut boxes above the homepage footer, retaining English and all gallery routes/navigation.
 - Moved admin categories immediately before the final public-site link; renamed primary article text labels.
 - Prevented creation defaults from resetting publication status, tags, sources or featured placement during partial article updates.
 
