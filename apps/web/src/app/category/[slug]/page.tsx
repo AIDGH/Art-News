@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  AdvertisementPlaceholder,
-  EcranNewsPromo,
-} from "@/components/promotion-blocks";
+import { AdvertisementPlaceholder } from "@/components/promotion-blocks";
 import { fetchArticles, fetchCategoryBySlug, fetchMediaPosts } from "@/lib/api";
 import { MediaGallery } from "@/components/media-gallery";
 import type { Article } from "@/lib/news";
@@ -136,7 +133,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       ) : null}
 
       <section className="promotion-stack category-promotions">
-        <EcranNewsPromo />
         <AdvertisementPlaceholder label="تبلیغات این بخش" placement="CATEGORY" />
       </section>
     </main>

@@ -2,10 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FeaturedNewsCarousel } from "@/components/featured-news-carousel";
 import { NewsTicker, type TickerItem } from "@/components/news-ticker";
-import {
-  AdvertisementPlaceholder,
-  EcranNewsPromo,
-} from "@/components/promotion-blocks";
+import { AdvertisementPlaceholder } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { type Article } from "@/lib/news";
 import { fetchArticles, fetchFeaturedArticles, fetchLatestCategoryContent } from "@/lib/api";
@@ -96,7 +93,6 @@ export default async function HomePage() {
       )}
 
       <section className="container promotion-stack promotion-stack-compact">
-        <EcranNewsPromo />
         <AdvertisementPlaceholder label="جایگاه تبلیغات صفحه اصلی" />
       </section>
 

@@ -4,10 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/article-card";
 import { ArticleEngagement } from "@/components/article-engagement";
-import {
-  AdvertisementPlaceholder,
-  EcranNewsPromo,
-} from "@/components/promotion-blocks";
+import { AdvertisementPlaceholder } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { fetchArticleBySlug, fetchArticles } from "@/lib/api";
 
@@ -149,7 +146,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">
           <section className="container promotion-stack article-promotions">
-            <EcranNewsPromo variant="sidebar" />
             <AdvertisementPlaceholder label="جایگاه تبلیغات" placement="ARTICLE" />
           </section>
 
