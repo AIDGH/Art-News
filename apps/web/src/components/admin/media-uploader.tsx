@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
 import { adminFetch, type MediaAsset } from "@/lib/admin-api";
+import { ImageCropModal } from "./image-crop-modal";
 
 type MediaUploaderProps = {
   value: MediaAsset | null;
@@ -11,15 +12,18 @@ type MediaUploaderProps = {
   onChange: (media: MediaAsset) => void;
   allowVideo?: boolean;
   onUploadingChange?: (uploading: boolean) => void;
+  /** When set (e.g. 3 for 3:1), static images are cropped to this width/height ratio before upload. */
+  cropAspect?: number;
 };
 
-export function MediaUploader({ value, alt, credit, onChange, allowVideo = false, onUploadingChange }: MediaUploaderProps) {
+export function MediaUploader({ value, alt, credit, onChange, allowVideo = false, onUploadingChange, cropAspect }: MediaUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const uploadingRef = useRef(false);
   const [uploading, setUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState("");
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [cropFile, setCropFile] = useState<File | null>(null);
   const [library, setLibrary] = useState<MediaAsset[]>([]);
 
   useEffect(() => {
@@ -29,17 +33,22 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
       .catch((caught) => setError(caught instanceof Error ? caught.message : "گالری باز نشد"));
   }, [library.length, libraryOpen, allowVideo]);
 
-  const upload = async (file: File) => {
-    if (uploadingRef.current) return;
+  const validate = (file: File) => {
     const video = ["video/mp4", "video/webm"].includes(file.type);
     if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type) && !(allowVideo && video)) {
       setError(allowVideo ? "تصویر، گیف یا ویدیوی MP4/WebM انتخاب کنید." : "فقط فایل تصویری انتخاب کنید.");
-      return;
+      return false;
     }
     if (file.size > (video ? 30 : 8) * 1024 * 1024) {
       setError(video ? "حجم ویدیو باید حداکثر ۳۰ مگابایت باشد." : "حجم تصویر باید حداکثر ۸ مگابایت باشد.");
-      return;
+      return false;
     }
+    return true;
+  };
+
+  const upload = async (file: File) => {
+    if (uploadingRef.current) return;
+    if (!validate(file)) return;
     uploadingRef.current = true;
     setUploading(true);
     onUploadingChange?.(true);
@@ -61,9 +70,22 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
     }
   };
 
+  // Entry point for every selected/dropped/pasted file. Static images are routed through
+  // the cropper when cropAspect is set; GIFs and videos upload directly.
+  const handleFile = (file: File) => {
+    if (uploadingRef.current) return;
+    setError("");
+    if (!validate(file)) return;
+    if (cropAspect && ["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setCropFile(file);
+      return;
+    }
+    void upload(file);
+  };
+
   const fileChanged = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) void upload(file);
+    if (file) handleFile(file);
     event.target.value = "";
   };
 
@@ -71,7 +93,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
     event.preventDefault();
     setIsDragging(false);
     const file = event.dataTransfer.files[0];
-    if (file) void upload(file);
+    if (file) handleFile(file);
   };
 
   const pasteFromClipboard = async () => {
@@ -82,7 +104,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
         const imageType = item.types.find((type) => type.startsWith("image/"));
         if (!imageType) continue;
         const blob = await item.getType(imageType);
-        await upload(new File([blob], `clipboard-${Date.now()}`, { type: imageType }));
+        handleFile(new File([blob], `clipboard-${Date.now()}.${imageType.split("/")[1] ?? "png"}`, { type: imageType }));
         return;
       }
       setError("در کلیپ‌بورد تصویر پیدا نشد.");
@@ -102,7 +124,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
         onDrop={drop}
         onPaste={(event) => {
           const file = Array.from(event.clipboardData.files).find((item) => item.type.startsWith("image/"));
-          if (file) void upload(file);
+          if (file) handleFile(file);
         }}
         tabIndex={0}
       >
@@ -130,6 +152,14 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
             </button>
           ))}
         </div>
+      ) : null}
+      {cropFile && cropAspect ? (
+        <ImageCropModal
+          file={cropFile}
+          aspect={cropAspect}
+          onCancel={() => setCropFile(null)}
+          onConfirm={(cropped) => { setCropFile(null); void upload(cropped); }}
+        />
       ) : null}
     </div>
   );

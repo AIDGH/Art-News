@@ -84,7 +84,7 @@ export default function AdvertisementsPage() {
     {formOpen ? <form className="admin-card admin-ad-form" onSubmit={save}>
       <h2>{editing ? "ویرایش تبلیغ" : "تبلیغ جدید"}</h2>
       <label className="admin-field"><span>عنوان تبلیغ</span><input required minLength={2} maxLength={160} value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} /></label>
-      <MediaUploader allowVideo value={media} alt={alt} credit="" onChange={(value) => { setMedia(value); setAlt(value.alt); }} />
+      <MediaUploader allowVideo cropAspect={3 / 1} value={media} alt={alt} credit="" onChange={(value) => { setMedia(value); setAlt(value.alt); }} />
       <p className="admin-field-note">تصویر و گیف تا ۸ مگابایت؛ ویدیوی MP4 یا WebM تا ۳۰ مگابایت.</p>
       <label className="admin-field"><span>توضیح فایل برای دسترس‌پذیری</span><input value={alt} onChange={(event) => setAlt(event.target.value)} placeholder="در صورت خالی‌بودن از عنوان استفاده می‌شود" /></label>
       <div className="admin-field-grid">
