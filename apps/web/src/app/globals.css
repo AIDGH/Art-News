@@ -3716,6 +3716,22 @@ img {
   cursor: default;
 }
 
+.admin-article-actions { column-gap: 24px; row-gap: 10px; }
+.admin-order-editor { min-width: 0; margin-block: 18px; }
+.admin-order-editor h2 { font-size: 1rem; }
+.admin-order-list { display: grid; gap: 8px; list-style: none; margin-block: 14px; padding: 0; }
+.admin-order-list li { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ded7ce; border-radius: 8px; min-width: 0; background: #fcfaf7; }
+.admin-order-list li.is-dragging { opacity: .5; }
+.admin-order-list img { width: 64px; height: 48px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+.admin-order-position { flex-shrink: 0; width: 20px; text-align: center; color: #766e63; }
+.admin-order-copy { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.admin-order-copy strong { display: block; font-size: .85rem; }
+.admin-order-copy small { display: block; font-size: .75rem; color: #766e63; margin-top: 4px; }
+.admin-order-controls { display: flex; gap: 4px; flex-shrink: 0; }
+.admin-order-controls button { width: 36px; height: 36px; border: 1px solid #d5cbc0; border-radius: 6px; cursor: pointer; font-size: 1.2rem; }
+.admin-order-controls button:disabled { opacity: .35; cursor: default; }
+@media (max-width: 480px) { .admin-order-list img { display: none; } }
+
 .admin-block-images {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

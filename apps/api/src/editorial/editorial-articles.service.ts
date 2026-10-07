@@ -13,6 +13,7 @@ import type { EditorialUser } from "../auth/auth.service";
 import type { CreateArticleDto } from "./dto/create-article.dto";
 import type { EditorialArticleQueryDto } from "./dto/editorial-article-query.dto";
 import type { UpdateArticleDto } from "./dto/update-article.dto";
+import { assertCompleteOrder } from "../common/display-order.dto";
 
 const editorialArticleInclude = {
   author: { select: { id: true, displayName: true, username: true } },
@@ -38,6 +39,32 @@ function slugifyTag(title: string): string {
 @Injectable()
 export class EditorialArticlesService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findFeaturedOrder() {
+    const rows = await this.prisma.homepagePlacement.findMany({
+      where: { slot: HomepageSlot.LEAD },
+      orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }, { id: "asc" }],
+      select: { article: { select: { id: true, title: true, status: true, coverImage: { select: { url: true } } } } },
+    });
+    return { data: rows.map(({ article }) => ({
+      id: article.id, title: article.title, status: article.status, imageUrl: article.coverImage?.url ?? null,
+    })) };
+  }
+
+  async saveFeaturedOrder(ids: string[]) {
+    await this.prisma.$transaction(async (transaction) => {
+      const current = await transaction.homepagePlacement.findMany({
+        where: { slot: HomepageSlot.LEAD }, select: { articleId: true },
+      });
+      assertCompleteOrder(ids, current.map((item) => item.articleId));
+      for (const [displayOrder, articleId] of ids.entries()) {
+        await transaction.homepagePlacement.update({
+          where: { articleId_slot: { articleId, slot: HomepageSlot.LEAD } }, data: { displayOrder },
+        });
+      }
+    });
+    return this.findFeaturedOrder();
+  }
 
   async findAll(query: EditorialArticleQueryDto) {
     const search = query.query?.trim();
@@ -105,11 +132,12 @@ export class EditorialArticlesService {
           },
         });
         if (dto.featured) {
+          const last = await transaction.homepagePlacement.findFirst({ where: { slot: HomepageSlot.LEAD }, orderBy: { displayOrder: "desc" }, select: { displayOrder: true } });
           await transaction.homepagePlacement.create({
             data: {
               articleId: created.id,
               slot: HomepageSlot.LEAD,
-              displayOrder: dto.featuredOrder,
+              displayOrder: dto.featuredOrder ?? (last?.displayOrder ?? -1) + 1,
             },
           });
         }
@@ -180,14 +208,15 @@ export class EditorialArticlesService {
         });
 
         if (dto.featured === true) {
+          const last = await transaction.homepagePlacement.findFirst({ where: { slot: HomepageSlot.LEAD }, orderBy: { displayOrder: "desc" }, select: { displayOrder: true } });
           await transaction.homepagePlacement.upsert({
             where: { articleId_slot: { articleId: id, slot: HomepageSlot.LEAD } },
             create: {
               articleId: id,
               slot: HomepageSlot.LEAD,
-              displayOrder: dto.featuredOrder ?? 0,
+              displayOrder: dto.featuredOrder ?? (last?.displayOrder ?? -1) + 1,
             },
-            update: { displayOrder: dto.featuredOrder ?? 0 },
+            update: dto.featuredOrder === undefined ? {} : { displayOrder: dto.featuredOrder },
           });
         } else if (dto.featured === false) {
           await transaction.homepagePlacement.deleteMany({

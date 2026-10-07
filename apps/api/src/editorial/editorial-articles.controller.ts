@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   Req,
   UseGuards,
@@ -16,6 +17,7 @@ import { CreateArticleDto } from "./dto/create-article.dto";
 import { EditorialArticleQueryDto } from "./dto/editorial-article-query.dto";
 import { UpdateArticleDto } from "./dto/update-article.dto";
 import { EditorialArticlesService } from "./editorial-articles.service";
+import { DisplayOrderDto } from "../common/display-order.dto";
 
 @Controller("editorial/articles")
 @UseGuards(SessionAuthGuard)
@@ -27,6 +29,16 @@ export class EditorialArticlesController {
   @ApiOperation({ summary: "List all editorial articles" })
   findAll(@Query() query: EditorialArticleQueryDto) {
     return this.articlesService.findAll(query);
+  }
+
+  @Get("featured-order")
+  findFeaturedOrder() {
+    return this.articlesService.findFeaturedOrder();
+  }
+
+  @Put("featured-order")
+  saveFeaturedOrder(@Body() dto: DisplayOrderDto) {
+    return this.articlesService.saveFeaturedOrder(dto.ids);
   }
 
   @Get(":id")

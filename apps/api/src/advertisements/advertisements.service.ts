@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { PrismaService } from "../database/prisma.service";
 import type { Advertisement } from "../generated/prisma/client";
 import type { AdvertisementQueryDto, CreateAdvertisementDto, UpdateAdvertisementDto } from "./dto/advertisement.dto";
+import { assertCompleteOrder } from "../common/display-order.dto";
 
 function adStatus(ad: Advertisement, now = new Date()) {
   if (!ad.enabled) return "DISABLED";
@@ -13,6 +14,25 @@ function adStatus(ad: Advertisement, now = new Date()) {
 @Injectable()
 export class AdvertisementsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findDisplayOrder() {
+    const { data } = await this.findAll({});
+    return { data: data.map((ad) => ({
+      id: ad.id, title: ad.title, status: ad.effectiveStatus, placement: ad.placement,
+      imageUrl: ad.media.mimeType.startsWith("image/") ? ad.media.url : null,
+    })) };
+  }
+
+  async saveDisplayOrder(ids: string[]) {
+    await this.prisma.$transaction(async (transaction) => {
+      const current = await transaction.advertisement.findMany({ select: { id: true } });
+      assertCompleteOrder(ids, current.map((item) => item.id));
+      for (const [displayOrder, id] of ids.entries()) {
+        await transaction.advertisement.update({ where: { id }, data: { displayOrder } });
+      }
+    });
+    return this.findDisplayOrder();
+  }
 
   async findPublic(query: AdvertisementQueryDto) {
     const now = new Date();
@@ -43,12 +63,13 @@ export class AdvertisementsService {
 
   async create(dto: CreateAdvertisementDto) {
     await this.validate(dto.mediaId, dto.startsAt, dto.endsAt);
+    const last = await this.prisma.advertisement.findFirst({ orderBy: { displayOrder: "desc" }, select: { displayOrder: true } });
     const data = await this.prisma.advertisement.create({
       data: {
         title: dto.title.trim(), text: dto.text?.trim() || null, targetUrl: dto.targetUrl || null,
         mediaId: dto.mediaId, placement: dto.placement ?? "ALL", enabled: dto.enabled ?? true,
         startsAt: dto.startsAt ? new Date(dto.startsAt) : null,
-        endsAt: dto.endsAt ? new Date(dto.endsAt) : null, displayOrder: dto.displayOrder ?? 0,
+        endsAt: dto.endsAt ? new Date(dto.endsAt) : null, displayOrder: dto.displayOrder ?? (last?.displayOrder ?? -1) + 1,
       }, include: { media: true },
     });
     return { data: { ...data, effectiveStatus: adStatus(data) } };

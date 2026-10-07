@@ -189,6 +189,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
             >
               <Image
                 src={article.imageUrl}
+                unoptimized={article.imageUrl.startsWith("/uploads/")}
                 alt={article.imageAlt}
                 fill
                 loading={articleIndex === 0 ? "eager" : "lazy"}

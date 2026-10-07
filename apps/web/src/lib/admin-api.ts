@@ -73,6 +73,7 @@ export type AdminArticle = {
 };
 
 export type AdminSiteSettings = {
+  ecranPromoText: string;
   footerDescription: string;
   aboutBody: string;
   updatedAt: string | null;

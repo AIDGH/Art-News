@@ -4,6 +4,8 @@
 
 ### Added
 
+- Editable Ecran promo text in site settings with a preserving default-column migration, plus visual slider/ad ordering with atomic saves and stale-list protection.
+
 - Confirmed permanent article deletion from the admin list and editor through an authenticated DELETE endpoint, preserving shared uploaded files and retaining archive as the reversible alternative.
 
 - Standalone photo/video posts with ordered albums, covers, draft/publish/archive workflow, a paginated admin panel and fullscreen public reels in the existing photo/film sections.
@@ -16,6 +18,8 @@
 - Additive SQLite migration for advertisements and article blocks; validated video uploads and 32 MiB multipart proxy allowance.
 
 ### Changed
+
+- Added spacing between admin article actions, fixed manual hyphenated slugs, clarified optional SEO fields, and bypassed Next image optimization only for runtime article upload covers.
 
 - Homepage category cards now query the latest published content per category independently of the global article page, including photo/video uploads with their own covers and dates. Removed hardcoded report articles from the homepage and report archive.
 

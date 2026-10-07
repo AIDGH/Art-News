@@ -75,6 +75,11 @@ accessedAt.
 رکورد singleton با شناسه ثابت `site` برای متن معرفی فوتر و بدنه قابل‌ویرایش
 صفحه «درباره ما». این رکورد داده عمومی است اما فقط endpoint محافظت‌شده پنل آن
 را تغییر می‌دهد.
+ستون `ecranPromoText` با migration افزایشی `20261007090000_add_ecran_promo_text`
+به آن اضافه شد؛ NOT NULL با default متن قبلی بنر است تا رکوردهای موجود حفظ شوند.
+چینش تصویری از ستون‌های موجود HomepagePlacement.displayOrder و
+Advertisement.displayOrder استفاده می‌کند و جدول تازه ندارد؛ ذخیره ترتیب در
+transaction با کنترل کامل‌بودن مجموعه شناسه‌ها انجام می‌شود.
 
 ### ArticleComment
 

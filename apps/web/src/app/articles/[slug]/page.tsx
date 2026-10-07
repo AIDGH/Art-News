@@ -109,6 +109,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <Image
                 src={article.imageUrl}
                 alt={article.imageAlt}
+                unoptimized={article.imageUrl.startsWith("/uploads/")}
                 fill
                 priority
                 sizes="(max-width: 1100px) 100vw, 800px"

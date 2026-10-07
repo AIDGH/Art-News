@@ -23,6 +23,7 @@ export function ArticleCard({
       <Link className="article-card-image" href={`/articles/${article.slug}`}>
         <Image
           src={article.imageUrl}
+          unoptimized={article.imageUrl.startsWith("/uploads/")}
           alt={article.imageAlt}
           fill
           sizes={

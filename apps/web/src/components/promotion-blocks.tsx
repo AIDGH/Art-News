@@ -1,8 +1,5 @@
 import Image from "next/image";
-import { fetchAdvertisements } from "@/lib/api";
-
-const BANNER_TEXT =
-  "🔸رسانه معتبر خبر، نقد فیلم، بازیگری،  تلویزیون، سریال، نمایش خانگی و تئاتر";
+import { fetchAdvertisements, fetchSiteSettings } from "@/lib/api";
 
 const bannerStyles = {
   // Fills (and never exceeds) the parent container, same width as the slider.
@@ -19,10 +16,11 @@ const bannerStyles = {
   },
 } as const;
 
-export function EcranNewsPromo({
+export async function EcranNewsPromo({
   variant = "default",
 }: { variant?: "default" | "sidebar" } = {}) {
   const styles = bannerStyles[variant];
+  const { ecranPromoText } = await fetchSiteSettings();
 
   return (
     <div
@@ -36,7 +34,7 @@ export function EcranNewsPromo({
       <div
         className={`min-w-0 flex-1 text-center leading-[1.9] text-white [overflow-wrap:anywhere] ${styles.text}`}
       >
-        <p className="whitespace-normal">{BANNER_TEXT}</p>
+        <p className="whitespace-pre-line">{ecranPromoText}</p>
       </div>
     </div>
   );

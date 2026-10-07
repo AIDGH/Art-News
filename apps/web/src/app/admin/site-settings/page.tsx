@@ -6,6 +6,7 @@ import { adminFetch, type AdminSiteSettings } from "@/lib/admin-api";
 export default function AdminSiteSettingsPage() {
   const [footerDescription, setFooterDescription] = useState("");
   const [aboutBody, setAboutBody] = useState("");
+  const [ecranPromoText, setEcranPromoText] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -16,6 +17,7 @@ export default function AdminSiteSettingsPage() {
       .then(({ data }) => {
         setFooterDescription(data.footerDescription);
         setAboutBody(data.aboutBody);
+        setEcranPromoText(data.ecranPromoText);
       })
       .catch((caught) => {
         setError(caught instanceof Error ? caught.message : "متن‌های سایت دریافت نشدند");
@@ -33,11 +35,12 @@ export default function AdminSiteSettingsPage() {
         "/editorial/site-settings",
         {
           method: "PUT",
-          body: JSON.stringify({ footerDescription, aboutBody }),
+          body: JSON.stringify({ footerDescription, aboutBody, ecranPromoText }),
         },
       );
       setFooterDescription(data.footerDescription);
       setAboutBody(data.aboutBody);
+      setEcranPromoText(data.ecranPromoText);
       setNotice("متن‌های سایت ذخیره شدند و حداکثر تا یک دقیقه در سایت نمایش داده می‌شوند.");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "ذخیره متن‌ها انجام نشد");
@@ -52,7 +55,7 @@ export default function AdminSiteSettingsPage() {
         <div>
           <span>محتوای ثابت</span>
           <h1>متن‌های سایت</h1>
-          <p>متن معرفی فوتر و محتوای صفحه درباره ما را بدون تغییر کد مدیریت کنید.</p>
+          <p>متن فوتر، درباره ما و تبلیغ اکران نیوز را بدون تغییر کد مدیریت کنید.</p>
         </div>
       </div>
       {error ? <div className="admin-alert is-error">{error}</div> : null}
@@ -61,6 +64,11 @@ export default function AdminSiteSettingsPage() {
         <div className="admin-empty">در حال دریافت متن‌ها…</div>
       ) : (
         <form className="admin-card admin-site-settings-form" onSubmit={submit}>
+          <label className="admin-field">
+            <span>متن تبلیغ اکران نیوز</span>
+            <textarea rows={4} maxLength={1200} required value={ecranPromoText} onChange={(event) => setEcranPromoText(event.target.value)} />
+            <small>در تمام جایگاه‌های اکران نیوز نمایش داده می‌شود؛ حداکثر ۱۲۰۰ نویسه.</small>
+          </label>
           <label className="admin-field">
             <span>متن زیر «سینما نمایش» در فوتر</span>
             <textarea

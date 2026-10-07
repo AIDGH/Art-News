@@ -1,5 +1,15 @@
 # Cinema Namayesh Deployment
 
+## Admin text and ordering update — 2026-10-07
+
+Apply `20261007090000_add_ecran_promo_text` using migrate deploy after Prisma
+generation. It adds one defaulted text column and preserves existing site copy;
+no reset/reseed is required. The main deploy script already runs generate/migrate
+before builds. Runtime Article upload covers now bypass Next image optimization,
+while build-time images retain optimization. The live Bot cover was verified as
+HTTP 200 at its upload URL and HTTP 400 through the Next image processor. No live
+content or uploaded file was changed. Do not wait for deployment after pushing.
+
 ## Runtime upload access — 2026-10-06
 
 The uploaded test PNG and MP4 existed, but Nginx returned 404 because

@@ -11,6 +11,7 @@ import {
 } from "@/lib/admin-api";
 import { MediaUploader } from "./media-uploader";
 import { ArticleBlocksEditor, type ContentBlockForm } from "./article-blocks-editor";
+import { DisplayOrderEditor } from "./display-order-editor";
 
 type ArticleEditorProps = { articleId?: string };
 type SourceForm = { url: string; title: string; publisher: string; author: string; publishedAt: string };
@@ -61,7 +62,6 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
   const [imageCredit, setImageCredit] = useState("");
   const [imageCaption, setImageCaption] = useState("");
   const [featured, setFeatured] = useState(false);
-  const [featuredOrder, setFeaturedOrder] = useState(0);
   const [loading, setLoading] = useState(Boolean(articleId));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -105,7 +105,6 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
         setImageCaption(article.coverImage?.caption || "");
         const placement = article.homepagePlacements.find((item) => item.slot === "LEAD");
         setFeatured(Boolean(placement));
-        setFeaturedOrder(placement?.displayOrder ?? 0);
       })
       .catch((caught) => setError(caught instanceof Error ? caught.message : "اطلاعات خبر دریافت نشد"))
       .finally(() => setLoading(false));
@@ -135,7 +134,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
       }
       const payload = {
         title,
-        slug,
+        slug: slug.trim(),
         lead,
         body,
         contentBlocks: contentBlocks.map((block) => block.kind === "TEXT" ? { kind: block.kind, text: block.text } : { kind: block.kind, mediaIds: block.images.map((media) => media!.id) }),
@@ -151,7 +150,6 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
           publishedAt: source.publishedAt ? new Date(source.publishedAt).toISOString() : undefined,
         })),
         featured,
-        featuredOrder,
       };
       const response = await adminFetch<{ data: AdminArticle }>(
         articleId ? `/editorial/articles/${articleId}` : "/editorial/articles",
@@ -213,7 +211,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
           <section className="admin-card">
             <div className="admin-card-heading"><span>۱</span><div><h2>متن اصلی خبر</h2><p>تیتر، خلاصه و متن اصلی مطلب</p></div></div>
             <label className="admin-field"><span>تیتر خبر</span><input value={title} onChange={(event) => { setTitle(event.target.value); if (!slugTouched) setSlug(slugify(event.target.value)); }} maxLength={220} required /></label>
-            <label className="admin-field"><span>شناسه نشانی (Slug)</span><input dir="ltr" value={slug} onChange={(event) => { setSlugTouched(true); setSlug(slugify(event.target.value)); }} maxLength={220} required /><small>در نشانی خبر استفاده می‌شود و بهتر است بعد از انتشار تغییر نکند.</small></label>
+            <label className="admin-field"><span>شناسه نشانی (Slug)</span><input dir="ltr" value={slug} onChange={(event) => { setSlugTouched(true); setSlug(event.target.value); }} maxLength={220} required /><small>حروف فارسی/انگلیسی، عدد، خط تیره (-) و زیرخط (_) مجازند؛ فاصله و / مجاز نیست. بهتر است بعد از انتشار تغییر نکند.</small></label>
             <label className="admin-field"><span>لید یا خلاصه</span><textarea rows={4} value={lead} onChange={(event) => setLead(event.target.value)} maxLength={600} required /><small>{lead.length.toLocaleString("fa-IR")} از ۶۰۰ نویسه</small></label>
             <label className="admin-field"><span>متن اصلی خبر</span><textarea className="admin-body-editor" rows={12} value={body} onChange={(event) => setBody(event.target.value)} required /><small>{wordCount.toLocaleString("fa-IR")} واژه — برای پاراگراف جدید یک خط خالی بگذارید. کپی و پیست متن پشتیبانی می‌شود.</small></label>
           </section>
@@ -248,8 +246,8 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
 
           <section className="admin-card">
             <div className="admin-card-heading"><span>۴</span><div><h2>تنظیمات موتور جست‌وجو</h2><p>در صورت خالی‌بودن از تیتر و لید استفاده می‌شود</p></div></div>
-            <label className="admin-field"><span>عنوان SEO</span><input value={seoTitle} onChange={(event) => setSeoTitle(event.target.value)} maxLength={220} /></label>
-            <label className="admin-field"><span>توضیح SEO</span><textarea rows={3} value={seoDescription} onChange={(event) => setSeoDescription(event.target.value)} maxLength={320} /></label>
+            <label className="admin-field"><span>عنوان SEO (اختیاری)</span><input value={seoTitle} onChange={(event) => setSeoTitle(event.target.value)} maxLength={220} placeholder="مثلاً: نخستین تصویر لیلا حاتمی در فیلم بُت" /><small>عنوان کوتاه و دقیق برای موتور جست‌وجو؛ اگر خالی باشد، تیتر خبر استفاده می‌شود.</small></label>
+            <label className="admin-field"><span>توضیح SEO (اختیاری)</span><textarea rows={3} value={seoDescription} onChange={(event) => setSeoDescription(event.target.value)} maxLength={320} placeholder="خلاصهٔ روشن خبر در یک یا دو جمله" /><small>خلاصه‌ای بدون تکرار کلمات؛ اگر خالی باشد، لید خبر استفاده می‌شود. نمایش عین این متن در گوگل تضمین نیست.</small></label>
           </section>
         </div>
 
@@ -260,7 +258,8 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
             <label className="admin-field"><span>وضعیت</span><select value={status} onChange={(event) => setStatus(event.target.value as AdminArticle["status"])}>{statusOptions.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label>
             <label className="admin-field"><span>زمان انتشار</span><input type="datetime-local" value={publishedAt} onChange={(event) => setPublishedAt(event.target.value)} required={status === "SCHEDULED"} /></label>
             <label className="admin-check"><input type="checkbox" checked={featured} onChange={(event) => setFeatured(event.target.checked)} /><span><strong>تازه‌های صفحه اول</strong><small>در اسلایدر بالای صفحه نمایش داده شود</small></span></label>
-            {featured ? <label className="admin-field"><span>ترتیب در اسلایدر</span><input type="number" min={0} max={20} value={featuredOrder} onChange={(event) => setFeaturedOrder(Number(event.target.value))} /></label> : null}
+            <small className="admin-field-note">خبر جدید پس از ذخیره به انتهای فهرست اضافه می‌شود؛ جای آن را از چینش زیر تغییر دهید.</small>
+            <DisplayOrderEditor title="چینش خبرهای اسلایدر" path="/editorial/articles/featured-order" hint="فقط چهار خبر منتشرشدهٔ اول در اسلایدر نمایش داده می‌شوند. ابتدا تغییرات خبر فعلی را ذخیره کنید." />
             <button className="admin-primary-button admin-save-wide" type="submit" disabled={saving}>{saving ? "در حال ذخیره…" : status === "PUBLISHED" ? "ذخیره و انتشار" : "ذخیره تغییرات"}</button>
             {articleId ? <button className="admin-danger-button" type="button" onClick={() => void archive()} disabled={saving}>بایگانی خبر</button> : null}
             {articleId ? <button className="admin-danger-button" type="button" onClick={() => void remove()} disabled={saving}>حذف دائمی خبر</button> : null}

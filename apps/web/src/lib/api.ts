@@ -54,11 +54,13 @@ export async function fetchAdvertisements(placement: "HOME" | "ARTICLE" | "CATEG
 }
 
 export type SiteSettings = {
+  ecranPromoText: string;
   footerDescription: string;
   aboutBody: string;
 };
 
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
+  ecranPromoText: "🔸رسانه معتبر خبر، نقد فیلم، بازیگری،  تلویزیون، سریال، نمایش خانگی و تئاتر",
   footerDescription:
     "پایگاه خبری سینما نمایش، رسانه انتشار تازه‌ترین و مهم‌ترین اخبار فرهنگی است",
   aboutBody: "",
@@ -174,7 +176,7 @@ export async function fetchSiteSettings(): Promise<SiteSettings> {
     });
     if (!response.ok) return DEFAULT_SITE_SETTINGS;
     const json = (await response.json()) as { data?: SiteSettings };
-    return json.data ?? DEFAULT_SITE_SETTINGS;
+    return { ...DEFAULT_SITE_SETTINGS, ...json.data };
   } catch (error) {
     console.error("Error fetching site settings:", error);
     return DEFAULT_SITE_SETTINGS;

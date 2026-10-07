@@ -32,7 +32,7 @@ export class CreateArticleDto {
   @IsString()
   @MinLength(2)
   @MaxLength(220)
-  @Matches(/^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u)
+  @Matches(/^[\p{L}\p{N}][\p{L}\p{N}_-]*$/u, { message: "شناسه نشانی فقط می‌تواند شامل حروف، عدد، خط تیره و زیرخط باشد" })
   slug!: string;
 
   @ApiProperty()
@@ -113,5 +113,5 @@ export class CreateArticleDto {
   @IsInt()
   @Min(0)
   @Max(20)
-  featuredOrder = 0;
+  featuredOrder?: number;
 }

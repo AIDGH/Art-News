@@ -293,5 +293,6 @@ model SiteSettings {
   id                String   @id @default("site")
   footerDescription String
   aboutBody         String
+  ecranPromoText     String   @default("🔸رسانه معتبر خبر، نقد فیلم، بازیگری،  تلویزیون، سریال، نمایش خانگی و تئاتر")
   updatedAt         DateTime @updatedAt
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { adminFetch, type AdminArticle, type AdminCategory } from "@/lib/admin-api";
+import { DisplayOrderEditor } from "@/components/admin/display-order-editor";
 
 const statusLabels: Record<AdminArticle["status"], string> = {
   DRAFT: "پیش‌نویس",
@@ -98,6 +99,7 @@ export default function AdminDashboardPage() {
       {error ? <div className="admin-alert is-error">{error}</div> : null}
       {notice ? <div className="admin-alert" role="status">{notice}</div> : null}
       <section className="admin-table-card">
+        <DisplayOrderEditor title="چینش خبرهای اسلایدر" path="/editorial/articles/featured-order" hint="چهار خبر منتشرشدهٔ اول نمایش داده می‌شوند؛ پیش‌نویس‌ها و خبرهای آینده تا زمان انتشار نمایش ندارند." />
         {loading ? <div className="admin-empty">در حال دریافت خبرها…</div> : articles.length === 0 ? <div className="admin-empty">خبری با این فیلتر پیدا نشد.</div> : (
           <div className="admin-table-scroll"><table><thead><tr><th>خبر</th><th>دسته‌بندی</th><th>وضعیت</th><th>آخرین تغییر</th><th /></tr></thead><tbody>
             {articles.map((article) => <tr key={article.id}>
@@ -105,7 +107,7 @@ export default function AdminDashboardPage() {
               <td>{article.category.title}</td>
               <td><span className={`admin-status is-${article.status.toLowerCase()}`}>{statusLabels[article.status]}</span></td>
               <td>{new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(article.updatedAt))}</td>
-              <td><div className="admin-block-actions"><Link href={`/admin/articles/${article.id}/edit`}>ویرایش</Link><button type="button" className="admin-danger-button" disabled={deletingId !== null} onClick={() => void removeArticle(article)}>{deletingId === article.id ? "در حال حذف…" : "حذف"}</button></div></td>
+              <td><div className="admin-block-actions admin-article-actions"><Link href={`/admin/articles/${article.id}/edit`}>ویرایش</Link><button type="button" className="admin-danger-button" disabled={deletingId !== null} onClick={() => void removeArticle(article)}>{deletingId === article.id ? "در حال حذف…" : "حذف"}</button></div></td>
             </tr>)}
           </tbody></table></div>
         )}

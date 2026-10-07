@@ -69,6 +69,8 @@ GET    /auth/me
 
 ```text
 GET    /editorial/articles
+GET    /editorial/articles/featured-order
+PUT    /editorial/articles/featured-order
 GET    /editorial/comments?status=PENDING|APPROVED|REJECTED
 PATCH  /editorial/comments/:id
 GET    /editorial/articles/:id
@@ -85,6 +87,8 @@ GET    /editorial/media
 POST   /editorial/media
 PATCH  /editorial/media/:id
 GET    /editorial/advertisements?status=active|inactive
+GET    /editorial/advertisements/display-order
+PUT    /editorial/advertisements/display-order
 POST   /editorial/advertisements
 PATCH  /editorial/advertisements/:id
 POST   /editorial/advertisements/:id/activate
@@ -103,6 +107,18 @@ status، publishedAt، SEO، tags، sources، featured و featuredOrder است.
 حالت پیش‌فرض فقط تصویر است. ویدیو نمی‌تواند تصویر اصلی یا عکس داخل خبر باشد.
 تنظیمات سایت شامل `footerDescription` و `aboutBody` است؛ متن فوتر اجباری و متن
 درباره ما می‌تواند خالی باشد.
+`ecranPromoText` متن بنر اکران نیوز (تا ۱۲۰۰ نویسه و غیرخالی) به تنظیمات اضافه
+شد. حذف این فیلد از درخواست قدیمی متن ذخیره‌شده را تغییر نمی‌دهد؛ مقدار null
+یا متن سفید نامعتبر است. `GET /site-settings` این متن را نیز برمی‌گرداند.
+
+endpointهای چینش GET، آرایه `data` با `id,title,imageUrl,status` (و `placement`
+برای تبلیغات) می‌دهند. PUT بدنه `{ids: [...]}` با تمام شناسه‌های یکتا در ترتیب
+دلخواه می‌گیرد؛ تا ۱۰۰۰ UUID. ذخیره در transaction انجام می‌شود و اگر آیتمی
+اضافه/حذف شده باشد، پیش از هر نوشتن ۴۰۹ می‌دهد. هیچ وضعیت، تاریخ یا محتوا عوض
+نمی‌شود. `featuredOrder`/`displayOrder` عددی برای سازگاری API باقی مانده‌اند ولی
+پنل از آن‌ها استفاده نمی‌کند؛ نبودن مقدار در create، آیتم را به انتها می‌برد و
+در update ترتیب فعلی حفظ می‌شود. تایپ دستی slug به فرم واگذار شده و API حروف،
+عدد، `_` و `-` را قبول می‌کند؛ نشانی باید با حرف یا عدد شروع شود.
 
 `contentBlocks` اختیاری در ساخت/ویرایش خبر آرایه مرتب تا ۵۰ بخش است:
 

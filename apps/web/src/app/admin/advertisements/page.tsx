@@ -4,10 +4,11 @@ import Image from "next/image";
 import { useEffect, useState, type FormEvent } from "react";
 import { adminFetch, type AdminAdvertisement, type MediaAsset } from "@/lib/admin-api";
 import { MediaUploader } from "@/components/admin/media-uploader";
+import { DisplayOrderEditor } from "@/components/admin/display-order-editor";
 
 const statusLabels = { ACTIVE: "فعال", SCHEDULED: "زمان‌بندی‌شده", EXPIRED: "پایان‌یافته", DISABLED: "غیرفعال" };
 const placements = { ALL: "همه جایگاه‌ها", HOME: "صفحه اصلی", ARTICLE: "صفحات خبر", CATEGORY: "صفحات دسته‌بندی" };
-const emptyForm = { title: "", text: "", targetUrl: "", placement: "ALL" as AdminAdvertisement["placement"], enabled: true, startsAt: "", endsAt: "", displayOrder: 0 };
+const emptyForm = { title: "", text: "", targetUrl: "", placement: "ALL" as AdminAdvertisement["placement"], enabled: true, startsAt: "", endsAt: "" };
 
 function localDate(value: string | null) {
   if (!value) return "";
@@ -42,7 +43,7 @@ export default function AdvertisementsPage() {
   const edit = (ad?: AdminAdvertisement) => {
     setEditing(ad?.id ?? null); setFormOpen(true); setError(""); setNotice("");
     setMedia(ad?.media ?? null); setAlt(ad?.media.alt ?? "");
-    setForm(ad ? { title: ad.title, text: ad.text ?? "", targetUrl: ad.targetUrl ?? "", placement: ad.placement, enabled: ad.enabled, startsAt: localDate(ad.startsAt), endsAt: localDate(ad.endsAt), displayOrder: ad.displayOrder } : emptyForm);
+    setForm(ad ? { title: ad.title, text: ad.text ?? "", targetUrl: ad.targetUrl ?? "", placement: ad.placement, enabled: ad.enabled, startsAt: localDate(ad.startsAt), endsAt: localDate(ad.endsAt) } : emptyForm);
   };
   const save = async (event: FormEvent) => {
     event.preventDefault(); setBusy(true); setError(""); setNotice("");
@@ -78,6 +79,7 @@ export default function AdvertisementsPage() {
   return <div className="admin-page">
     <div className="admin-page-heading"><div><span>مدیریت نمایش</span><h1>تبلیغات</h1><p>تصویر، گیف یا ویدیو را همراه لینک و زمان نمایش ثبت کنید.</p></div><button className="admin-primary-button" disabled={busy} onClick={() => edit()}>＋ تبلیغ جدید</button></div>
     {error ? <div className="admin-alert is-error">{error}</div> : null}
+    <DisplayOrderEditor title="چینش تبلیغات" path="/editorial/advertisements/display-order" hint="تمام تبلیغات با وضعیت و جایگاه‌شان نمایش داده می‌شوند؛ فقط تبلیغات فعالِ هر جایگاه در سایت دیده می‌شوند. تبلیغ جدید به انتهای فهرست اضافه می‌شود." onSaved={reload} />
     {notice ? <div className="admin-alert is-success">{notice}</div> : null}
     {formOpen ? <form className="admin-card admin-ad-form" onSubmit={save}>
       <h2>{editing ? "ویرایش تبلیغ" : "تبلیغ جدید"}</h2>
@@ -90,7 +92,6 @@ export default function AdvertisementsPage() {
         <label className="admin-field"><span>محل نمایش</span><select value={form.placement} onChange={(event) => setForm({ ...form, placement: event.target.value as AdminAdvertisement["placement"] })}>{Object.entries(placements).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
         <label className="admin-field"><span>شروع نمایش</span><input type="datetime-local" value={form.startsAt} onChange={(event) => setForm({ ...form, startsAt: event.target.value })} /><small>خالی: از همین حالا</small></label>
         <label className="admin-field"><span>پایان نمایش</span><input type="datetime-local" value={form.endsAt} onChange={(event) => setForm({ ...form, endsAt: event.target.value })} /><small>خالی: بدون تاریخ پایان</small></label>
-        <label className="admin-field"><span>ترتیب نمایش</span><input type="number" min={0} max={1000} value={form.displayOrder} onChange={(event) => setForm({ ...form, displayOrder: Number(event.target.value) })} /><small>عدد کوچک‌تر بالاتر نمایش داده می‌شود.</small></label>
       </div>
       <label className="admin-field"><span>نوشتهٔ همراه (اختیاری)</span><textarea rows={3} maxLength={1200} value={form.text} onChange={(event) => setForm({ ...form, text: event.target.value })} /></label>
       <label className="admin-check"><input type="checkbox" checked={form.enabled} onChange={(event) => setForm({ ...form, enabled: event.target.checked })} /><span>نمایش تبلیغ در بازهٔ تعیین‌شده فعال باشد</span></label>

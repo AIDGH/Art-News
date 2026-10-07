@@ -13,7 +13,7 @@ export class SiteSettingsService {
   async find() {
     const settings = await this.prisma.siteSettings.findUnique({
       where: { id: SITE_SETTINGS_ID },
-      select: { footerDescription: true, aboutBody: true, updatedAt: true },
+      select: { footerDescription: true, aboutBody: true, ecranPromoText: true, updatedAt: true },
     });
 
     return { data: settings ?? { ...DEFAULT_SITE_SETTINGS, updatedAt: null } };
@@ -23,12 +23,13 @@ export class SiteSettingsService {
     const data = {
       footerDescription: dto.footerDescription.trim(),
       aboutBody: dto.aboutBody.trim(),
+      ...(dto.ecranPromoText !== undefined ? { ecranPromoText: dto.ecranPromoText.trim() } : {}),
     };
     const settings = await this.prisma.siteSettings.upsert({
       where: { id: SITE_SETTINGS_ID },
       update: data,
       create: { id: SITE_SETTINGS_ID, ...data },
-      select: { footerDescription: true, aboutBody: true, updatedAt: true },
+      select: { footerDescription: true, aboutBody: true, ecranPromoText: true, updatedAt: true },
     });
 
     return { data: settings };
