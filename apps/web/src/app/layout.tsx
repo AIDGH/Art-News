@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: "%s | سینما نمایش",
   },
   description:
-    "خبر، نقد و گفت‌وگو درباره سینما، تئاتر، تلویزیون و شبکه نمایش خانگی.",
+    "پایگاه خبری سینما نمایش، رسانه انتشار تازهترین و مهمترین اخبار فرهنگی است",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -21,15 +21,15 @@ export const metadata: Metadata = {
     siteName: "سینما نمایش",
     title: "سینما نمایش | رسانه سینما و نمایش",
     description:
-      "خبر، نقد و گفت‌وگو از سینمای ایران و جهان در یک تجربه فارسی و سریع.",
-    images: [{ url: "/og.png", width: 1735, height: 907, alt: "سینما نمایش" }],
+      "پایگاه خبری سینما نمایش، رسانه انتشار تازهترین و مهمترین اخبار فرهنگی است",
+    images: [{ url: "/logo-cinema-namayesh.png", alt: "سینما نمایش" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "سینما نمایش | رسانه سینما و نمایش",
     description:
-      "خبر، نقد و گفت‌وگو از سینمای ایران و جهان در یک تجربه فارسی و سریع.",
-    images: ["/og.png"],
+      "پایگاه خبری سینما نمایش، رسانه انتشار تازهترین و مهمترین اخبار فرهنگی است",
+    images: ["/logo-cinema-namayesh.png"],
   },
 };
 
