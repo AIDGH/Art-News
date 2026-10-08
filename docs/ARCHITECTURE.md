@@ -20,6 +20,11 @@ Frontend هیچ‌گاه مستقیم به database متصل نمی‌شود.
 
 ## Search discovery
 
+Root metadata separates the descriptive search meta description from the short
+Open Graph/Twitter sharing tagline. Article routes keep their own story-specific
+descriptions; footer/site-settings copy is independent. Messaging apps may cache
+old link previews after deployment.
+
 Next metadata routes provide `/robots.txt` and request-time `/sitemap.xml`.
 The sitemap fetches lightweight public article URL/date rows from the Nest API
 and categories, without loading full article content or accessing SQLite directly.

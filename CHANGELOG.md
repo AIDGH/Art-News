@@ -21,6 +21,8 @@
 
 ### Changed
 
+- Separated homepage SEO description from the shorter Open Graph/Twitter sharing tagline, preserving article-specific metadata and footer copy.
+
 - Added spacing between admin article actions, fixed manual hyphenated slugs, clarified optional SEO fields, and bypassed Next image optimization only for runtime article upload covers.
 
 - Homepage category cards now query the latest published content per category independently of the global article page, including photo/video uploads with their own covers and dates. Removed hardcoded report articles from the homepage and report archive.
