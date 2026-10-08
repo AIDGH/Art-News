@@ -23,6 +23,13 @@ export class ArticlesController {
     return this.articlesService.findAll(query);
   }
 
+  @Get("sitemap")
+  @ApiOperation({ summary: "List public article URLs and modification dates for the sitemap" })
+  @ApiOkResponse({ description: "Published article sitemap entries" })
+  findSitemap() {
+    return this.articlesService.findSitemap();
+  }
+
   @Get("featured")
   @ApiOperation({ summary: "List featured homepage articles" })
   @ApiOkResponse({ description: "Ordered featured articles" })

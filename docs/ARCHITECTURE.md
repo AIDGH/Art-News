@@ -18,6 +18,18 @@ SQLite
 
 Frontend هیچ‌گاه مستقیم به database متصل نمی‌شود.
 
+## Search discovery
+
+Next metadata routes provide `/robots.txt` and request-time `/sitemap.xml`.
+The sitemap fetches lightweight public article URL/date rows from the Nest API
+and categories, without loading full article content or accessing SQLite directly.
+It includes canonical public pages only, normalizes screenings to report,
+deduplicates URLs and uses encoded slug segments and real modification dates.
+API failures are not hidden behind an empty successful sitemap. `site-url.ts`
+shares `NEXT_PUBLIC_SITE_URL` with root metadata; local fallback is port 3001.
+No migration or editorial data change is required. Split into multiple sitemaps
+before exceeding the single-file limit of 50,000 URLs.
+
 ## Local Development Ports
 
 - Next.js frontend به‌صورت پیش‌فرض روی `http://localhost:3001` اجرا می‌شود.

@@ -23,7 +23,8 @@ describe("Visual display order and editor validation", () => {
 
   it("saves slider order atomically and refuses a changed selection before writing", async () => {
     const placements = { findMany: jest.fn().mockResolvedValue(ids.map((articleId) => ({ articleId }))), update: jest.fn() };
-    const prisma = { homepagePlacement: placements, $transaction: jest.fn(async (callback) => callback(prisma)) };
+    const transaction = { homepagePlacement: placements };
+    const prisma = { ...transaction, $transaction: jest.fn(async (callback: (tx: typeof transaction) => Promise<unknown>) => callback(transaction)) };
     const service = new EditorialArticlesService(prisma as unknown as PrismaService);
     jest.spyOn(service, "findFeaturedOrder").mockResolvedValue({ data: [] });
     await service.saveFeaturedOrder([...ids].reverse());
@@ -35,7 +36,8 @@ describe("Visual display order and editor validation", () => {
 
   it("saves all ad IDs in the requested order without changing dates or enabled state", async () => {
     const ads = { findMany: jest.fn().mockResolvedValue(ids.map((id) => ({ id }))), update: jest.fn() };
-    const prisma = { advertisement: ads, $transaction: jest.fn(async (callback) => callback(prisma)) };
+    const transaction = { advertisement: ads };
+    const prisma = { ...transaction, $transaction: jest.fn(async (callback: (tx: typeof transaction) => Promise<unknown>) => callback(transaction)) };
     const service = new AdvertisementsService(prisma as unknown as PrismaService);
     jest.spyOn(service, "findDisplayOrder").mockResolvedValue({ data: [] });
     await service.saveDisplayOrder([...ids].reverse());

@@ -17,9 +17,15 @@ http://localhost:3001/api/v1
 
 ## Public Endpoints
 
+`GET /articles/sitemap` returns `{ data: [{ slug, updatedAt, publishedAt }] }`
+for public articles whose publication time has arrived, without article bodies,
+media or private fields. Drafts, reviews, archives and future publications are
+excluded. This static route is registered before `GET /articles/:slug`.
+
 ```text
 GET /health
 GET /articles
+GET /articles/sitemap
 GET /articles/featured
 GET /articles/:slug
 GET /categories

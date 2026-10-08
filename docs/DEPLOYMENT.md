@@ -1,5 +1,21 @@
 # Cinema Namayesh Deployment
 
+## Search discovery — 2026-10-08
+
+Deploy API and web together; `/sitemap.xml` depends on the new public
+`/api/v1/articles/sitemap` endpoint. No migration or database write is needed.
+Production `NEXT_PUBLIC_SITE_URL` must be `https://cinemanamayesh.ir`; it is
+shared with canonical metadata and robots sitemap URLs. The sitemap is generated
+at request time, so build does not require a running API. API failure returns an
+error rather than publishing a partial sitemap. No deployment polling after push.
+
+Owner follow-up: add `cinemanamayesh.ir` as a Domain property in Google Search
+Console, install the exact supplied DNS TXT record in the authoritative DNS zone,
+verify ownership, submit `https://cinemanamayesh.ir/sitemap.xml`, and use URL
+Inspection to test/request indexing of the home page and a few published stories.
+Do not change nameservers to verify ownership or replace existing DNS records.
+Search Console account access is required; indexing and ranking are not guaranteed.
+
 ## Admin text and ordering update — 2026-10-07
 
 Apply `20261007090000_add_ecran_promo_text` using migrate deploy after Prisma

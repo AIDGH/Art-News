@@ -4,6 +4,8 @@
 
 ### Added
 
+- Automatic public sitemap and robots metadata routes, with lightweight published article URL/date API, canonical domain sharing, and Search Console setup guidance. No migration required.
+
 - Editable Ecran promo text in site settings with a preserving default-column migration, plus visual slider/ad ordering with atomic saves and stale-list protection.
 
 - Confirmed permanent article deletion from the admin list and editor through an authenticated DELETE endpoint, preserving shared uploaded files and retaining archive as the reversible alternative.

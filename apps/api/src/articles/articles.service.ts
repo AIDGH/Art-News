@@ -98,6 +98,18 @@ export class ArticlesService {
     };
   }
 
+  async findSitemap() {
+    const data = await this.prisma.article.findMany({
+      where: {
+        status: { in: [PublicationStatus.PUBLISHED, PublicationStatus.SCHEDULED] },
+        publishedAt: { lte: new Date() },
+      },
+      select: { slug: true, updatedAt: true, publishedAt: true },
+      orderBy: [{ publishedAt: "desc" }, { id: "desc" }],
+    });
+    return { data };
+  }
+
   async findBySlug(slug: string): Promise<{ data: PublicArticle }> {
     const article = await this.prisma.article.findFirst({
       where: {
