@@ -29,11 +29,13 @@ export function SiteFooter({ description }: { description: string }) {
           <FooterSocials />
         </div>
         <nav aria-label="دسته‌بندی‌های فوتر">
-          {categories.map((category) => (
-            <Link href={`/category/${category.slug}`} key={category.slug}>
-              {category.title}
-            </Link>
-          ))}
+          {categories
+            .filter((category) => category.slug !== "cinema")
+            .map((category) => (
+              <Link href={`/category/${category.slug}`} key={category.slug}>
+                {category.title}
+              </Link>
+            ))}
         </nav>
       </div>
       <div className="container footer-bottom">

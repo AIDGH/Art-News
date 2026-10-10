@@ -213,7 +213,6 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
                 <p>{article.lead}</p>
                 <div className="featured-carousel-meta">
                   <span>{article.publishedLabel}</span>
-                  <span>{article.readingTime}</span>
                 </div>
               </div>
             </article>

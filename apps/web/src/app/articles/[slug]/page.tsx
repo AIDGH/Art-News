@@ -93,11 +93,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <h1>{article.title}</h1>
             <p className="article-lead">{article.lead}</p>
             <div className="article-byline">
-              <div>
-                <strong>{article.author}</strong>
-                <span>{article.publishedLabel}</span>
-              </div>
-              <span>{article.readingTime} برای مطالعه</span>
+              <span>{article.publishedLabel}</span>
             </div>
           </header>
 

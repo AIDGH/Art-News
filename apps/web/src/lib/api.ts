@@ -156,6 +156,47 @@ export async function fetchArticles(params?: { category?: string; query?: string
   }
 }
 
+/** Fetches the latest published media posts (PHOTOS + VIDEOS) and maps them into the Article shape. */
+export async function fetchLatestMediaPostsAsArticles(take = 20): Promise<Article[]> {
+  try {
+    const url = new URL(`${API_BASE_URL}/media-posts`);
+    url.searchParams.set("pageSize", take.toString());
+    const res = await fetch(url.toString(), { cache: "no-store" });
+    if (!res.ok) return [];
+    const json = await res.json() as { data?: Array<{ id: string; title: string; description: string | null; kind: "PHOTOS" | "VIDEOS"; publishedAt: string | null; cover: { url: string; alt: string } | null }> };
+    const kindToSlug: Record<string, string> = { PHOTOS: "photos", VIDEOS: "videos" };
+    const kindToTitle: Record<string, string> = { PHOTOS: "عکس", VIDEOS: "فیلم" };
+    return (json.data || [])
+      .filter((post) => post.publishedAt)
+      .map((post) => {
+        const categorySlug = kindToSlug[post.kind] ?? "photos";
+        const publishedAt = post.publishedAt!;
+        return {
+          slug: post.id,
+          title: post.title,
+          lead: post.description || "",
+          category: { slug: categorySlug, title: kindToTitle[post.kind] ?? post.kind, description: "" },
+          imageUrl: post.cover?.url || "/images/placeholder.svg",
+          imageAlt: post.cover?.alt || post.title,
+          imageCredit: "",
+          publishedAt,
+          publishedLabel: new Intl.DateTimeFormat("fa-IR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }).format(new Date(publishedAt)),
+          readingTime: "",
+          author: "",
+          body: [],
+          href: `/category/${categorySlug}`,
+        } satisfies Article;
+      });
+  } catch (error) {
+    console.error("Error fetching media posts as articles:", error);
+    return [];
+  }
+}
+
 export async function fetchArticleBySlug(slug: string): Promise<Article | undefined> {
   try {
     const res = await fetch(`${API_BASE_URL}/articles/${slug}`, { next: { revalidate: 60 } });

@@ -115,8 +115,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   </p>
                   <div className="text-slate-500 text-xs font-medium mt-3 flex items-center gap-1">
                     <span>{article.publishedLabel}</span>
-                    <span className="mx-1">&bull;</span>
-                    <span>{article.readingTime}</span>
                   </div>
                 </div>
               </article>

@@ -46,7 +46,6 @@ export function ArticleCard({
         {variant !== "compact" ? <p className={excerptClassName}>{excerpt}</p> : null}
         <div className="article-meta">
           <span>{article.publishedLabel}</span>
-          <span>{article.readingTime}</span>
         </div>
       </div>
     </article>

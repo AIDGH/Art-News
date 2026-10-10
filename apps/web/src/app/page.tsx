@@ -5,7 +5,7 @@ import { NewsTicker, type TickerItem } from "@/components/news-ticker";
 import { AdvertisementPlaceholder } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { type Article } from "@/lib/news";
-import { fetchArticles, fetchFeaturedArticles, fetchLatestCategoryContent } from "@/lib/api";
+import { fetchArticles, fetchFeaturedArticles, fetchLatestCategoryContent, fetchLatestMediaPostsAsArticles } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +27,7 @@ function PremiumArticle({ article }: { article: Article }) {
   return (
     <article className="group flex gap-4 items-center !py-2 md:!py-3">
       <Link
-        href={`/articles/${article.slug}`}
+        href={article.href ?? `/articles/${article.slug}`}
         className="block overflow-hidden rounded-xl shrink-0 w-32 md:w-48 aspect-[3/2] relative"
       >
         <Image
@@ -41,15 +41,13 @@ function PremiumArticle({ article }: { article: Article }) {
       </Link>
       <div className="flex-1 min-w-0">
         <h3 className="text-slate-900 font-extrabold group-hover:text-orange-600 transition-colors duration-300 text-base md:text-lg line-clamp-2">
-          <Link href={`/articles/${article.slug}`}>{article.title}</Link>
+          <Link href={article.href ?? `/articles/${article.slug}`}>{article.title}</Link>
         </h3>
         <p className="text-slate-700 text-sm line-clamp-2 mt-2">
           {excerpt}
         </p>
         <div className="text-slate-500 text-xs font-medium mt-3 flex items-center gap-1">
           <span>{article.publishedLabel}</span>
-          <span className="mx-1">&bull;</span>
-          <span>{article.readingTime}</span>
         </div>
       </div>
     </article>
@@ -57,10 +55,11 @@ function PremiumArticle({ article }: { article: Article }) {
 }
 
 export default async function HomePage() {
-  const [uiArticles, selectedFeaturedArticles, latestCategoryContent] = await Promise.all([
+  const [uiArticles, selectedFeaturedArticles, latestCategoryContent, latestMediaArticles] = await Promise.all([
     fetchArticles(),
     fetchFeaturedArticles(),
     fetchLatestCategoryContent(),
+    fetchLatestMediaPostsAsArticles(20),
   ]);
   const featuredArticles = selectedFeaturedArticles.length > 0
     ? selectedFeaturedArticles
@@ -74,7 +73,7 @@ export default async function HomePage() {
     })
     .filter((item) => item !== undefined);
 
-  const latestNewsArticles = [...uiArticles]
+  const latestNewsArticles = [...uiArticles, ...latestMediaArticles]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, 8);
 
