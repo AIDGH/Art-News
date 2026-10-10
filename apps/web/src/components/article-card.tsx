@@ -18,14 +18,16 @@ export function ArticleCard({
   excerptClassName,
 }: ArticleCardProps) {
   const excerpt = article.lead || (article.body && article.body.length > 0 ? article.body[0] : "");
+  const isVideo = article.category?.slug === "videos" || article.category?.slug === "video";
   return (
     <article className={`article-card article-card-${variant}`}>
-      <Link className="article-card-image" href={`/articles/${article.slug}`}>
+      <Link className={`article-card-image rounded-lg ${isVideo ? "!aspect-video" : ""}`} href={`/articles/${article.slug}`}>
         <Image
           src={article.imageUrl}
           unoptimized={article.imageUrl.startsWith("/uploads/")}
           alt={article.imageAlt}
           fill
+          className="object-cover rounded-lg"
           sizes={
             variant === "horizontal"
               ? "(max-width: 760px) 42vw, 280px"
@@ -41,7 +43,7 @@ export function ArticleCard({
           </Link>
         )}
         <h3>
-          <Link href={`/articles/${article.slug}`}>{article.title}</Link>
+          <Link href={`/articles/${article.slug}`} className="line-clamp-3 md:line-clamp-4">{article.title}</Link>
         </h3>
         {variant !== "compact" ? <p className={excerptClassName}>{excerpt}</p> : null}
         <div className="article-meta">

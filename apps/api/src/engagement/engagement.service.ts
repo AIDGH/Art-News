@@ -17,7 +17,7 @@ export class EngagementService {
   private async findArticle(slug: string) {
     const article = await this.prisma.article.findFirst({
       where: {
-        slug,
+        OR: [{ slug }, { id: slug }],
         status: { in: [PublicationStatus.PUBLISHED, PublicationStatus.SCHEDULED] },
         publishedAt: { lte: new Date() },
       },
@@ -28,7 +28,21 @@ export class EngagementService {
   }
 
   async findPublic(slug: string, visitorId?: string) {
-    const article = await this.findArticle(slug);
+    let article: { id: string };
+    try {
+      article = await this.findArticle(slug);
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        return {
+          data: {
+            articleLikes: 0,
+            articleLiked: false,
+            comments: [],
+          },
+        };
+      }
+      throw err;
+    }
     const [comments, articleLikes, ownArticleLike] = await Promise.all([
       this.prisma.articleComment.findMany({
         where: { articleId: article.id, status: CommentStatus.APPROVED },

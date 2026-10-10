@@ -91,23 +91,24 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <section className="flex flex-col gap-6 mt-6" aria-label={`خبرهای ${category.title}`}>
           {categoryArticles.map((article) => {
             const excerpt = article.lead || (article.body && article.body.length > 0 ? article.body[0] : "");
+            const isVideo = slug === "videos" || article.category?.slug === "videos" || article.category?.slug === "video";
             return (
               <article key={article.slug} className="group flex gap-4 items-center">
                 <Link
                   href={`/articles/${article.slug}`}
-                  className="block overflow-hidden rounded-xl shrink-0 w-32 md:w-48 aspect-[3/2] relative"
+                  className={`block overflow-hidden rounded-lg shrink-0 w-32 md:w-48 ${isVideo ? "aspect-video" : "aspect-[3/2]"} relative`}
                 >
                   <Image
                     src={article.imageUrl}
                     unoptimized={article.imageUrl.startsWith("/uploads/")}
                     alt={article.imageAlt}
                     fill
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    className="object-cover rounded-lg transition-transform duration-700 ease-out group-hover:scale-105"
                     sizes="(max-width: 760px) 30vw, 200px"
                   />
                 </Link>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-slate-900 font-extrabold group-hover:text-orange-600 transition-colors duration-300 text-base md:text-lg line-clamp-2">
+                  <h3 className="text-slate-900 font-extrabold group-hover:text-orange-600 transition-colors duration-300 text-base md:text-lg line-clamp-3 md:line-clamp-4">
                     <Link href={`/articles/${article.slug}`}>{article.title}</Link>
                   </h3>
                   <p className="text-slate-700 text-sm line-clamp-2 mt-2">

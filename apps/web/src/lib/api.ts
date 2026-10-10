@@ -73,7 +73,7 @@ type ApiArticle = {
   body: string;
   contentBlocks?: Article["contentBlocks"];
   category: Category;
-  coverImage?: { url: string; alt: string; credit?: string | null } | null;
+  coverImage?: { url: string; alt: string; credit?: string | null; mimeType?: string | null } | null;
   publishedAt: string;
   author?: { displayName?: string; username?: string };
   seoTitle?: string | null;
@@ -83,6 +83,10 @@ type ApiArticle = {
 };
 
 export function mapApiArticleToUi(apiArticle: ApiArticle): Article {
+  const videoUrl = apiArticle.coverImage?.mimeType?.startsWith("video/")
+    ? apiArticle.coverImage.url
+    : undefined;
+
   return {
     slug: apiArticle.slug,
     title: apiArticle.title,
@@ -100,6 +104,7 @@ export function mapApiArticleToUi(apiArticle: ApiArticle): Article {
     readingTime: `${Math.max(1, Math.ceil([apiArticle.body, ...(apiArticle.contentBlocks ?? []).map((block) => block.text ?? "")].join(" ").trim().split(/\s+/).length / 220)).toLocaleString("fa-IR")} دقیقه`,
     author: apiArticle.author?.displayName || apiArticle.author?.username || "",
     body: (apiArticle.body || "").split(/\n\s*\n/).filter(Boolean),
+    videoUrl,
     contentBlocks: apiArticle.contentBlocks ?? [],
     seoTitle: apiArticle.seoTitle || undefined,
     seoDescription: apiArticle.seoDescription || undefined,
@@ -109,6 +114,49 @@ export function mapApiArticleToUi(apiArticle: ApiArticle): Article {
       title: source.title || undefined,
       publisher: source.publisher || undefined,
     })) || [],
+  };
+}
+
+export function mapMediaPostToArticle(post: MediaPost): Article {
+  const kindToSlug: Record<string, string> = { PHOTOS: "photos", VIDEOS: "videos" };
+  const kindToTitle: Record<string, string> = { PHOTOS: "عکس", VIDEOS: "فیلم" };
+  const categorySlug = kindToSlug[post.kind] ?? "videos";
+  const publishedAt = post.publishedAt || new Date().toISOString();
+
+  const videoItem = post.items?.find((item) =>
+    item.media?.mimeType?.startsWith("video/") || (item.media as { kind?: string })?.kind === "VIDEO",
+  );
+  const videoUrl =
+    videoItem?.media?.url ||
+    (post.kind === "VIDEOS" && post.items?.[0]?.media ? post.items[0].media.url : undefined);
+
+  const paragraphs = post.description ? post.description.split(/\n\s*\n/).filter(Boolean) : [];
+
+  return {
+    slug: post.id,
+    title: post.title,
+    lead: "",
+    category: {
+      slug: categorySlug,
+      title: kindToTitle[post.kind] ?? "فیلم",
+      description: "",
+    },
+    imageUrl: post.cover?.url || videoItem?.media?.url || "/images/placeholder.svg",
+    imageAlt: post.cover?.alt || post.title,
+    imageCredit: post.cover?.credit || "",
+    publishedAt,
+    publishedLabel: new Intl.DateTimeFormat("fa-IR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(new Date(publishedAt)),
+    readingTime: "۲ دقیقه",
+    author: "سینما نمایش",
+    body: paragraphs,
+    videoUrl,
+    sources: post.targetUrl
+      ? [{ url: post.targetUrl, title: "مشاهده پست اصلی" }]
+      : [],
   };
 }
 
@@ -188,7 +236,7 @@ export async function fetchLatestMediaPostsAsArticles(take = 20): Promise<Articl
           readingTime: "",
           author: "",
           body: [],
-          href: `/category/${categorySlug}`,
+          href: `/articles/${post.id}`,
         } satisfies Article;
       });
   } catch (error) {
@@ -200,14 +248,25 @@ export async function fetchLatestMediaPostsAsArticles(take = 20): Promise<Articl
 export async function fetchArticleBySlug(slug: string): Promise<Article | undefined> {
   try {
     const res = await fetch(`${API_BASE_URL}/articles/${slug}`, { next: { revalidate: 60 } });
-    if (!res.ok) return undefined;
-    const json = await res.json();
-    if (!json.data) return undefined;
-    return mapApiArticleToUi(json.data);
+    if (res.ok) {
+      const json = await res.json();
+      if (json.data) return mapApiArticleToUi(json.data);
+    }
   } catch (error) {
     console.error(`Error fetching article ${slug}:`, error);
-    return undefined;
   }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/media-posts/${slug}`, { cache: "no-store" });
+    if (res.ok) {
+      const json = (await res.json()) as { data?: MediaPost };
+      if (json.data) return mapMediaPostToArticle(json.data);
+    }
+  } catch (error) {
+    console.error(`Error fetching media post as article ${slug}:`, error);
+  }
+
+  return undefined;
 }
 
 export async function fetchSiteSettings(): Promise<SiteSettings> {

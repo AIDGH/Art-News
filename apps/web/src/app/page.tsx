@@ -24,23 +24,24 @@ const homepageSectionSlugs = [
 
 function PremiumArticle({ article }: { article: Article }) {
   const excerpt = article.lead || (article.body && article.body.length > 0 ? article.body[0] : "");
+  const isVideo = article.category.slug === "videos" || article.category.slug === "video";
   return (
     <article className="group flex gap-4 items-center !py-2 md:!py-3">
       <Link
         href={article.href ?? `/articles/${article.slug}`}
-        className="block overflow-hidden rounded-xl shrink-0 w-32 md:w-48 aspect-[3/2] relative"
+        className={`block overflow-hidden rounded-lg shrink-0 w-32 md:w-48 ${isVideo ? "aspect-video" : "aspect-[3/2]"} relative`}
       >
         <Image
           src={article.imageUrl}
           unoptimized={article.imageUrl.startsWith("/uploads/")}
           alt={article.imageAlt}
           fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover rounded-lg transition-transform duration-700 ease-out group-hover:scale-105"
           sizes="(max-width: 760px) 30vw, 200px"
         />
       </Link>
       <div className="flex-1 min-w-0">
-        <h3 className="text-slate-900 font-extrabold group-hover:text-orange-600 transition-colors duration-300 text-base md:text-lg line-clamp-2">
+        <h3 className="text-slate-900 font-extrabold group-hover:text-orange-600 transition-colors duration-300 text-base md:text-lg line-clamp-3 md:line-clamp-4">
           <Link href={article.href ?? `/articles/${article.slug}`}>{article.title}</Link>
         </h3>
         <p className="text-slate-700 text-sm line-clamp-2 mt-2">
@@ -112,20 +113,22 @@ export default async function HomePage() {
       <section className="container compact-home-section">
         <div className="compact-news-grid">
           {sectionArticles.map((article) => {
-            const href = article.contentType === "MEDIA"
+            const href = article.contentType === "MEDIA" && article.category.slug !== "videos"
               ? `/category/${article.category.slug}`
               : `/articles/${article.slug}`;
             const publishedLabel = new Intl.DateTimeFormat("fa-IR", {
               year: "numeric", month: "long", day: "numeric",
             }).format(new Date(article.publishedAt));
+            const isVideo = article.category.slug === "videos" || article.category.slug === "video";
             return (
               <article className="compact-news-item" key={article.category.slug}>
-                <Link className="compact-news-image" href={href}>
+                <Link className={`compact-news-image rounded-lg ${isVideo ? "!aspect-video" : ""}`} href={href}>
                   <Image
                     src={article.coverImage?.url || "/images/placeholder.svg"}
                     alt={article.coverImage?.alt || article.title}
                     fill
                     unoptimized
+                    className="object-cover rounded-lg"
                     sizes="(max-width: 700px) 34vw, 210px"
                   />
                 </Link>
@@ -135,7 +138,7 @@ export default async function HomePage() {
                       {article.category.title}
                     </span>
                   </Link>
-                  <h2><Link href={href}>{article.title}</Link></h2>
+                  <h2><Link href={href} className="text-slate-900 font-bold hover:text-orange-600 transition-colors line-clamp-3 md:line-clamp-4">{article.title}</Link></h2>
                   <span>{publishedLabel}</span>
                 </div>
               </article>

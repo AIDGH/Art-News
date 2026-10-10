@@ -20,6 +20,7 @@ export type Article = {
   /** Optional override link — used for media posts that point to a category page */
   href?: string;
   body: string[];
+  videoUrl?: string;
   contentBlocks?: Array<{ id: string; kind: "TEXT" | "IMAGES"; text: string | null; images: Array<{ media: { url: string; alt: string; caption: string | null; credit: string | null } }> }>;
   seoTitle?: string;
   seoDescription?: string;

@@ -73,6 +73,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     inLanguage: "fa-IR",
   };
 
+  // Consolidate content paragraphs to ensure text renders exactly once
+  const contentParagraphs = (() => {
+    const list: string[] = [];
+    if (article.lead && !article.body.some((b) => b.trim() === article.lead.trim())) {
+      list.push(article.lead);
+    }
+    list.push(...article.body);
+    return list;
+  })();
+
   return (
     <main className="article-page">
       <script
@@ -83,37 +93,54 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       />
       <div className="article-desktop-layout">
         <article>
-          <header className="article-header container-narrow">
+          {/* 1. Media: Video Player (if video) OR Cover Image (if normal article) */}
+          {article.videoUrl ? (
+            <div className="container-wide pt-4 md:pt-6">
+              <div className="w-full max-h-[85vh] bg-black flex items-center justify-center rounded-xl overflow-hidden mb-8">
+                <video
+                  src={article.videoUrl}
+                  poster={article.imageUrl}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+            </div>
+          ) : (
+            <figure className="article-figure container-wide mb-8">
+              <div>
+                <Image
+                  src={article.imageUrl}
+                  alt={article.imageAlt}
+                  unoptimized={article.imageUrl.startsWith("/uploads/")}
+                  fill
+                  priority
+                  sizes="(max-width: 1100px) 100vw, 800px"
+                />
+              </div>
+              {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
+            </figure>
+          )}
+
+          {/* 2. Post Title & 3. Metadata (Date) */}
+          <header className="article-header container-narrow !pt-0 !pb-6">
             <Link
               className="category-label"
               href={`/category/${article.category.slug}`}
             >
               {article.category.title}
             </Link>
-            <h1>{article.title}</h1>
-            <p className="article-lead">{article.lead}</p>
-            <div className="article-byline">
+            <h1 className="mt-3">{article.title}</h1>
+            <div className="article-byline mt-3">
               <span>{article.publishedLabel}</span>
             </div>
           </header>
 
-          <figure className="article-figure container-wide">
-            <div>
-              <Image
-                src={article.imageUrl}
-                alt={article.imageAlt}
-                unoptimized={article.imageUrl.startsWith("/uploads/")}
-                fill
-                priority
-                sizes="(max-width: 1100px) 100vw, 800px"
-              />
-            </div>
-            {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
-          </figure>
-
+          {/* 4. Post Content (Rendered only ONE time) */}
           <div className="article-body-layout container-wide">
             <div className="article-body">
-              {article.body.map((paragraph, index) => (
+              {contentParagraphs.map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
               {article.contentBlocks?.map((block) => block.kind === "TEXT" ?
@@ -137,7 +164,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               ) : null}
             </div>
           </div>
-          <ArticleEngagement slug={article.slug} />
+          <ArticleEngagement slug={article.slug || slug} />
         </article>
 
         <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">

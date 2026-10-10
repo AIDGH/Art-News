@@ -62,6 +62,19 @@ export class MediaPostsService {
     return { data: { id } };
   }
 
+  async findOnePublic(id: string) {
+    const post = await this.prisma.mediaPost.findFirst({
+      where: {
+        id,
+        status: "PUBLISHED",
+        publishedAt: { lte: new Date() },
+      },
+      include,
+    });
+    if (!post) throw new NotFoundException("محتوا پیدا نشد.");
+    return post;
+  }
+
   private async findOne(id: string) {
     const post = await this.prisma.mediaPost.findUnique({ where: { id } });
     if (!post) throw new NotFoundException("محتوا پیدا نشد.");
