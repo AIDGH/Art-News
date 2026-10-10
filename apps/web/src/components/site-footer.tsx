@@ -18,24 +18,29 @@ export function SiteFooter({ description }: { description: string }) {
             >
               مجوز پایگاه خبری
             </a>
-            <a
-              href="/about"
-              className="text-orange-500 hover:text-orange-400 transition-colors"
-            >
-              درباره ما
-            </a>
             <ERasanehTrustSeal />
           </div>
           <FooterSocials />
         </div>
         <nav aria-label="دسته‌بندی‌های فوتر">
           {categories
-            .filter((category) => category.slug !== "cinema")
+            .filter(
+              (category) =>
+                !["news", "reviews-notes", "interviews", "report"].includes(
+                  category.slug,
+                ),
+            )
             .map((category) => (
               <Link href={`/category/${category.slug}`} key={category.slug}>
                 {category.title}
               </Link>
             ))}
+          <Link
+            href="/about"
+            className="text-orange-500 hover:text-orange-400 transition-colors font-bold"
+          >
+            درباره ما
+          </Link>
         </nav>
       </div>
       <div className="container footer-bottom">
