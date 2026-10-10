@@ -57,7 +57,7 @@ export const categories: Category[] = [
   },
   {
     slug: "theater",
-    title: "تئاتر",
+    title: "نمایش",
     description: "خبر، نقد و گفت‌وگو از صحنه تئاتر",
   },
   {

@@ -18,6 +18,12 @@ export function SiteFooter({ description }: { description: string }) {
             >
               مجوز پایگاه خبری
             </a>
+            <a
+              href="/about"
+              className="text-orange-500 hover:text-orange-400 transition-colors"
+            >
+              درباره ما
+            </a>
             <ERasanehTrustSeal />
           </div>
           <FooterSocials />

@@ -36,7 +36,7 @@ const menuItems: MenuItem[] = [
       { href: "/category/report", label: "گزارش" },
     ],
   },
-  { href: "/category/theater", color: "#9c4aa5", label: "تئاتر" },
+  { href: "/category/theater", color: "#9c4aa5", label: "نمایش" },
   { href: "/category/television", color: "#df8c21", label: "تلویزیون" },
   { href: "/category/home-video", color: "#2c9a86", label: "شبکه نمایش خانگی" },
   { href: "/category/world-cinema", color: "#d64c4c", label: "سینمای جهان" },
