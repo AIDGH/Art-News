@@ -112,7 +112,7 @@ export default async function HomePage() {
       <section className="container compact-home-section">
         <div className="compact-news-grid">
           {sectionArticles.map((article) => {
-            const href = article.contentType === "MEDIA"
+            const href = article.contentType === "MEDIA" && article.category.slug !== "videos"
               ? `/category/${article.category.slug}`
               : `/articles/${article.slug}`;
             const publishedLabel = new Intl.DateTimeFormat("fa-IR", {

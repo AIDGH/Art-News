@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { MediaPost, MediaPostPage } from "@/lib/media-posts";
@@ -34,11 +35,18 @@ export function MediaGallery({ initial, kind, failed = false }: { initial: Media
   };
   const close = useCallback(() => setOpenIndex(null), []);
   return <section className="media-gallery" aria-label={kind === "PHOTOS" ? "آلبوم عکس‌ها" : "ویدیوها"}>
-    <div className="media-cover-grid">{result.data.map((post, index) => <div className="media-cover-entry" key={post.id}><button className="media-cover-card" type="button" onClick={() => setOpenIndex(index)} aria-label={`نمایش ${post.title}`}>
-      <span className="media-cover-image"><Image src={post.cover.url} alt={post.cover.alt || post.title} fill unoptimized sizes="(max-width: 760px) 45vw, (max-width: 1100px) 30vw, 280px" />
+    <div className="media-cover-grid">{result.data.map((post, index) => {
+      const content = <>
+      <span className={`media-cover-image${post.kind === "VIDEOS" ? " media-cover-image-video" : ""}`}><Image src={post.cover.url} alt={post.cover.alt || post.title} fill unoptimized sizes="(max-width: 760px) 45vw, (max-width: 1100px) 30vw, 280px" />
         <span className="media-cover-badge"><MediaIcon video={post.kind === "VIDEOS"} /><span>{post.items.length.toLocaleString("fa-IR")}</span></span>
-      </span><span className="media-cover-title">{post.title}</span>
-    </button><SourceLink post={post} /></div>)}</div>
+      </span><span className="media-cover-title">{post.title}</span></>;
+      return <div className="media-cover-entry" key={post.id}>
+        {post.kind === "VIDEOS"
+          ? <Link className="media-cover-card" href={`/articles/${post.id}`} aria-label={`نمایش ${post.title}`}>{content}</Link>
+          : <button className="media-cover-card" type="button" onClick={() => setOpenIndex(index)} aria-label={`نمایش ${post.title}`}>{content}</button>}
+        <SourceLink post={post} />
+      </div>;
+    })}</div>
     {!result.data.length && !error ? <p className="media-gallery-empty">هنوز {kind === "PHOTOS" ? "آلبوم عکسی" : "ویدیویی"} منتشر نشده است.</p> : null}
     {error ? <p role="alert">{error}</p> : null}
     {result.meta.hasMore || error ? <button className="media-load-more" disabled={loading} onClick={() => void loadMore()}>{loading ? "در حال دریافت…" : error ? "تلاش دوباره" : "نمایش بیشتر"}</button> : null}

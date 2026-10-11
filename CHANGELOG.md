@@ -21,6 +21,8 @@
 
 ### Changed
 
+- Reverted `43fb626` to restore the previous article layout, then isolated player-first/title-below presentation to published video posts. Added a responsive, uncropped player and ordered album selection; kept author/reading-time removal and the existing photo gallery. No database migration or content deletion.
+
 - Separated homepage SEO description from the shorter Open Graph/Twitter sharing tagline, preserving article-specific metadata and footer copy.
 
 - Added spacing between admin article actions, fixed manual hyphenated slugs, clarified optional SEO fields, and bypassed Next image optimization only for runtime article upload covers.

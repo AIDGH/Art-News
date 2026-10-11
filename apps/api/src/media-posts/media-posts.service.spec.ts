@@ -10,7 +10,7 @@ describe("Media posts", () => {
   const video = "e3f38d84-dbb1-4f30-99b7-5700835de842";
   const prisma = {
     mediaAsset: { findMany: jest.fn() },
-    mediaPost: { findUnique: jest.fn(), findMany: jest.fn(), count: jest.fn(), create: jest.fn(), update: jest.fn(), delete: jest.fn() },
+    mediaPost: { findFirst: jest.fn(), findUnique: jest.fn(), findMany: jest.fn(), count: jest.fn(), create: jest.fn(), update: jest.fn(), delete: jest.fn() },
     $transaction: jest.fn(),
   };
   const service = new MediaPostsService(prisma as unknown as PrismaService);
@@ -38,6 +38,17 @@ describe("Media posts", () => {
     expect(prisma.mediaPost.create).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({ publishedAt: null, status: "DRAFT", items: { create: [{ mediaId: image, position: 0 }] } }),
     }));
+  });
+
+  it("protects direct media URLs with publication status and date checks", async () => {
+    prisma.mediaPost.findFirst.mockResolvedValue(null);
+    await expect(service.findOnePublic("private-post")).rejects.toBeInstanceOf(NotFoundException);
+    expect(prisma.mediaPost.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "private-post", status: "PUBLISHED", publishedAt: { lte: expect.any(Date) } },
+    }));
+    const post = { id: "published-post", items: [{ position: 0, media: { id: video } }] };
+    prisma.mediaPost.findFirst.mockResolvedValue(post);
+    expect(await service.findOnePublic(post.id)).toEqual({ data: post });
   });
 
   it("saves the source link and allows clearing it on edit", async () => {

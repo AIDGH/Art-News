@@ -188,7 +188,7 @@ export async function fetchLatestMediaPostsAsArticles(take = 20): Promise<Articl
           readingTime: "",
           author: "",
           body: [],
-          href: `/category/${categorySlug}`,
+          href: post.kind === "VIDEOS" ? `/articles/${post.id}` : `/category/${categorySlug}`,
         } satisfies Article;
       });
   } catch (error) {
@@ -200,6 +200,29 @@ export async function fetchLatestMediaPostsAsArticles(take = 20): Promise<Articl
 export async function fetchArticleBySlug(slug: string): Promise<Article | undefined> {
   try {
     const res = await fetch(`${API_BASE_URL}/articles/${slug}`, { next: { revalidate: 60 } });
+    if (res.status === 404) {
+      const mediaResponse = await fetch(`${API_BASE_URL}/media-posts/${encodeURIComponent(slug)}`, { cache: "no-store" });
+      if (!mediaResponse.ok) return undefined;
+      const { data: post } = await mediaResponse.json() as { data: MediaPost };
+      if (post.kind !== "VIDEOS" || !post.publishedAt) return undefined;
+      return {
+        slug: post.id,
+        title: post.title,
+        lead: "",
+        seoDescription: post.description || post.title,
+        category: { slug: "videos", title: "فیلم", description: "" },
+        imageUrl: post.cover.url,
+        imageAlt: post.cover.alt || post.title,
+        imageCredit: post.cover.credit || "",
+        publishedAt: post.publishedAt,
+        publishedLabel: new Intl.DateTimeFormat("fa-IR", { year: "numeric", month: "long", day: "numeric" }).format(new Date(post.publishedAt)),
+        readingTime: "",
+        author: "",
+        body: (post.description || "").split(/\n\s*\n/).filter(Boolean),
+        videoPost: post,
+        sources: post.targetUrl ? [{ url: post.targetUrl, title: "مشاهده پست اصلی" }] : [],
+      };
+    }
     if (!res.ok) return undefined;
     const json = await res.json();
     if (!json.data) return undefined;

@@ -164,6 +164,7 @@ Secure دارد. حذف کوکی یا مرورگر دیگر می‌تواند ه
 ### Standalone media posts — 2026-10-05
 
 - `GET /media-posts?kind=PHOTOS|VIDEOS&page=1&pageSize=12`: عمومی، no-store، فقط PUBLISHED با زمان رسیده؛ status ارسالی این شرط را تغییر نمی‌دهد.
+- `GET /media-posts/:id`: عمومی، no-store، پاسخ `{data: MediaPost}` با فایل‌های مرتب؛ پیش‌نویس، بایگانی، زمان آینده و شناسه ناموجود ۴۰۴ هستند. صفحه فیلم از این مسیر استفاده می‌کند؛ مدل دیدگاه/لایک خبر به MediaPost متصل نیست.
 - `GET /editorial/media-posts`: نشست لازم؛ فیلتر kind و status و صفحه‌بندی.
 - `POST /editorial/media-posts`: ساخت؛ `PUT /editorial/media-posts/:id`: ویرایش کامل.
 - `PATCH /editorial/media-posts/:id/status`: `{status: "DRAFT" | "PUBLISHED" | "ARCHIVED"}`.

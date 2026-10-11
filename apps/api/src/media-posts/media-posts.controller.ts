@@ -9,6 +9,10 @@ export class MediaPostsController {
   @Get()
   @Header("Cache-Control", "no-store")
   list(@Query() query: MediaPostQueryDto) { return this.posts.list(query, true); }
+
+  @Get(":id")
+  @Header("Cache-Control", "no-store")
+  getOne(@Param("id") id: string) { return this.posts.findOnePublic(id); }
 }
 
 @Controller("editorial/media-posts")

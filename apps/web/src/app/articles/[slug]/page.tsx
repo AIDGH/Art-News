@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/article-card";
 import { ArticleEngagement } from "@/components/article-engagement";
+import { VideoPostPlayer } from "@/components/video-post-player";
 import { AdvertisementPlaceholder } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { fetchArticleBySlug, fetchArticles } from "@/lib/api";
@@ -83,7 +84,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       />
       <div className="article-desktop-layout">
         <article>
-          <header className="article-header container-narrow">
+          {article.videoPost ? <VideoPostPlayer post={article.videoPost} /> : null}
+          <header className={`article-header container-narrow${article.videoPost ? " article-header-video" : ""}`}>
             <Link
               className="category-label"
               href={`/category/${article.category.slug}`}
@@ -91,13 +93,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               {article.category.title}
             </Link>
             <h1>{article.title}</h1>
-            <p className="article-lead">{article.lead}</p>
+            {article.lead ? <p className="article-lead">{article.lead}</p> : null}
             <div className="article-byline">
               <span>{article.publishedLabel}</span>
             </div>
           </header>
 
-          <figure className="article-figure container-wide">
+          {!article.videoPost ? <figure className="article-figure container-wide">
             <div>
               <Image
                 src={article.imageUrl}
@@ -109,7 +111,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               />
             </div>
             {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
-          </figure>
+          </figure> : null}
 
           <div className="article-body-layout container-wide">
             <div className="article-body">
@@ -137,7 +139,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               ) : null}
             </div>
           </div>
-          <ArticleEngagement slug={article.slug} />
+          {!article.videoPost ? <ArticleEngagement slug={article.slug} /> : null}
         </article>
 
         <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">
