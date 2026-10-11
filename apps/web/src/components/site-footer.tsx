@@ -26,7 +26,7 @@ export function SiteFooter({ description }: { description: string }) {
           {categories
             .filter(
               (category) =>
-                !["news", "interview", "interviews", "review", "reviews-notes", "report"].includes(
+                !["news", "reviews-notes", "interviews", "report"].includes(
                   category.slug,
                 ),
             )
