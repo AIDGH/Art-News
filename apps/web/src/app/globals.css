@@ -3717,6 +3717,9 @@ img {
 }
 
 .admin-article-actions { column-gap: 24px; row-gap: 10px; }
+.admin-short-link { display: inline-flex; max-width: 100%; flex-direction: column; align-items: flex-start; gap: 6px; }
+.admin-short-link label { display: grid; gap: 4px; max-width: 100%; font-size: .8rem; }
+.admin-short-link input { width: min(100%, 320px); max-width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
 .admin-order-editor { min-width: 0; margin-block: 18px; }
 .admin-order-editor h2 { font-size: 1rem; }
 .admin-order-list { display: grid; gap: 8px; list-style: none; margin-block: 14px; padding: 0; }

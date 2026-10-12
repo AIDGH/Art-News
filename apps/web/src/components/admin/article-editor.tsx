@@ -12,6 +12,8 @@ import {
 import { MediaUploader } from "./media-uploader";
 import { ArticleBlocksEditor, type ContentBlockForm } from "./article-blocks-editor";
 import { DisplayOrderEditor } from "./display-order-editor";
+import { CopyShortLink } from "./copy-short-link";
+import { isPublishedForSharing } from "@/lib/short-links";
 
 type ArticleEditorProps = { articleId?: string };
 type SourceForm = { url: string; title: string; publisher: string; author: string; publishedAt: string };
@@ -66,6 +68,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [shareable, setShareable] = useState(false);
 
   useEffect(() => {
     const requests: [Promise<{ data: AdminCategory[] }>, Promise<{ data: AdminArticle }> | null] = [
@@ -80,6 +83,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
         }
         if (!articleResponse) return;
         const article = articleResponse.data;
+        setShareable(isPublishedForSharing(article.status, article.publishedAt));
         setTitle(article.title);
         setSlug(article.slug);
         setSlugTouched(true);
@@ -155,6 +159,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
         articleId ? `/editorial/articles/${articleId}` : "/editorial/articles",
         { method: articleId ? "PATCH" : "POST", body: JSON.stringify(payload) },
       );
+      setShareable(isPublishedForSharing(response.data.status, response.data.publishedAt));
       setNotice(status === "PUBLISHED" ? "خبر ذخیره و در سایت منتشر شد." : "تغییرات خبر ذخیره شد.");
       if (!articleId) router.replace(`/admin/articles/${response.data.id}/edit`);
       router.refresh();
@@ -200,6 +205,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
       <div className="admin-page-heading">
         <div><span>{articleId ? "ویرایش محتوا" : "مطلب تازه"}</span><h1>{articleId ? "ویرایش خبر" : "ثبت خبر جدید"}</h1><p>اطلاعات اصلی، تصویر و وضعیت انتشار را تکمیل کنید.</p></div>
         <div className="admin-heading-actions">
+          {articleId && shareable ? <CopyShortLink id={articleId} /> : null}
           {articleId && status === "PUBLISHED" ? <Link href={`/articles/${slug}`} target="_blank">مشاهده خبر</Link> : null}
           <button className="admin-primary-button" type="submit" disabled={saving}>{saving ? "در حال ذخیره…" : "ذخیره خبر"}</button>
         </div>

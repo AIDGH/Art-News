@@ -4,6 +4,8 @@
 
 ### Added
 
+- Stable ASCII sharing links for existing/new published articles and media, using lossless UUID encoding and a no-store redirect to the current original URL. Admin copy buttons include a manual clipboard fallback; no migration or slug rewrite.
+
 - Automatic public sitemap and robots metadata routes, with lightweight published article URL/date API, canonical domain sharing, and Search Console setup guidance. No migration required.
 
 - Editable Ecran promo text in site settings with a preserving default-column migration, plus visual slider/ad ordering with atomic saves and stale-list protection.

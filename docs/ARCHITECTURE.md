@@ -35,6 +35,20 @@ shares `NEXT_PUBLIC_SITE_URL` with root metadata; local fallback is port 3001.
 No migration or editorial data change is required. Split into multiple sitemaps
 before exceeding the single-file limit of 50,000 URLs.
 
+## Sharing links
+
+Sharing links use `/p/:code` with a type prefix (`a` for Article, `m` for MediaPost)
+and the complete 16-byte UUID encoded as 22 canonical base64url characters. This
+is reversible and collision-free within each content type; it needs no persisted
+mapping or migration. The frontend resolves the current published target via
+`GET /articles/short/:code` and responds with a no-store 307 redirect. Publication
+status and date are enforced before returning a path. Article slug changes retain
+the same sharing code; private/deleted targets return 404, upstream failures 503.
+The route is noindex/follow and excluded from the sitemap. Canonical and metadata
+remain on the original article URL. Media videos resolve to their player page;
+photo albums resolve to the existing photo gallery. Admin copy uses Clipboard API
+with a selectable input fallback when clipboard permission/access is unavailable.
+
 ## Local Development Ports
 
 - Next.js frontend به‌صورت پیش‌فرض روی `http://localhost:3001` اجرا می‌شود.

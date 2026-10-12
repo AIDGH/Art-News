@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { adminFetch, type AdminArticle, type AdminCategory } from "@/lib/admin-api";
 import { DisplayOrderEditor } from "@/components/admin/display-order-editor";
+import { CopyShortLink } from "@/components/admin/copy-short-link";
+import { isPublishedForSharing } from "@/lib/short-links";
 
 const statusLabels: Record<AdminArticle["status"], string> = {
   DRAFT: "پیش‌نویس",
@@ -107,7 +109,7 @@ export default function AdminDashboardPage() {
               <td>{article.category.title}</td>
               <td><span className={`admin-status is-${article.status.toLowerCase()}`}>{statusLabels[article.status]}</span></td>
               <td>{new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(article.updatedAt))}</td>
-              <td><div className="admin-block-actions admin-article-actions"><Link href={`/admin/articles/${article.id}/edit`}>ویرایش</Link><button type="button" className="admin-danger-button" disabled={deletingId !== null} onClick={() => void removeArticle(article)}>{deletingId === article.id ? "در حال حذف…" : "حذف"}</button></div></td>
+              <td><div className="admin-block-actions admin-article-actions"><Link href={`/admin/articles/${article.id}/edit`}>ویرایش</Link>{isPublishedForSharing(article.status, article.publishedAt) ? <CopyShortLink id={article.id} /> : null}<button type="button" className="admin-danger-button" disabled={deletingId !== null} onClick={() => void removeArticle(article)}>{deletingId === article.id ? "در حال حذف…" : "حذف"}</button></div></td>
             </tr>)}
           </tbody></table></div>
         )}

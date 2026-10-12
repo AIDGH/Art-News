@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
+import { Controller, Get, Header, Param, Query } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
@@ -35,6 +35,13 @@ export class ArticlesController {
   @ApiOkResponse({ description: "Ordered featured articles" })
   findFeatured() {
     return this.articlesService.findFeatured();
+  }
+
+  @Get("short/:code")
+  @Header("Cache-Control", "no-store")
+  @ApiOperation({ summary: "Resolve a stable sharing link for published content" })
+  resolveShortLink(@Param("code") code: string) {
+    return this.articlesService.resolveShortLink(code);
   }
 
   @Get(":slug")

@@ -6,6 +6,7 @@ import {
   type PaginatedResponse,
 } from "../common/pagination";
 import { PrismaService } from "../database/prisma.service";
+import { decodeShortLink } from "../common/short-link";
 import type { ArticleQueryDto } from "./dto/article-query.dto";
 
 const publicArticleSelect = {
@@ -108,6 +109,29 @@ export class ArticlesService {
       orderBy: [{ publishedAt: "desc" }, { id: "desc" }],
     });
     return { data };
+  }
+
+  async resolveShortLink(code: string): Promise<{ data: { path: string } }> {
+    const target = decodeShortLink(code);
+    if (!target) throw new NotFoundException("لینک پیدا نشد.");
+    if (target.kind === "media") {
+      const post = await this.prisma.mediaPost.findFirst({
+        where: { id: target.id, status: "PUBLISHED", publishedAt: { lte: new Date() } },
+        select: { id: true, kind: true },
+      });
+      if (!post) throw new NotFoundException("محتوا پیدا نشد.");
+      return { data: { path: post.kind === "VIDEOS" ? `/articles/${post.id}` : "/category/photos" } };
+    }
+    const article = await this.prisma.article.findFirst({
+      where: {
+        id: target.id,
+        status: { in: [PublicationStatus.PUBLISHED, PublicationStatus.SCHEDULED] },
+        publishedAt: { lte: new Date() },
+      },
+      select: { slug: true },
+    });
+    if (!article) throw new NotFoundException("خبر پیدا نشد.");
+    return { data: { path: `/articles/${encodeURIComponent(article.slug)}` } };
   }
 
   async findBySlug(slug: string): Promise<{ data: PublicArticle }> {

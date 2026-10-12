@@ -7,6 +7,8 @@ import { MediaUploader } from "@/components/admin/media-uploader";
 import { adminFetch, type MediaAsset } from "@/lib/admin-api";
 import type { MediaPost, MediaPostPage } from "@/lib/media-posts";
 import "@/components/media-gallery.css";
+import { CopyShortLink } from "@/components/admin/copy-short-link";
+import { isPublishedForSharing } from "@/lib/short-links";
 
 const statuses = { DRAFT: "پیش‌نویس", PUBLISHED: "منتشرشده", ARCHIVED: "بایگانی" };
 const empty = { title: "", description: "", targetUrl: "", kind: "PHOTOS" as MediaPost["kind"], status: "DRAFT" as MediaPost["status"] };
@@ -124,6 +126,7 @@ export default function MediaPostsPage() {
       <div className="admin-ad-list">{result.data.map((post) => <article className="admin-card admin-ad-item" key={post.id}>
         <div className="admin-ad-preview"><Image src={post.cover.url} alt={post.cover.alt || post.title} width={600} height={400} unoptimized /></div>
         <div className="admin-ad-details"><h2>{post.title}</h2><p>{post.kind === "PHOTOS" ? "عکس" : "فیلم"} · {statuses[post.status]} · {post.items.length.toLocaleString("fa-IR")} فایل</p>
+          {isPublishedForSharing(post.status, post.publishedAt) ? <CopyShortLink id={post.id} kind="media" /> : null}
           <div className="admin-block-actions"><button disabled={busy} onClick={() => edit(post)}>ویرایش</button><button disabled={busy} onClick={() => void action(post, post.status === "PUBLISHED" ? "ARCHIVED" : "PUBLISHED")}>{post.status === "PUBLISHED" ? "توقف انتشار" : "انتشار"}</button><button disabled={busy} className="admin-danger-button" onClick={() => void action(post, "DELETE")}>حذف</button></div>
         </div>
       </article>)}</div>

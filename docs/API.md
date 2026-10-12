@@ -28,6 +28,7 @@ GET /articles
 GET /articles/sitemap
 GET /articles/featured
 GET /articles/:slug
+GET /articles/short/:code
 GET /categories
 GET /categories/latest
 GET /categories/:slug/articles
@@ -49,6 +50,13 @@ POST /articles/:slug/engagement/comments/:commentId/likes
 زمان‌بندی‌شده‌ای که موعدش رسیده لحاظ می‌شود. در `photos` و `videos` جدیدترین
 آلبوم منتشرشده نیز با جدیدترین خبر مقایسه می‌شود؛ در تاریخ برابر آلبوم اولویت
 دارد. دسته بدون محتوای عمومی حذف می‌شود. متن کامل یا فایل ویدیو دریافت نمی‌شود.
+
+`GET /articles/short/:code` پاسخ `{data: {path}}` و `Cache-Control: no-store` دارد.
+کد شامل a/m و ۲۲ کاراکتر base64url canonical از UUID کامل است؛ فقط خبر PUBLISHED
+یا SCHEDULED با تاریخ رسیده و رسانه PUBLISHED با تاریخ رسیده resolve می‌شوند.
+ناموجود، حذف‌شده، پیش‌نویس، بایگانی یا آینده ۴۰۴ است. مسیر عمومی `/p/:code` در
+فرانت هدایت ۳۰۷ به آدرس اصلی جاری انجام می‌دهد؛ API مشکل‌دار ۵۰۳ است و به خانه
+یا مقصد خارجی هدایت نمی‌شود. این لینک preview خصوصی نیست و migration ندارد.
 
 پارامترهای `GET /articles`:
 
