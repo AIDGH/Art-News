@@ -52,10 +52,29 @@ export async function generateMetadata({
 
   if (!category) return {};
 
+  const title = `${category.title} | سینما نمایش`;
+  const description = category.description || `تازه‌ترین مطالب ${category.title} در سینما نمایش.`;
+  const url = `/category/${category.slug}`;
+
   return {
     title: category.title,
-    description: category.description,
-    alternates: { canonical: `/category/${category.slug}` },
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "website",
+      locale: "fa_IR",
+      siteName: "سینما نمایش",
+      title,
+      description,
+      url,
+      images: [{ url: "/logo-cinema-namayesh.png", alt: "سینما نمایش" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/logo-cinema-namayesh.png"],
+    },
   };
 }
 

@@ -25,6 +25,13 @@ Open Graph/Twitter sharing tagline. Article routes keep their own story-specific
 descriptions; footer/site-settings copy is independent. Messaging apps may cache
 old link previews after deployment.
 
+The homepage renders a single `WebSite` JSON-LD node with the public brand name
+and canonical root URL from `site-url.ts`. Category metadata explicitly supplies
+its own Open Graph/Twitter title and description instead of inheriting the root
+sharing tagline; category HTML titles continue to use the root title template.
+The existing favicon, homepage tagline and article metadata are unchanged.
+Search engines decide whether and when to adopt the site name and search ranking.
+
 Next metadata routes provide `/robots.txt` and request-time `/sitemap.xml`.
 The sitemap fetches lightweight public article URL/date rows from the Nest API
 and categories, without loading full article content or accessing SQLite directly.

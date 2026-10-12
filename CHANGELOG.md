@@ -4,6 +4,8 @@
 
 ### Added
 
+- Homepage `WebSite` structured data identifying Cinema Namayesh at its canonical root URL.
+
 - Stable ASCII sharing links for existing/new published articles and media, using lossless UUID encoding and a no-store redirect to the current original URL. Admin copy buttons include a manual clipboard fallback; no migration or slug rewrite.
 
 - Automatic public sitemap and robots metadata routes, with lightweight published article URL/date API, canonical domain sharing, and Search Console setup guidance. No migration required.
@@ -22,6 +24,8 @@
 - Additive SQLite migration for advertisements and article blocks; validated video uploads and 32 MiB multipart proxy allowance.
 
 ### Changed
+
+- Category Open Graph/Twitter titles and descriptions now identify their own category instead of inheriting the homepage tagline; existing category HTML titles, favicon and homepage sharing copy are preserved.
 
 - Reverted `43fb626` to restore the previous article layout, then isolated player-first/title-below presentation to published video posts. Added a responsive, uncropped player and ordered album selection; kept author/reading-time removal and the existing photo gallery. No database migration or content deletion.
 

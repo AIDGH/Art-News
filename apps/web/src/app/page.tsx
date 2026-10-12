@@ -6,8 +6,16 @@ import { AdvertisementPlaceholder } from "@/components/promotion-blocks";
 import { SectionHeading } from "@/components/section-heading";
 import { type Article } from "@/lib/news";
 import { fetchArticles, fetchFeaturedArticles, fetchLatestCategoryContent, fetchLatestMediaPostsAsArticles } from "@/lib/api";
+import { siteUrl } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "سینما نمایش",
+  url: siteUrl("/"),
+};
 
 const homepageSectionSlugs = [
   "news",
@@ -85,6 +93,12 @@ export default async function HomePage() {
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <NewsTicker items={tickerItems} />
 
       {featuredArticles.length > 0 && (
