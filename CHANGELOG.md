@@ -25,6 +25,8 @@
 
 ### Changed
 
+- Photo albums and legacy photo articles now show photos above the headline, with a larger labeled download button and visible keyboard focus.
+
 - Photo albums render their images before the description with a download action per image; ordinary article/film layout and legacy photo cover downloads are preserved.
 
 - Removed the extra cover from standalone photo album pages while retaining album items, listing/social covers and legacy article images.

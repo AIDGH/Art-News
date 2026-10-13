@@ -18,11 +18,12 @@ function ImageDownload({ url, label }: { url: string; label: string }) {
     <a
       href={url}
       download
-      className="absolute bottom-4 left-4 p-3 bg-black/70 hover:bg-black/90 text-white rounded-full shadow-lg backdrop-blur-md transition-all z-10"
+      className="photo-download"
       aria-label={label}
       title={label}
     >
       <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+      <span>دانلود عکس</span>
     </a>
   );
 }
@@ -107,6 +108,23 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </figure>)}
     </div>);
 
+  const mainFigure = !article.videoPost && !isPhotoAlbum ? (
+    <figure className="article-figure container-wide">
+      <div className="relative">
+        <Image
+          src={article.imageUrl}
+          alt={article.imageAlt}
+          unoptimized={article.imageUrl.startsWith("/uploads/")}
+          fill
+          priority
+          sizes="(max-width: 1100px) 100vw, 800px"
+        />
+        {isPhotoPost ? <ImageDownload url={imageUrl} label="دانلود عکس" /> : null}
+      </div>
+      {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
+    </figure>
+  ) : null;
+
   return (
     <main className="article-page">
       <script
@@ -116,8 +134,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }}
       />
       <div className="article-desktop-layout">
-        <article>
+        <article className={isPhotoPost ? "article-photo-post" : undefined}>
           {article.videoPost ? <VideoPostPlayer post={article.videoPost} /> : null}
+          {isPhotoAlbum ? <div className="photo-album-images container-wide">{contentBlocks}</div> : null}
+          {isPhotoPost ? mainFigure : null}
           <header className={`article-header container-narrow${article.videoPost ? " article-header-video" : ""}`}>
             <Link
               className="category-label"
@@ -132,24 +152,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </header>
 
-          {!article.videoPost && !isPhotoAlbum ? <figure className="article-figure container-wide">
-            <div className="relative">
-              <Image
-                src={article.imageUrl}
-                alt={article.imageAlt}
-                unoptimized={article.imageUrl.startsWith("/uploads/")}
-                fill
-                priority
-                sizes="(max-width: 1100px) 100vw, 800px"
-              />
-              {isPhotoPost ? <ImageDownload url={imageUrl} label="دانلود عکس" /> : null}
-            </div>
-            {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
-          </figure> : null}
+          {!isPhotoPost ? mainFigure : null}
 
           <div className="article-body-layout container-wide">
             <div className="article-body">
-              {isPhotoAlbum ? contentBlocks : null}
               <div
                 className="article-html-body"
                 dangerouslySetInnerHTML={{ __html: article.body }}

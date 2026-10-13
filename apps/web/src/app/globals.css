@@ -3937,6 +3937,50 @@ img {
   line-height: 1.7;
 }
 
+.article-page .article-photo-post .article-header {
+  padding-block: 28px 24px;
+}
+
+.photo-album-images > .article-inline-images:first-child {
+  margin-top: 0;
+}
+
+.photo-download {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid #ffffff70;
+  border-radius: 14px;
+  background: #181818eb;
+  color: #fff;
+  font-size: .9rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none;
+  box-shadow: 0 3px 12px #0004;
+  transition: background-color .2s;
+}
+
+.photo-download svg {
+  flex-shrink: 0;
+}
+
+.photo-download:hover {
+  background: #000;
+}
+
+.photo-download:focus-visible {
+  outline: 3px solid #ff8a32;
+  outline-offset: 3px;
+}
+
 .admin-content-blocks {
   display: grid;
   gap: 20px;
