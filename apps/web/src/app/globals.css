@@ -3945,6 +3945,16 @@ img {
   margin-top: 0;
 }
 
+.photo-category {
+  padding-bottom: 24px;
+  text-align: center;
+}
+
+.photo-category .category-label {
+  display: inline-block;
+  font-size: clamp(1.2rem, 1.6vw, 1.45rem);
+}
+
 .photo-download {
   position: absolute;
   bottom: 12px;
@@ -3953,9 +3963,9 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
+  min-width: 48px;
   min-height: 48px;
-  padding: 10px 16px;
+  padding: 11px;
   border: 1px solid #ffffff70;
   border-radius: 14px;
   background: #181818eb;
