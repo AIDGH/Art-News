@@ -109,7 +109,7 @@ export default async function AboutPage() {
         {/* 4. Social Icons: centered, neatly grouped with premium styling */}
         <div className="flex justify-center gap-4">
           <a
-            href="https://instagram.com/cinemanamayesh_ir"
+            href="https://www.instagram.com/cinemanamayesh.ir/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="صفحه اینستاگرام"
