@@ -181,8 +181,8 @@ export function NavigationMenu() {
               tabIndex={isOpen ? 0 : -1}
               onClick={closeMenu}
               className={`fixed inset-0 z-[60] cursor-default border-0 bg-black/50 transition-[opacity,backdrop-filter] duration-300 ease-out ${isOpen
-                  ? "pointer-events-auto opacity-100 backdrop-blur-xs"
-                  : "pointer-events-none opacity-0 backdrop-blur-none"
+                ? "pointer-events-auto opacity-100 backdrop-blur-xs"
+                : "pointer-events-none opacity-0 backdrop-blur-none"
                 }`}
             />
 
@@ -194,8 +194,8 @@ export function NavigationMenu() {
               aria-hidden={!isOpen}
               inert={!isOpen}
               className={`fixed top-0 bottom-0 start-0 z-[70] flex h-[100dvh] w-[min(310px,calc(100vw-48px))] flex-col bg-[var(--surface)] text-[var(--ink)] shadow-2xl transition-transform duration-300 ease-out ${isOpen
-                  ? "translate-x-0"
-                  : "pointer-events-none -translate-x-full rtl:translate-x-full"
+                ? "translate-x-0"
+                : "pointer-events-none -translate-x-full rtl:translate-x-full"
                 }`}
             >
               {/* Drawer Header */}
@@ -292,7 +292,7 @@ export function NavigationMenu() {
               {/* Drawer Footer info */}
               <div className="px-6 py-4 border-t border-[var(--line)] bg-[var(--paper)] text-xs text-[var(--ink-soft)] flex items-center justify-between">
                 <span>رسانه سینما و نمایش</span>
-                <span className="font-mono text-[11px]">نسخه ۱.۸</span>
+                <span className="font-mono text-[11px]">نسخه 2.0</span>
               </div>
             </aside>
           </>,
