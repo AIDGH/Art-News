@@ -128,11 +128,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           <div className="article-body-layout container-wide">
             <div className="article-body">
-              {article.body.map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
+              <div
+                className="article-html-body"
+                dangerouslySetInnerHTML={{ __html: article.body }}
+              />
               {article.contentBlocks?.map((block) => block.kind === "TEXT" ?
-                <div key={block.id}>{block.text?.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+                <div
+                  key={block.id}
+                  className="article-html-body"
+                  dangerouslySetInnerHTML={{ __html: block.text ?? "" }}
+                />
                 : <div className={`article-inline-images${block.images.length === 1 ? " is-single" : ""}`} key={block.id}>
                   {block.images.map(({ media }, index) => <figure key={index}>
                     <Image src={media.url} alt={media.alt} width={1000} height={750} unoptimized sizes="(max-width: 650px) 100vw, 420px" />

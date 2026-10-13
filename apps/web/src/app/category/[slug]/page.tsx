@@ -109,7 +109,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       {hasArticles ? (
         <section className="flex flex-col gap-6 mt-6" aria-label={`خبرهای ${category.title}`}>
           {categoryArticles.map((article) => {
-            const excerpt = article.lead || (article.body && article.body.length > 0 ? article.body[0] : "");
+            const excerpt = article.lead || (article.body ? article.body.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 200) : "");
             return (
               <article key={article.slug} className="group flex gap-4 items-center">
                 <Link

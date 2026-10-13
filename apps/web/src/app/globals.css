@@ -596,6 +596,192 @@ body:has(.admin-root) .public-site-footer {
   line-height: 2;
 }
 
+/* ── Rich Text Editor (TipTap) ──────────────────────────────── */
+
+.admin-field-label {
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.rte-wrapper {
+  position: relative;
+  border: 1px solid #cfc6b8;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.rte-wrapper:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(198, 65, 45, 0.1);
+}
+
+/* Toolbar */
+.rte-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 7px 10px;
+  border-bottom: 1px solid #e8e2d8;
+  background: #faf8f3;
+  direction: rtl;
+}
+
+.rte-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 30px;
+  padding: 0 7px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #3d3831;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.rte-toolbar-btn:hover:not(:disabled) {
+  border-color: #d5cec5;
+  background: #f0ece4;
+  color: #1b1915;
+}
+
+.rte-toolbar-btn.is-active {
+  border-color: rgba(198, 65, 45, 0.35);
+  color: var(--accent-dark);
+  background: rgba(198, 65, 45, 0.08);
+}
+
+.rte-toolbar-btn.is-active:hover {
+  background: rgba(198, 65, 45, 0.14);
+}
+
+.rte-toolbar-btn:disabled,
+.rte-toolbar-btn.is-disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.rte-toolbar-sep {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  margin-inline: 4px;
+  background: #ddd7cd;
+  flex-shrink: 0;
+}
+
+/* Editor content area */
+.rte-editor-area {
+  display: block;
+}
+
+.rte-content {
+  padding: 14px 18px;
+  outline: none;
+  font-family: "Vazirmatn", Tahoma, "Segoe UI", Arial, sans-serif;
+  font-size: 0.92rem;
+  line-height: 2;
+  color: #1b1915;
+  text-align: right;
+  direction: rtl;
+  word-break: break-word;
+}
+
+/* Placeholder */
+.rte-content.rte-is-empty::before {
+  content: attr(data-placeholder);
+  float: right;
+  color: #a09890;
+  pointer-events: none;
+  height: 0;
+}
+
+/* Typography inside editor */
+.rte-content p {
+  margin-bottom: 0.75em;
+}
+
+.rte-content p:last-child {
+  margin-bottom: 0;
+}
+
+.rte-content h2 {
+  margin: 0.9em 0 0.4em;
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+.rte-content h3 {
+  margin: 0.8em 0 0.35em;
+  font-size: 1.1rem;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.rte-content h4 {
+  margin: 0.7em 0 0.3em;
+  font-size: 0.95rem;
+  font-weight: 900;
+  line-height: 1.5;
+}
+
+.rte-content strong {
+  font-weight: 900;
+}
+
+.rte-content em {
+  font-style: italic;
+}
+
+.rte-content ul,
+.rte-content ol {
+  padding-right: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+.rte-content ul {
+  list-style: disc;
+}
+
+.rte-content ol {
+  list-style: decimal;
+}
+
+.rte-content li {
+  margin-bottom: 0.25em;
+}
+
+.rte-content blockquote {
+  margin: 0.75em 0;
+  padding: 10px 16px;
+  border-right: 4px solid var(--accent);
+  border-radius: 3px;
+  background: rgba(198, 65, 45, 0.05);
+  color: #5a534a;
+  font-style: italic;
+}
+
+/* Hidden validation input */
+.rte-hidden-input {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .admin-field small,
 .admin-field-note {
   color: #807a71;
@@ -2829,6 +3015,85 @@ img {
   margin-top: 27px;
 }
 
+/* Rich HTML content rendered from TipTap editor */
+.article-html-body {
+  font-family: "Vazirmatn", Tahoma, "Segoe UI", Arial, sans-serif;
+  font-size: clamp(1.04rem, 1.45vw, 1.2rem);
+  line-height: 2.18;
+  direction: rtl;
+  text-align: right;
+}
+
+.article-html-body p {
+  margin-bottom: 1em;
+}
+
+.article-html-body p:last-child {
+  margin-bottom: 0;
+}
+
+.article-html-body h2 {
+  margin: 1.4em 0 0.5em;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.article-html-body h3 {
+  margin: 1.2em 0 0.45em;
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  font-weight: 900;
+  line-height: 1.5;
+}
+
+.article-html-body h4 {
+  margin: 1em 0 0.4em;
+  font-size: clamp(0.98rem, 1.5vw, 1.1rem);
+  font-weight: 900;
+  line-height: 1.55;
+}
+
+.article-html-body strong {
+  font-weight: 900;
+}
+
+.article-html-body em {
+  font-style: italic;
+}
+
+.article-html-body ul,
+.article-html-body ol {
+  padding-right: 1.75em;
+  margin-bottom: 1em;
+}
+
+.article-html-body ul {
+  list-style: disc;
+}
+
+.article-html-body ol {
+  list-style: decimal;
+}
+
+.article-html-body li {
+  margin-bottom: 0.3em;
+}
+
+.article-html-body blockquote {
+  margin: 1.2em 0;
+  padding: 12px 20px;
+  border-right: 4px solid var(--accent);
+  border-radius: 2px;
+  background: rgba(198, 65, 45, 0.04);
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* Preserve TipTap inline text-align styles */
+.article-html-body [style*="text-align"] {
+  text-align: inherit;
+}
+
 .demo-disclaimer {
   margin-top: 42px;
   padding: 22px 24px;
@@ -3716,24 +3981,125 @@ img {
   cursor: default;
 }
 
-.admin-article-actions { column-gap: 24px; row-gap: 10px; }
-.admin-short-link { display: inline-flex; max-width: 100%; flex-direction: column; align-items: flex-start; gap: 6px; }
-.admin-short-link label { display: grid; gap: 4px; max-width: 100%; font-size: .8rem; }
-.admin-short-link input { width: min(100%, 320px); max-width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
-.admin-order-editor { min-width: 0; margin-block: 18px; }
-.admin-order-editor h2 { font-size: 1rem; }
-.admin-order-list { display: grid; gap: 8px; list-style: none; margin-block: 14px; padding: 0; }
-.admin-order-list li { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ded7ce; border-radius: 8px; min-width: 0; background: #fcfaf7; }
-.admin-order-list li.is-dragging { opacity: .5; }
-.admin-order-list img { width: 64px; height: 48px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
-.admin-order-position { flex-shrink: 0; width: 20px; text-align: center; color: #766e63; }
-.admin-order-copy { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.admin-order-copy strong { display: block; font-size: .85rem; }
-.admin-order-copy small { display: block; font-size: .75rem; color: #766e63; margin-top: 4px; }
-.admin-order-controls { display: flex; gap: 4px; flex-shrink: 0; }
-.admin-order-controls button { width: 36px; height: 36px; border: 1px solid #d5cbc0; border-radius: 6px; cursor: pointer; font-size: 1.2rem; }
-.admin-order-controls button:disabled { opacity: .35; cursor: default; }
-@media (max-width: 480px) { .admin-order-list img { display: none; } }
+.admin-article-actions {
+  column-gap: 24px;
+  row-gap: 10px;
+}
+
+.admin-short-link {
+  display: inline-flex;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.admin-short-link label {
+  display: grid;
+  gap: 4px;
+  max-width: 100%;
+  font-size: .8rem;
+}
+
+.admin-short-link input {
+  width: min(100%, 320px);
+  max-width: 100%;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+}
+
+.admin-order-editor {
+  min-width: 0;
+  margin-block: 18px;
+}
+
+.admin-order-editor h2 {
+  font-size: 1rem;
+}
+
+.admin-order-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin-block: 14px;
+  padding: 0;
+}
+
+.admin-order-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #ded7ce;
+  border-radius: 8px;
+  min-width: 0;
+  background: #fcfaf7;
+}
+
+.admin-order-list li.is-dragging {
+  opacity: .5;
+}
+
+.admin-order-list img {
+  width: 64px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.admin-order-position {
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+  color: #766e63;
+}
+
+.admin-order-copy {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.admin-order-copy strong {
+  display: block;
+  font-size: .85rem;
+}
+
+.admin-order-copy small {
+  display: block;
+  font-size: .75rem;
+  color: #766e63;
+  margin-top: 4px;
+}
+
+.admin-order-controls {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.admin-order-controls button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d5cbc0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.admin-order-controls button:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .admin-order-list img {
+    display: none;
+  }
+}
 
 .admin-block-images {
   display: grid;

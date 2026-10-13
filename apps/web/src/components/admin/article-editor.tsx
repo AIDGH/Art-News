@@ -14,6 +14,11 @@ import { ArticleBlocksEditor, type ContentBlockForm } from "./article-blocks-edi
 import { DisplayOrderEditor } from "./display-order-editor";
 import { CopyShortLink } from "./copy-short-link";
 import { isPublishedForSharing } from "@/lib/short-links";
+import { RichTextEditor } from "./rich-text-editor";
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
 
 type ArticleEditorProps = { articleId?: string };
 type SourceForm = { url: string; title: string; publisher: string; author: string; publishedAt: string };
@@ -114,7 +119,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
       .finally(() => setLoading(false));
   }, [articleId]);
 
-  const wordCount = useMemo(() => [body, ...contentBlocks.filter((block) => block.kind === "TEXT").map((block) => block.text)].join(" ").trim().split(/\s+/).filter(Boolean).length, [body, contentBlocks]);
+  const wordCount = useMemo(() => [stripHtml(body), ...contentBlocks.filter((block) => block.kind === "TEXT").map((block) => stripHtml(block.text))].join(" ").trim().split(/\s+/).filter(Boolean).length, [body, contentBlocks]);
 
   const save = async (event: FormEvent) => {
     event.preventDefault();
@@ -219,7 +224,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
             <label className="admin-field"><span>تیتر خبر</span><input value={title} onChange={(event) => { setTitle(event.target.value); if (!slugTouched) setSlug(slugify(event.target.value)); }} maxLength={220} required /></label>
             <label className="admin-field"><span>شناسه نشانی (Slug)</span><input dir="ltr" value={slug} onChange={(event) => { setSlugTouched(true); setSlug(event.target.value); }} maxLength={220} required /><small>حروف فارسی/انگلیسی، عدد، خط تیره (-) و زیرخط (_) مجازند؛ فاصله و / مجاز نیست. بهتر است بعد از انتشار تغییر نکند.</small></label>
             <label className="admin-field"><span>لید یا خلاصه</span><textarea rows={4} value={lead} onChange={(event) => setLead(event.target.value)} maxLength={600} required /><small>{lead.length.toLocaleString("fa-IR")} از ۶۰۰ نویسه</small></label>
-            <label className="admin-field"><span>متن اصلی خبر</span><textarea className="admin-body-editor" rows={12} value={body} onChange={(event) => setBody(event.target.value)} required /><small>{wordCount.toLocaleString("fa-IR")} واژه — برای پاراگراف جدید یک خط خالی بگذارید. کپی و پیست متن پشتیبانی می‌شود.</small></label>
+            <div className="admin-field"><span className="admin-field-label">متن اصلی خبر</span><RichTextEditor value={body} onChange={setBody} minHeight={420} required /><small>{wordCount.toLocaleString("fa-IR")} واژه</small></div>
           </section>
 
           <section className="admin-card">
@@ -270,7 +275,7 @@ export function ArticleEditor({ articleId }: ArticleEditorProps) {
             {articleId ? <button className="admin-danger-button" type="button" onClick={() => void archive()} disabled={saving}>بایگانی خبر</button> : null}
             {articleId ? <button className="admin-danger-button" type="button" onClick={() => void remove()} disabled={saving}>حذف دائمی خبر</button> : null}
           </section>
-          <section className="admin-card admin-checklist"><h2>چک‌لیست انتشار</h2><ul><li className={title ? "is-done" : ""}>تیتر خبر</li><li className={lead.length >= 10 ? "is-done" : ""}>لید کامل</li><li className={body.length >= 20 ? "is-done" : ""}>متن خبر</li><li className={coverImage ? "is-done" : ""}>تصویر اصلی</li><li className={imageAlt ? "is-done" : ""}>متن جایگزین تصویر</li><li className={categoryId ? "is-done" : ""}>دسته‌بندی</li></ul></section>
+          <section className="admin-card admin-checklist"><h2>چک‌لیست انتشار</h2><ul><li className={title ? "is-done" : ""}>تیتر خبر</li><li className={lead.length >= 10 ? "is-done" : ""}>لید کامل</li><li className={stripHtml(body).length >= 20 ? "is-done" : ""}>متن خبر</li><li className={coverImage ? "is-done" : ""}>تصویر اصلی</li><li className={imageAlt ? "is-done" : ""}>متن جایگزین تصویر</li><li className={categoryId ? "is-done" : ""}>دسته‌بندی</li></ul></section>
         </aside>
       </div>
     </form>

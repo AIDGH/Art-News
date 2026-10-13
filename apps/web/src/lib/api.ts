@@ -97,9 +97,9 @@ export function mapApiArticleToUi(apiArticle: ApiArticle): Article {
       month: "long",
       day: "numeric",
     }).format(new Date(apiArticle.publishedAt)),
-    readingTime: `${Math.max(1, Math.ceil([apiArticle.body, ...(apiArticle.contentBlocks ?? []).map((block) => block.text ?? "")].join(" ").trim().split(/\s+/).length / 220)).toLocaleString("fa-IR")} دقیقه`,
+    readingTime: `${Math.max(1, Math.ceil([(apiArticle.body || "").replace(/<[^>]*>/g, " "), ...(apiArticle.contentBlocks ?? []).map((block) => (block.text ?? "").replace(/<[^>]*>/g, " "))].join(" ").trim().split(/\s+/).filter(Boolean).length / 220)).toLocaleString("fa-IR")} دقیقه`,
     author: apiArticle.author?.displayName || apiArticle.author?.username || "",
-    body: (apiArticle.body || "").split(/\n\s*\n/).filter(Boolean),
+    body: apiArticle.body || "",
     contentBlocks: apiArticle.contentBlocks ?? [],
     seoTitle: apiArticle.seoTitle || undefined,
     seoDescription: apiArticle.seoDescription || undefined,
@@ -222,20 +222,20 @@ export async function fetchArticleBySlug(slug: string): Promise<Article | undefi
         body: (post.description || "").split(/\n\s*\n/).filter(Boolean),
         contentBlocks: !isVideo && post.items?.length
           ? [
-              {
-                id: `${post.id}-gallery`,
-                kind: "IMAGES",
-                text: null,
-                images: post.items.map((item) => ({
-                  media: {
-                    url: item.media.url,
-                    alt: item.media.alt || "",
-                    caption: item.media.caption ?? null,
-                    credit: item.media.credit ?? null,
-                  },
-                })),
-              },
-            ]
+            {
+              id: `${post.id}-gallery`,
+              kind: "IMAGES",
+              text: null,
+              images: post.items.map((item) => ({
+                media: {
+                  url: item.media.url,
+                  alt: item.media.alt || "",
+                  caption: item.media.caption ?? null,
+                  credit: item.media.credit ?? null,
+                },
+              })),
+            },
+          ]
           : [],
         videoPost: isVideo ? post : undefined,
         sources: post.targetUrl ? [{ url: post.targetUrl, title: "مشاهده پست اصلی" }] : [],

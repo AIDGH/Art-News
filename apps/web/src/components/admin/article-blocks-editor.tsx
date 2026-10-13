@@ -2,6 +2,7 @@
 
 import type { MediaAsset } from "@/lib/admin-api";
 import { MediaUploader } from "./media-uploader";
+import { RichTextEditor } from "./rich-text-editor";
 
 export type ContentBlockForm = {
   key: string;
@@ -34,7 +35,7 @@ export function ArticleBlocksEditor({ blocks, onChange }: {
             <button type="button" onClick={() => onChange(blocks.filter((_, i) => i !== index))}>حذف بخش</button>
           </div>
         </div>
-        {block.kind === "TEXT" ? <label className="admin-field"><span>متن این بخش</span><textarea rows={6} maxLength={50000} value={block.text} required onChange={(event) => update(index, { text: event.target.value })} /></label>
+        {block.kind === "TEXT" ? <div className="admin-field"><span className="admin-field-label">متن این بخش</span><RichTextEditor value={block.text} onChange={(html) => update(index, { text: html })} minHeight={240} required /></div>
           : <><div className="admin-block-images">{block.images.map((media, imageIndex) => <div className="admin-block-image" key={imageIndex}>
             <MediaUploader value={media} alt={media?.alt ?? ""} credit={media?.credit ?? ""} onChange={(value) => update(index, { images: block.images.map((item, i) => i === imageIndex ? value : item) })} />
             {media ? <>
