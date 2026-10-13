@@ -25,6 +25,8 @@
 
 ### Changed
 
+- Photo albums render their images before the description with a download action per image; ordinary article/film layout and legacy photo cover downloads are preserved.
+
 - Removed the extra cover from standalone photo album pages while retaining album items, listing/social covers and legacy article images.
 
 - Fixed rich-text rollout build failures by converting media/sample bodies to strings, linked homepage photo cards to individual albums, and excluded shared navigation/footer text from Google snippets without hiding categories. Preserved main's editor, title and version 2.0 updates.
