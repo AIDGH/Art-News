@@ -204,13 +204,14 @@ export async function fetchArticleBySlug(slug: string): Promise<Article | undefi
       const mediaResponse = await fetch(`${API_BASE_URL}/media-posts/${encodeURIComponent(slug)}`, { cache: "no-store" });
       if (!mediaResponse.ok) return undefined;
       const { data: post } = await mediaResponse.json() as { data: MediaPost };
-      if (post.kind !== "VIDEOS" || !post.publishedAt) return undefined;
+      if (!post.publishedAt) return undefined;
+      const isVideo = post.kind === "VIDEOS";
       return {
         slug: post.id,
         title: post.title,
         lead: "",
         seoDescription: post.description || post.title,
-        category: { slug: "videos", title: "فیلم", description: "" },
+        category: { slug: isVideo ? "videos" : "photos", title: isVideo ? "فیلم" : "عکس", description: "" },
         imageUrl: post.cover.url,
         imageAlt: post.cover.alt || post.title,
         imageCredit: post.cover.credit || "",
@@ -219,7 +220,24 @@ export async function fetchArticleBySlug(slug: string): Promise<Article | undefi
         readingTime: "",
         author: "",
         body: (post.description || "").split(/\n\s*\n/).filter(Boolean),
-        videoPost: post,
+        contentBlocks: !isVideo && post.items?.length
+          ? [
+              {
+                id: `${post.id}-gallery`,
+                kind: "IMAGES",
+                text: null,
+                images: post.items.map((item) => ({
+                  media: {
+                    url: item.media.url,
+                    alt: item.media.alt || "",
+                    caption: item.media.caption ?? null,
+                    credit: item.media.credit ?? null,
+                  },
+                })),
+              },
+            ]
+          : [],
+        videoPost: isVideo ? post : undefined,
         sources: post.targetUrl ? [{ url: post.targetUrl, title: "مشاهده پست اصلی" }] : [],
       };
     }

@@ -8,7 +8,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "سینما نمایش | رسانه سینما و نمایش",
+    default: "رسانه سینما نمایش",
     template: "%s | سینما نمایش",
   },
   description:
@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fa_IR",
     siteName: "سینما نمایش",
-    title: "سینما نمایش | رسانه سینما و نمایش",
+    title: "رسانه سینما نمایش",
     description: "از فیلم و سریال و نمایش می‌گوییم.",
     images: [{ url: "/logo-cinema-namayesh.png", alt: "سینما نمایش" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "سینما نمایش | رسانه سینما و نمایش",
+    title: "رسانه سینما نمایش",
     description: "از فیلم و سریال و نمایش می‌گوییم.",
     images: ["/logo-cinema-namayesh.png"],
   },

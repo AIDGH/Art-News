@@ -51,6 +51,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   if (!article) notFound();
 
+  const isPhotoPost = article.category?.slug === "photos";
+  const imageUrl = article.imageUrl;
+
   const imageCredit = /تصویر ارائه[\s‌-]*شده برای نمونه/.test(article.imageCredit ?? "")
     ? ""
     : article.imageCredit;
@@ -100,7 +103,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </header>
 
           {!article.videoPost ? <figure className="article-figure container-wide">
-            <div>
+            <div className="relative">
               <Image
                 src={article.imageUrl}
                 alt={article.imageAlt}
@@ -109,6 +112,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 priority
                 sizes="(max-width: 1100px) 100vw, 800px"
               />
+              {isPhotoPost && (
+                <a
+                  href={imageUrl}
+                  download
+                  className="absolute bottom-4 left-4 p-3 bg-black/70 hover:bg-black/90 text-white rounded-full shadow-lg backdrop-blur-md transition-all z-10"
+                  aria-label="Download image"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </a>
+              )}
             </div>
             {imageCredit ? <figcaption>{imageCredit}</figcaption> : null}
           </figure> : null}
