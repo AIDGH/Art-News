@@ -52,6 +52,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   if (!article) notFound();
 
   const isPhotoPost = article.category?.slug === "photos";
+  const isPhotoAlbum = article.mediaPost?.kind === "PHOTOS";
   const imageUrl = article.imageUrl;
 
   const imageCredit = /تصویر ارائه[\s‌-]*شده برای نمونه/.test(article.imageCredit ?? "")
@@ -102,7 +103,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </header>
 
-          {!article.videoPost ? <figure className="article-figure container-wide">
+          {!article.videoPost && !isPhotoAlbum ? <figure className="article-figure container-wide">
             <div className="relative">
               <Image
                 src={article.imageUrl}
