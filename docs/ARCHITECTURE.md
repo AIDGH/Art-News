@@ -31,6 +31,9 @@ its own Open Graph/Twitter title and description instead of inheriting the root
 sharing tagline; category HTML titles continue to use the root title template.
 The existing favicon, homepage tagline and article metadata are unchanged.
 Search engines decide whether and when to adopt the site name and search ranking.
+Shared header/footer containers and homepage category badges use `data-nosnippet`
+to exclude navigation and boilerplate from Google summaries without removing links
+or blocking indexing. Existing cached snippets require a new crawl to change.
 
 Next metadata routes provide `/robots.txt` and request-time `/sitemap.xml`.
 The sitemap fetches lightweight public article URL/date rows from the Nest API
@@ -92,7 +95,7 @@ EcranNewsPromo یک Server Component غیرهمگام است و متن را از
 خوانده می‌شوند. API با یک transaction، تازه‌ترین خبر هر دسته و تازه‌ترین آلبوم
 عکس/فیلم را می‌گیرد و تاریخ انتشار واقعی را مقایسه می‌کند؛ محدودیت ۳۰ خبر کلی
 به این کارت‌ها اعمال نمی‌شود. ترتیب و ظاهر بخش‌ها حفظ می‌شود و دسته خالی حذف
-می‌شود. کارت آلبوم عکس به گالری همان دسته، فیلم به `/articles/:mediaPostId` و کارت خبر به جزئیات خبر لینک دارد؛ کاور
+می‌شود. کارت آلبوم عکس و فیلم به `/articles/:mediaPostId` و کارت خبر به جزئیات خبر لینک دارد؛ برچسب دسته همچنان به آرشیو می‌رود. کاور
 مستقیم و بدون پردازش Next نمایش داده می‌شود و ویدیو در صفحه اصلی بارگیری نمی‌شود.
 گزارش ثابت ساختگی دیگر در صفحه اصلی یا آرشیو گزارش جایگزین داده واقعی نمی‌شود.
 نام قدیمی دسته گزارش (`screenings`) در کارت صفحه اصلی، آرشیو `/category/report`
@@ -101,9 +104,11 @@ EcranNewsPromo یک Server Component غیرهمگام است و متن را از
 
 از ۲۰۲۶-۱۰-۰۵ ماژول media-posts آلبوم مستقل از خبر را مدیریت می‌کند. صفحات
 عکس/فیلم صفحه اول API عمومی را سمت سرور می‌گیرند؛ MediaGallery گرید، دریافت
-بیشتر و dialog ریلز عکس را مدیریت می‌کند. کارت فیلم به صفحه مستقل با VideoPostPlayer
-می‌رود؛ فقط پست VIDEOS می‌تواند پس از پاسخ ۴۰۴ Article از API عمومی media-posts
-خوانده شود. چیدمان خبر عادی تیتر/لید سپس عکس است؛ فقط فیلم پلیر سپس تیتر دارد.
+بیشتر را مدیریت می‌کند. کارت عکس به صفحه مستقل کاور/آلبوم و کارت فیلم به صفحه مستقل با VideoPostPlayer
+می‌رود؛ هر دو نوع می‌توانند پس از پاسخ ۴۰۴ Article از API عمومی media-posts
+خوانده شوند. `mediaPost` هویت رسانه را حفظ می‌کند تا endpoint نظرات خبر برای آلبوم فراخوانی نشود.
+توضیح ساده رسانه و داده نمونه با escape HTML به پاراگراف تبدیل می‌شوند؛ متن rich-text واقعی خبر حفظ می‌شود.
+چیدمان خبر عادی تیتر/لید سپس عکس است؛ فقط فیلم پلیر سپس تیتر دارد.
 نام نویسنده و زمان مطالعه در رابط حذف مانده‌اند. تمام فایل‌های پست فیلم به ترتیب
 ذخیره‌شده انتخاب‌پذیرند؛ ویدیو نخست انتخاب اولیه است، بدون autoplay و با توقف در
 تعویض فایل یا مخفی‌شدن تب. نظرات/لایک Article برای MediaPost فراخوانی نمی‌شوند.

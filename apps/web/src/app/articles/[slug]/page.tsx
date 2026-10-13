@@ -157,7 +157,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               ) : null}
             </div>
           </div>
-          {!article.videoPost ? <ArticleEngagement slug={article.slug} /> : null}
+          {!article.mediaPost ? <ArticleEngagement slug={article.slug} /> : null}
         </article>
 
         <aside className="article-sidebar" aria-label="تبلیغات و مطالب مرتبط">

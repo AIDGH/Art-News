@@ -126,9 +126,7 @@ export default async function HomePage() {
       <section className="container compact-home-section">
         <div className="compact-news-grid">
           {sectionArticles.map((article) => {
-            const href = article.contentType === "MEDIA" && article.category.slug !== "videos"
-              ? `/category/${article.category.slug}`
-              : `/articles/${article.slug}`;
+            const href = `/articles/${article.slug}`;
             const publishedLabel = new Intl.DateTimeFormat("fa-IR", {
               year: "numeric", month: "long", day: "numeric",
             }).format(new Date(article.publishedAt));
@@ -145,7 +143,7 @@ export default async function HomePage() {
                 </Link>
                 <div>
                   <Link href={`/category/${article.category.slug}`}>
-                    <span className="inline-block bg-orange-100 text-orange-600 text-xs font-bold px-3 py-1 rounded-md mb-2">
+                    <span data-nosnippet className="inline-block bg-orange-100 text-orange-600 text-xs font-bold px-3 py-1 rounded-md mb-2">
                       {article.category.title}
                     </span>
                   </Link>

@@ -1,4 +1,5 @@
 import type { MediaPost } from "./media-posts";
+import { plainTextToHtml } from "./plain-text-html";
 
 export type Category = {
   slug: string;
@@ -19,10 +20,11 @@ export type Article = {
   readingTime: string;
   author: string;
   featured?: boolean;
-  /** Optional override link — used for media posts that point to a category page */
+  /** Optional override link for published media posts. */
   href?: string;
   body: string;
   videoPost?: MediaPost;
+  mediaPost?: MediaPost;
   contentBlocks?: Array<{ id: string; kind: "TEXT" | "IMAGES"; text: string | null; images: Array<{ media: { url: string; alt: string; caption: string | null; credit: string | null } }> }>;
   seoTitle?: string;
   seoDescription?: string;
@@ -96,7 +98,7 @@ const categoryBySlug = Object.fromEntries(
   categories.map((category) => [category.slug, category]),
 ) as Record<string, Category>;
 
-export const articles: Article[] = [
+const sampleArticles = [
   {
     slug: "report-from-the-fajr-film-festival",
     title: "حاشیه‌های روز اول جشنواره؛ از تأخیر در نمایش تا غافلگیری منتقدان",
@@ -320,6 +322,11 @@ export const articles: Article[] = [
     ],
   },
 ];
+
+export const articles: Article[] = sampleArticles.map((article) => ({
+  ...article,
+  body: plainTextToHtml(article.body.join("\n\n")),
+}));
 
 export function getArticle(slug: string): Article | undefined {
   return articles.find((article) => article.slug === slug);

@@ -25,6 +25,8 @@
 
 ### Changed
 
+- Fixed rich-text rollout build failures by converting media/sample bodies to strings, linked homepage photo cards to individual albums, and excluded shared navigation/footer text from Google snippets without hiding categories. Preserved main's editor, title and version 2.0 updates.
+
 - Category Open Graph/Twitter titles and descriptions now identify their own category instead of inheriting the homepage tagline; existing category HTML titles, favicon and homepage sharing copy are preserved.
 
 - Reverted `43fb626` to restore the previous article layout, then isolated player-first/title-below presentation to published video posts. Added a responsive, uncropped player and ordered album selection; kept author/reading-time removal and the existing photo gallery. No database migration or content deletion.

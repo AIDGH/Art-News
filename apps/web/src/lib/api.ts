@@ -1,5 +1,6 @@
 import { Article, type Category } from "./news";
 import type { MediaPost, MediaPostPage } from "./media-posts";
+import { plainTextToHtml } from "./plain-text-html";
 
 export async function fetchMediaPosts(kind: MediaPost["kind"]): Promise<{ page: MediaPostPage; failed: boolean }> {
   try {
@@ -187,8 +188,8 @@ export async function fetchLatestMediaPostsAsArticles(take = 20): Promise<Articl
           }).format(new Date(publishedAt)),
           readingTime: "",
           author: "",
-          body: [],
-          href: post.kind === "VIDEOS" ? `/articles/${post.id}` : `/category/${categorySlug}`,
+          body: "",
+          href: `/articles/${post.id}`,
         } satisfies Article;
       });
   } catch (error) {
@@ -219,7 +220,7 @@ export async function fetchArticleBySlug(slug: string): Promise<Article | undefi
         publishedLabel: new Intl.DateTimeFormat("fa-IR", { year: "numeric", month: "long", day: "numeric" }).format(new Date(post.publishedAt)),
         readingTime: "",
         author: "",
-        body: (post.description || "").split(/\n\s*\n/).filter(Boolean),
+        body: plainTextToHtml(post.description || ""),
         contentBlocks: !isVideo && post.items?.length
           ? [
             {
@@ -238,6 +239,7 @@ export async function fetchArticleBySlug(slug: string): Promise<Article | undefi
           ]
           : [],
         videoPost: isVideo ? post : undefined,
+        mediaPost: post,
         sources: post.targetUrl ? [{ url: post.targetUrl, title: "مشاهده پست اصلی" }] : [],
       };
     }

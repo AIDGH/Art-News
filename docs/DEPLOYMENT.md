@@ -1,5 +1,17 @@
 # Cinema Namayesh Deployment
 
+## Failed rich-text rollout — 2026-10-13
+
+Read-only SSH audit found the deploy timer active and retrying `eab0de2`, while
+the current symlink and deployed-revision still pointed to `7b42a93`. Frontend
+build failed at `src/lib/api.ts:169`: media mapping returned `body: never[]` after
+Article.body changed to string. Free root disk space was 18 GiB (21% used), and
+there were no pending migrations. Correct the media and sample body mappings;
+retain the editor, menu version 2.0 and title changes from main. No live service,
+deployment script, database or upload mutation was made during diagnosis.
+The existing timer will publish the corrected main through its usual build path;
+do not wait for deployment after pushing. Google result text also needs recrawling.
+
 ## Search discovery — 2026-10-08
 
 Deploy API and web together; `/sitemap.xml` depends on the new public

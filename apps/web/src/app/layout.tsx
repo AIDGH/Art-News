@@ -38,11 +38,11 @@ export default async function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body>
-        <div className="public-site-header">
+        <div className="public-site-header" data-nosnippet>
           <SiteHeader />
         </div>
         {children}
-        <div className="public-site-footer">
+        <div className="public-site-footer" data-nosnippet>
           <SiteFooter description={siteSettings.footerDescription} />
         </div>
       </body>
