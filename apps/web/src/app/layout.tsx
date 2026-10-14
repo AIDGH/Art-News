@@ -12,20 +12,20 @@ export const metadata: Metadata = {
     template: "%s | سینما نمایش",
   },
   description:
-    "سینما نمایش؛ اخبار، نقد و گفت‌وگو درباره فیلم، سریال و نمایش ایران و جهان.",
+    "سینما نمایش؛ اخبار، نقد و گفت‌وگو درباره فیلم، سریال و تئاتر ایران و جهان.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "fa_IR",
     siteName: "سینما نمایش",
     title: "رسانه سینما نمایش",
-    description: "از فیلم و سریال و نمایش می‌گوییم.",
+    description: "از فیلم و سریال و تئاتر می‌گوییم.",
     images: [{ url: "/logo-cinema-namayesh.png", alt: "سینما نمایش" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "رسانه سینما نمایش",
-    description: "از فیلم و سریال و نمایش می‌گوییم.",
+    description: "از فیلم و سریال و تئاتر می‌گوییم.",
     images: ["/logo-cinema-namayesh.png"],
   },
 };
