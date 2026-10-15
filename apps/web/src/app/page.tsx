@@ -83,7 +83,7 @@ export default async function HomePage() {
 
   const latestNewsArticles = [...uiArticles, ...latestMediaArticles]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    .slice(0, 8);
+    .slice(0, 15);
 
   const tickerItems: TickerItem[] = uiArticles.slice(0, 8).map((a) => ({
     id: a.slug,
