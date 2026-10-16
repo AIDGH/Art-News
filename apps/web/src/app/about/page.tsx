@@ -3,7 +3,7 @@ import Link from "next/link";
 import { fetchSiteSettings } from "@/lib/api";
 
 export const metadata: Metadata = {
-  title: "درباره ما | پایگاه خبری سینما نمایش",
+  title: "درباره ما",
   description:
     "آشنایی با سینما نمایش و راه‌های ارتباطی این رسانه.",
   alternates: { canonical: "/about" },

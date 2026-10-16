@@ -34,6 +34,9 @@ Search engines decide whether and when to adopt the site name and search ranking
 Shared header/footer containers and homepage category badges use `data-nosnippet`
 to exclude navigation and boilerplate from Google summaries without removing links
 or blocking indexing. Existing cached snippets require a new crawl to change.
+The homepage title is explicitly branded as `پایگاه خبری سینما نمایش`, while the
+About page title is simply `درباره ما` to avoid competing for the homepage brand
+query. Search engines may still rewrite titles and snippets after recrawling.
 
 Next metadata routes provide `/robots.txt` and request-time `/sitemap.xml`.
 The sitemap fetches lightweight public article URL/date rows from the Nest API

@@ -25,6 +25,8 @@
 
 ### Changed
 
+- Set a distinct homepage title for the exact brand/news query, simplified the About title to avoid competing with it, and refreshed the homepage search description. Google still controls the final title, snippet and ranking.
+
 - Restored the photo category label above images and kept headlines below; downloads retain the larger icon button without visible text.
 
 - Photo albums and legacy photo articles now show photos above the headline, with a larger labeled download button and visible keyboard focus.
