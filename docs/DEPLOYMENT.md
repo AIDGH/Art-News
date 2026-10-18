@@ -5,8 +5,10 @@
 Search Console's stored crawl from October 17 already contains the current home
 title, meta description and footer `data-nosnippet`. A successful crawl does not
 mean Google has regenerated the displayed title/snippet. The homepage now has a
-visible brand h1 and matching introduction, carousel headlines use h2, and the
-portaled mobile menu has its own snippet exclusion with the corrected brand.
+metadata description shared with WebSite structured data, and the portaled
+mobile menu has its own snippet exclusion with the corrected brand. The owner
+requested removal of the visible introduction later the same day; it was removed
+and the original carousel headings restored.
 No migration or server setting change is required. After the usual deployment,
 request indexing once for the canonical homepage if needed; repeated requests,
 removing the page from Search, or noindexing categories are not fixes. Search

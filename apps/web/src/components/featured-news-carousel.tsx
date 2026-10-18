@@ -205,7 +205,11 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
                 tabIndex={isCurrent ? 0 : -1}
               />
               <div className="featured-carousel-copy">
-                <h2>{article.title}</h2>
+                {articleIndex === 0 ? (
+                  <h1>{article.title}</h1>
+                ) : (
+                  <h2>{article.title}</h2>
+                )}
                 <p>{article.lead}</p>
                 <div className="featured-carousel-meta">
                   <span>{article.publishedLabel}</span>

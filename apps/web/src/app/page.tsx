@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { type Article } from "@/lib/news";
 import { fetchArticles, fetchFeaturedArticles, fetchLatestCategoryContent, fetchLatestMediaPostsAsArticles } from "@/lib/api";
 import { siteUrl } from "@/lib/site-url";
-import { HOME_DESCRIPTION, HOME_TITLE } from "@/lib/site-metadata";
+import { HOME_DESCRIPTION } from "@/lib/site-metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -101,10 +101,6 @@ export default async function HomePage() {
           __html: JSON.stringify(websiteJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <section className="container home-intro" aria-labelledby="home-title">
-        <h1 id="home-title">{HOME_TITLE}</h1>
-        <p>{HOME_DESCRIPTION}</p>
-      </section>
       <NewsTicker items={tickerItems} />
 
       {featuredArticles.length > 0 && (
