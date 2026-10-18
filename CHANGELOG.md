@@ -25,6 +25,8 @@
 
 ### Changed
 
+- Aligned the visible homepage heading, introduction, metadata and WebSite description; carousel stories now use h2. Corrected the mobile drawer's brand name and excluded its portaled content, the ticker and homepage ads from snippets. Existing footer exclusion is retained; Google must still reprocess search results.
+
 - Set a distinct homepage title for the exact brand/news query, simplified the About title to avoid competing with it, and refreshed the homepage search description. Google still controls the final title, snippet and ranking.
 
 - Restored the photo category label above images and kept headlines below; downloads retain the larger icon button without visible text.

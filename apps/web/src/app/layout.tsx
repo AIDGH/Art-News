@@ -3,28 +3,28 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { fetchSiteSettings } from "@/lib/api";
 import { SITE_URL } from "@/lib/site-url";
+import { HOME_DESCRIPTION, HOME_TITLE } from "@/lib/site-metadata";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "پایگاه خبری سینما نمایش",
+    default: HOME_TITLE,
     template: "%s | سینما نمایش",
   },
-  description:
-    "تازه‌ترین اخبار، نقد و گفت‌وگو درباره سینما، تئاتر، تلویزیون و نمایش خانگی در رسانه سینما نمایش.",
+  description: HOME_DESCRIPTION,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "fa_IR",
     siteName: "سینما نمایش",
-    title: "پایگاه خبری سینما نمایش",
+    title: HOME_TITLE,
     description: "از فیلم و سریال و تئاتر می‌گوییم.",
     images: [{ url: "/logo-cinema-namayesh.png", alt: "سینما نمایش" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "پایگاه خبری سینما نمایش",
+    title: HOME_TITLE,
     description: "از فیلم و سریال و تئاتر می‌گوییم.",
     images: ["/logo-cinema-namayesh.png"],
   },

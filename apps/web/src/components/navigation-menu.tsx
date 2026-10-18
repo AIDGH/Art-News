@@ -173,7 +173,7 @@ export function NavigationMenu() {
 
       {canUsePortal
         ? createPortal(
-          <>
+          <div data-nosnippet>
             <button
               type="button"
               aria-label="بستن منو با کلیک روی پس‌زمینه"
@@ -291,11 +291,11 @@ export function NavigationMenu() {
 
               {/* Drawer Footer info */}
               <div className="px-6 py-4 border-t border-[var(--line)] bg-[var(--paper)] text-xs text-[var(--ink-soft)] flex items-center justify-between">
-                <span>رسانه سینما و نمایش</span>
+                <span>رسانه سینما نمایش</span>
                 <span className="font-mono text-[11px]">نسخه 2.0</span>
               </div>
             </aside>
-          </>,
+          </div>,
           document.body,
         )
         : null}

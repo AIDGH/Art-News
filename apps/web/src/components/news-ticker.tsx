@@ -12,7 +12,7 @@ export function NewsTicker({ items = [] }: { items?: TickerItem[] }) {
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="news-ticker" role="marquee" aria-label="نوار متحرک چه خبر">
+    <div className="news-ticker" role="marquee" aria-label="نوار متحرک چه خبر" data-nosnippet>
       <span className="news-ticker-label" aria-hidden="true">چه خبر</span>
       <div className="news-ticker-viewport">
         <div className="news-ticker-track">
