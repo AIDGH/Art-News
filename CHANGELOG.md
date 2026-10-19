@@ -4,6 +4,8 @@
 
 ### Added
 
+- Ecran News apex HTTPS and permanent redirects to the canonical site, preserving paths and query strings. Versioned Nginx redirect config; www DNS and certificate expansion remain pending at the DNS provider.
+
 - Homepage `WebSite` structured data identifying Cinema Namayesh at its canonical root URL.
 
 - Stable ASCII sharing links for existing/new published articles and media, using lossless UUID encoding and a no-store redirect to the current original URL. Admin copy buttons include a manual clipboard fallback; no migration or slug rewrite.

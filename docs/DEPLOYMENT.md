@@ -1,5 +1,35 @@
 # Cinema Namayesh Deployment
 
+## Ecran News HTTPS and redirect — 2026-10-19
+
+- Pulled `main` first; it was already current at `c9bfb7c`.
+- Public DNS for `ecrannews.ir` resolves to `95.38.160.189`. Both the server
+  resolver and Cloudflare returned NXDOMAIN for `www.ecrannews.ir`; the DNS
+  provider still needs `www CNAME ecrannews.ir` (or an A to the same address).
+- Issued a separate Let's Encrypt certificate for `ecrannews.ir`, expiring
+  2027-01-17. The existing Certbot account, nginx renewal integration and active
+  renewal timer are used. Main-domain certificate and application are unchanged.
+- Installed `deploy/nginx-ecrannews.conf` at
+  `/etc/nginx/sites-available/ecrannews`, enabled it, and removed both Ecran
+  names from the default application's HTTP server block to avoid duplicates.
+  HTTP for both names and HTTPS for the apex redirect 301 directly to
+  `https://cinemanamayesh.ir$request_uri`, preserving path and query.
+- Config backups: `/root/cinema-nginx-before-ecrannews-20261019.conf` and
+  `/root/cinema-nginx-pre-redirect-20261019.conf`. `nginx -t` and reload passed;
+  real HTTP/HTTPS apex redirects and an HTTPS check from outside the server
+  passed. A forced-address HTTP check passed for www; this does not establish
+  public www DNS or HTTPS readiness. Main homepage returned 200 and API health
+  returned ok. Renewal dry-run was attempted, but the SSH connection closed
+  before a final result was captured; do not count it as a passed dry-run.
+  A reconnect confirmed nginx config validity, the live redirect and active
+  Certbot timer; the regular renewal log reported no failures (not yet due).
+- Once www DNS works, expand the existing certificate with
+  `certbot certonly --nginx --non-interactive --cert-name ecrannews.ir --expand -d ecrannews.ir -d www.ecrannews.ir`,
+  add `www.ecrannews.ir` to the HTTPS server_name in the Ecran config, run
+  `nginx -t`, reload and verify both public hostnames. Do not add www to the
+  TLS block before its certificate covers that name. The saved config in the
+  repo describes the currently deployed apex-only TLS state.
+
 ## Homepage search presentation — 2026-10-18
 
 Search Console's stored crawl from October 17 already contains the current home
@@ -195,8 +225,8 @@ ls -lh /var/backups/cinema-namayesh
 
 Only SSH, HTTP, and HTTPS are public. Application ports `3001` and `4001` bind
 to loopback and must not be exposed by the cloud security group. The canonical
-domain is `cinemanamayesh.ir`; `ecrannews.ir` will receive a permanent redirect
-after both domains point to the server and TLS certificates are issued.
+domain is `cinemanamayesh.ir`; `ecrannews.ir` has HTTPS and a permanent redirect
+to it. The www variant still needs DNS and certificate expansion (see October 19).
 
 UFW defaults to denying inbound traffic and allows only OpenSSH and Nginx Full.
 SSH password and keyboard-interactive authentication are disabled; root access
@@ -215,9 +245,8 @@ ecrannews.ir           A      95.38.160.189
 www.ecrannews.ir       CNAME  ecrannews.ir
 ```
 
-Certbot and its renewal timer are installed. Main-domain HTTPS and canonical
-redirects are active. Certificate issuance and permanent redirects for the two
-Ecran News hostnames remain pending until their DNS is connected.
+Certbot and its renewal timer are installed. Main-domain and Ecran apex HTTPS
+and canonical redirects are active. Ecran www DNS and TLS remain pending.
 
 ## Secrets
 
