@@ -19,10 +19,10 @@
   real HTTP/HTTPS apex redirects and an HTTPS check from outside the server
   passed. A forced-address HTTP check passed for www; this does not establish
   public www DNS or HTTPS readiness. Main homepage returned 200 and API health
-  returned ok. Renewal dry-run was attempted, but the SSH connection closed
-  before a final result was captured; do not count it as a passed dry-run.
-  A reconnect confirmed nginx config validity, the live redirect and active
-  Certbot timer; the regular renewal log reported no failures (not yet due).
+  returned ok. Although the SSH session closed before returning dry-run output,
+  reconnecting and checking the Certbot log confirmed at 11:26:36 UTC that all
+  simulated renewals succeeded. Nginx config, the live redirect and the active
+  Certbot timer were also rechecked successfully afterwards.
 - Once www DNS works, expand the existing certificate with
   `certbot certonly --nginx --non-interactive --cert-name ecrannews.ir --expand -d ecrannews.ir -d www.ecrannews.ir`,
   add `www.ecrannews.ir` to the HTTPS server_name in the Ecran config, run
