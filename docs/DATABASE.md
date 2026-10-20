@@ -32,6 +32,12 @@ MediaAsset مشترک Restrict است. index عمومی kind/status/publishedAt 
 
 دسته‌بندی اصلی خبر. هر Article در MVP یک Category اصلی دارد.
 
+دسته `english` با migration داده‌ای `20261020190000_add_english_category`
+فقط در صورت نبودن افزوده می‌شود و sortOrder آن بعد از دسته‌های موجود است.
+شناسه، عنوان، توضیح و ترتیب دسته انگلیسی موجود حفظ می‌شوند؛ اجرای دوباره
+رکورد تکراری نمی‌سازد. تغییر seed به‌تنهایی روی دیتابیس production اثر ندارد؛
+برای افزودن دسته ثابت، migration محدود لازم است و seed عمومی اجرا نمی‌شود.
+
 ### ArticleContentBlock و ArticleBlockImage
 
 هر خبر صفر یا چند بخش مرتب با `kind=TEXT|IMAGES` و `position` دارد. متن در

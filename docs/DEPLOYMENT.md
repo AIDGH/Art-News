@@ -1,5 +1,26 @@
 # Cinema Namayesh Deployment
 
+## English admin category — 2026-10-20
+
+Production and origin/main both ran `2ac3455`; deployment was healthy. Alireza's
+English dropdown change only modified `prisma/seed.ts`, which deployment does
+not run. No English Category row existed, so the live dropdown could not list it.
+
+Added `20261020190000_add_english_category`, a data-only migration that inserts
+the missing row at the end of category ordering and leaves an existing English
+category unchanged. It was checked for repeat execution and preservation of
+customized title/order. Do not run the full seed: it also updates administrator
+and sample editorial data.
+
+To make the admin option available immediately, the same idempotent SQL was
+applied in a transaction under the deployment lock. Backup:
+`/var/backups/cinema-namayesh/cinema-before-english-category-20261020.db`.
+Article/User/MediaPost counts stayed `24/2/2`; SQLite quick_check passed. The
+live public category API (loopback and HTTPS) now returns English. An open
+admin editor needs a refresh to reload its category options. The next normal
+`prisma migrate deploy` will run the same SQL as a no-op and record the migration
+in its own history; no manual migration-history insertion or reset was used.
+
 ## Ecran News HTTPS and redirect — 2026-10-19
 
 - Pulled `main` first; it was already current at `c9bfb7c`.

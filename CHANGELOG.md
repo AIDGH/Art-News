@@ -27,6 +27,8 @@
 
 ### Changed
 
+- Added a preserving data migration for the English editorial category. The seed-only change was already deployed but did not populate production; the category is now available to the admin article dropdown without reseeding content or accounts.
+
 - Removed the visible homepage brand introduction at the owner's request and restored the carousel's original heading levels. Search metadata and snippet exclusions remain in place.
 
 - Aligned the visible homepage heading, introduction, metadata and WebSite description; carousel stories now use h2. Corrected the mobile drawer's brand name and excluded its portaled content, the ticker and homepage ads from snippets. Existing footer exclusion is retained; Google must still reprocess search results.
