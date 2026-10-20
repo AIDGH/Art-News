@@ -19,6 +19,7 @@ const categories = [
   { slug: "world-cinema", title: "سینمای جهان", description: "فیلم‌ها، جشنواره‌ها و سینماگران جهان" },
   { slug: "photos", title: "عکس", description: "گزارش‌های تصویری، پشت صحنه و رویدادهای سینمایی" },
   { slug: "videos", title: "فیلم", description: "ویدیوها، تیزرها و گفت‌وگوهای تصویری" },
+  { slug: "english", title: "انگلیسی", description: "English-language news and coverage" },
 ];
 
 const categoryBySlug = Object.fromEntries(
