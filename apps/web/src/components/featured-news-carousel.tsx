@@ -127,7 +127,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
     }
 
     if (cancelled || Math.abs(distance) < 56) return;
-    moveBy(distance > 0 ? 1 : -1);
+    moveBy(distance < 0 ? 1 : -1);
   };
 
   const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
@@ -170,7 +170,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
           className={`featured-carousel-track${isDragging ? " is-dragging" : ""}${isTeleporting ? " is-teleporting" : ""}`}
           onTransitionEnd={handleTransitionEnd}
           style={{
-            transform: `translate3d(calc(${trackPosition * 100}% + ${dragOffset}px), 0, 0)`,
+            transform: `translate3d(calc(${-trackPosition * 100}% + ${dragOffset}px), 0, 0)`,
           }}
         >
           {slideArticles.map((article, slideIndex) => {
@@ -224,10 +224,12 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
           <div className="featured-carousel-controls" dir="ltr">
             <button
               type="button"
-              aria-label="خبر تازه بعدی"
-              onClick={() => moveBy(1)}
+              aria-label="خبر تازه قبلی"
+              onClick={() => moveBy(-1)}
             >
-              ←
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="m14 6-6 6 6 6" />
+              </svg>
             </button>
             <span
               className="featured-carousel-counter"
@@ -241,10 +243,12 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
             </span>
             <button
               type="button"
-              aria-label="خبر تازه قبلی"
-              onClick={() => moveBy(-1)}
+              aria-label="خبر تازه بعدی"
+              onClick={() => moveBy(1)}
             >
-              →
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="m10 6 6 6-6 6" />
+              </svg>
             </button>
           </div>
         ) : null}

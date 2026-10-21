@@ -27,6 +27,8 @@
 
 ### Changed
 
+- Removed the English preparation paragraph; carousel next is now the right arrow, indicators run left to right, and matching slide/swipe direction retains RTL story text. Replaced thin arrows with rounded SVG chevrons in 44px controls.
+
 - Added a preserving data migration for the English editorial category. The seed-only change was already deployed but did not populate production; the category is now available to the admin article dropdown without reseeding content or accounts.
 
 - Removed the visible homepage brand introduction at the owner's request and restored the carousel's original heading levels. Search metadata and snippet exclusions remain in place.
