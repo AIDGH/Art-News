@@ -175,6 +175,21 @@ Internet
         -> SQLite /var/lib/cinema-namayesh/cinema.db
 ```
 
+Public news images now use `/image-source/:filename` as the input to Next's
+image optimizer. This runtime route reads only timestamp/UUID image filenames
+through `apps/web/public/uploads`, including uploads created after the build.
+The existing deploy symlink and the `cinema` user's read access are required;
+no Nginx or database changes are needed. Next caches resized WebP variants in
+its writable `.next/cache`; originals and GIFs remain available under `/uploads/`.
+If optimization fails, the browser falls back to the original image.
+
+Regression check after a local production build and `next start --port 3002`:
+`node scripts/verify-image-optimization.mjs http://127.0.0.1:3002` from `apps/web`.
+The test creates and removes only its own temporary upload and verifies new
+uploads, thumbnail dimensions/bytes, cache hits, invalid paths, and original
+file integrity. On 2026-10-22 this passed locally; SSH production timed out,
+so live performance and deployment were not verified during that session.
+
 Runtime uploads live in `/var/lib/cinema-namayesh/uploads`. Application releases
 live under `/srv/cinema-namayesh/releases`, while
 `/srv/cinema-namayesh/current` points to the active release.

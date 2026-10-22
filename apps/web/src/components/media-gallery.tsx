@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/news-image";
 import Link from "next/link";
 import { useState } from "react";
 import type { MediaPost, MediaPostPage } from "@/lib/media-posts";
@@ -34,7 +34,7 @@ export function MediaGallery({ initial, kind, failed = false }: { initial: Media
   return <section className="media-gallery" aria-label={kind === "PHOTOS" ? "آلبوم عکس‌ها" : "ویدیوها"}>
     <div className="media-cover-grid">{result.data.map((post) => {
       const content = <>
-      <span className={`media-cover-image${post.kind === "VIDEOS" ? " media-cover-image-video" : ""}`}><Image src={post.cover.url} alt={post.cover.alt || post.title} fill unoptimized sizes="(max-width: 760px) 45vw, (max-width: 1100px) 30vw, 280px" />
+      <span className={`media-cover-image${post.kind === "VIDEOS" ? " media-cover-image-video" : ""}`}><Image src={post.cover.url} alt={post.cover.alt || post.title} fill sizes="(max-width: 760px) 45vw, (max-width: 1100px) 30vw, 280px" />
         <span className="media-cover-badge"><MediaIcon video={post.kind === "VIDEOS"} /><span>{post.items.length.toLocaleString("fa-IR")}</span></span>
       </span><span className="media-cover-title">{post.title}</span></>;
       return <div className="media-cover-entry" key={post.id}>

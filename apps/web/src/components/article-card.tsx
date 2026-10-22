@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/news-image";
 import Link from "next/link";
 import type { Article } from "@/lib/news";
 
@@ -23,7 +23,6 @@ export function ArticleCard({
       <Link className="article-card-image" href={`/articles/${article.slug}`}>
         <Image
           src={article.imageUrl}
-          unoptimized={article.imageUrl.startsWith("/uploads/")}
           alt={article.imageAlt}
           fill
           sizes={

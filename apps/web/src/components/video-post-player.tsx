@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/news-image";
 import { useEffect, useRef, useState } from "react";
 import type { MediaPost } from "@/lib/media-posts";
 import "./video-post-player.css";
@@ -47,7 +47,7 @@ export function VideoPostPlayer({ post }: { post: MediaPost }) {
         aria-label={post.title}
         onPlay={() => { setStarted(true); setFailed(false); }}
         onError={() => setFailed(true)}
-      /> : <Image src={asset.url} alt={asset.alt || post.title} fill unoptimized sizes="(max-width: 1100px) 100vw, 900px" />}
+      /> : <Image src={asset.url} alt={asset.alt || post.title} fill sizes="(max-width: 1100px) 100vw, 900px" />}
       {isVideo && !started && !failed ? <button
         className="video-post-play"
         type="button"
@@ -68,7 +68,7 @@ export function VideoPostPlayer({ post }: { post: MediaPost }) {
         aria-label={`${item.media.mimeType.startsWith("video/") ? "ویدیو" : "عکس"} ${(itemIndex + 1).toLocaleString("fa-IR")}`}
         onClick={() => select(itemIndex)}
       >
-        <span className="video-post-thumb"><Image src={item.media.mimeType.startsWith("video/") ? post.cover.url : item.media.url} alt="" fill unoptimized sizes="88px" /></span>
+        <span className="video-post-thumb"><Image src={item.media.mimeType.startsWith("video/") ? post.cover.url : item.media.url} alt="" fill sizes="88px" /></span>
         <span>{item.media.mimeType.startsWith("video/") ? "ویدیو" : "عکس"} {(itemIndex + 1).toLocaleString("fa-IR")}</span>
       </button>)}
     </div> : null}

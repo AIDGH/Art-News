@@ -27,6 +27,8 @@
 
 ### Changed
 
+- Responsive, cached WebP delivery for public uploaded news/photo images via a constrained runtime image-source route, including files uploaded after deploy. Original downloads and animated GIFs stay intact; failed optimization falls back to the original. Preload the first carousel/photo-album image and keep a single-slide carousel visible.
+
 - Removed the English preparation paragraph; carousel next is now the right arrow, indicators run left to right, and matching slide/swipe direction retains RTL story text. Replaced thin arrows with rounded SVG chevrons in 44px controls.
 
 - Added a preserving data migration for the English editorial category. The seed-only change was already deployed but did not populate production; the category is now available to the admin article dropdown without reseeding content or accounts.

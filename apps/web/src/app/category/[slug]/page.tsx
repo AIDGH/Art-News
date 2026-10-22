@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/news-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AdvertisementPlaceholder } from "@/components/promotion-blocks";
@@ -118,7 +118,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 >
                   <Image
                     src={article.imageUrl}
-                    unoptimized={article.imageUrl.startsWith("/uploads/")}
                     alt={article.imageAlt}
                     fill
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"

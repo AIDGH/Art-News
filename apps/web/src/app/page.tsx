@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/news-image";
 import Link from "next/link";
 import { FeaturedNewsCarousel } from "@/components/featured-news-carousel";
 import { NewsTicker, type TickerItem } from "@/components/news-ticker";
@@ -42,7 +42,6 @@ function PremiumArticle({ article }: { article: Article }) {
       >
         <Image
           src={article.imageUrl}
-          unoptimized={article.imageUrl.startsWith("/uploads/")}
           alt={article.imageAlt}
           fill
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -139,7 +138,6 @@ export default async function HomePage() {
                     src={article.coverImage?.url || "/images/placeholder.svg"}
                     alt={article.coverImage?.alt || article.title}
                     fill
-                    unoptimized
                     sizes="(max-width: 700px) 34vw, 210px"
                   />
                 </Link>

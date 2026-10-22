@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/news-image";
 import Link from "next/link";
 import {
   useEffect,
@@ -30,6 +30,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
     articles.length > 1
       ? [articles[articles.length - 1], ...articles, articles[0]]
       : articles;
+  const visiblePosition = articles.length > 1 ? trackPosition : 0;
 
   const moveBy = (step: number) => {
     if (articles.length < 2 || isTransitioning.current) return;
@@ -170,7 +171,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
           className={`featured-carousel-track${isDragging ? " is-dragging" : ""}${isTeleporting ? " is-teleporting" : ""}`}
           onTransitionEnd={handleTransitionEnd}
           style={{
-            transform: `translate3d(calc(${-trackPosition * 100}% + ${dragOffset}px), 0, 0)`,
+            transform: `translate3d(calc(${-visiblePosition * 100}% + ${dragOffset}px), 0, 0)`,
           }}
         >
           {slideArticles.map((article, slideIndex) => {
@@ -178,7 +179,7 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
               articles.length > 1
                 ? (slideIndex - 1 + articles.length) % articles.length
                 : 0;
-            const isCurrent = slideIndex === trackPosition;
+            const isCurrent = slideIndex === visiblePosition;
 
             return (
             <article
@@ -189,10 +190,9 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
             >
               <Image
                 src={article.imageUrl}
-                unoptimized={article.imageUrl.startsWith("/uploads/")}
                 alt={article.imageAlt}
                 fill
-                loading={articleIndex === 0 ? "eager" : "lazy"}
+                preload={articleIndex === 0 && slideIndex === (articles.length > 1 ? 1 : 0)}
                 draggable={false}
                 sizes="(max-width: 820px) 100vw, 1280px"
               />

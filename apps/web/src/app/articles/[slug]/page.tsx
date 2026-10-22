@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/news-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/article-card";
@@ -91,7 +91,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     articleSection: article.category.title,
     inLanguage: "fa-IR",
   };
-  const contentBlocks = article.contentBlocks?.map((block) => block.kind === "TEXT" ?
+  const contentBlocks = article.contentBlocks?.map((block, blockIndex) => block.kind === "TEXT" ?
     <div
       key={block.id}
       className="article-html-body"
@@ -100,7 +100,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     : <div className={`article-inline-images${block.images.length === 1 ? " is-single" : ""}`} key={block.id}>
       {block.images.map(({ media }, index) => <figure key={index}>
         <div className="relative">
-          <Image src={media.url} alt={media.alt} width={1000} height={750} unoptimized sizes="(max-width: 650px) 100vw, 420px" />
+          <Image src={media.url} alt={media.alt} width={1000} height={750} preload={isPhotoAlbum && blockIndex === 0 && index === 0} sizes={isPhotoAlbum || block.images.length === 1 ? "(max-width: 1100px) 100vw, 1000px" : "(max-width: 650px) 100vw, 420px"} />
           {isPhotoPost ? <ImageDownload url={media.url} label={`دانلود عکس ${index + 1}`} /> : null}
         </div>
         {media.caption || media.credit ? <figcaption>{[media.caption, media.credit].filter(Boolean).join(" — ")}</figcaption> : null}
@@ -113,7 +113,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <Image
           src={article.imageUrl}
           alt={article.imageAlt}
-          unoptimized={article.imageUrl.startsWith("/uploads/")}
           fill
           priority
           sizes="(max-width: 1100px) 100vw, 800px"
