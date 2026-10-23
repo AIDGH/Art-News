@@ -6,6 +6,7 @@ RELEASES_DIR=/srv/cinema-namayesh/releases
 CURRENT_LINK=/srv/cinema-namayesh/current
 STATE_DIR=/var/lib/cinema-namayesh
 DEPLOYED_REVISION_FILE="$STATE_DIR/deployed-revision"
+FAILED_REVISION_FILE="$STATE_DIR/failed-revision"
 LOCK_FILE=/run/lock/cinema-namayesh-deploy.lock
 
 exec 9>"$LOCK_FILE"
@@ -18,6 +19,13 @@ deployed_revision="$(cat "$DEPLOYED_REVISION_FILE" 2>/dev/null || true)"
 if [[ "$target_revision" == "$deployed_revision" ]]; then
   exit 0
 fi
+
+# A failed build must not consume CPU every minute. A new revision retries
+# automatically; an operator may explicitly retry the same revision once.
+if [[ "${FORCE_DEPLOY:-0}" != "1" && "$target_revision" == "$(cat "$FAILED_REVISION_FILE" 2>/dev/null || true)" ]]; then
+  exit 0
+fi
+trap 'printf "%s\n" "$target_revision" > "$FAILED_REVISION_FILE"' EXIT
 
 setfacl -m u:www-data:--x "$STATE_DIR"
 setfacl -R -m u:www-data:rX "$STATE_DIR/uploads"
@@ -50,7 +58,7 @@ source /etc/cinema-namayesh/web.env
 set +a
 corepack pnpm web:build
 setfacl -R -m u:cinema:rX "$release_dir"
-chown -R cinema:cinema "$release_dir/apps/web/.next/cache"
+chown -R cinema:cinema "$release_dir/apps/web/.next/cache" "$release_dir/apps/web/.next/server"
 
 ln -sfn "$release_dir" "$CURRENT_LINK.new"
 mv -Tf "$CURRENT_LINK.new" "$CURRENT_LINK"
@@ -70,6 +78,11 @@ fi
 
 printf '%s\n' "$target_revision" > "$DEPLOYED_REVISION_FILE"
 chown cinema:cinema "$DEPLOYED_REVISION_FILE"
+# Deployment succeeded; subsequent cleanup errors must not mark it failed.
+trap - EXIT
+if [[ -f "$FAILED_REVISION_FILE" ]]; then
+  printf '\n' > "$FAILED_REVISION_FILE"
+fi
 
 mapfile -t old_releases < <(find "$RELEASES_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rn | tail -n +4 | cut -d' ' -f2-)
 for old_release in "${old_releases[@]}"; do

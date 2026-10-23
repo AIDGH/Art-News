@@ -177,13 +177,16 @@ Internet
 
 Public news images now use `/image-source/:filename` as the input to Next's
 image optimizer. This runtime route reads only timestamp/UUID image filenames
-through `apps/web/public/uploads`, including uploads created after the build.
-The existing deploy symlink and the `cinema` user's read access are required;
+from the absolute runtime `NEWS_UPLOAD_DIRECTORY` (set by `cinema-web.service`
+to `/var/lib/cinema-namayesh/uploads`), including uploads created after build.
+Do not resolve the public uploads symlink in the route: Turbopack traces it
+outside the release root and fails the build. The `cinema` user's read access is required;
 no Nginx or database changes are needed. Next caches resized WebP variants in
 its writable `.next/cache`; originals and GIFs remain available under `/uploads/`.
 If optimization fails, the browser falls back to the original image.
 
-Regression check after a local production build and `next start --port 3002`:
+Regression check after a local production build and
+`NEWS_UPLOAD_DIRECTORY=/absolute/path/to/apps/web/public/uploads next start --port 3002`:
 `node scripts/verify-image-optimization.mjs http://127.0.0.1:3002` from `apps/web`.
 The test creates and removes only its own temporary upload and verifies new
 uploads, thumbnail dimensions/bytes, cache hits, invalid paths, and original
@@ -204,6 +207,10 @@ new commit exists, `/usr/local/sbin/deploy-cinema-namayesh` creates an isolated
 Git worktree, installs the locked dependencies, generates Prisma Client, applies
 database migrations, builds both applications, switches the `current` symlink,
 and restarts the services. A failed health check restores the previous release.
+The failed revision is recorded in `/var/lib/cinema-namayesh/failed-revision`;
+the timer skips it until a new commit arrives. An operator can retry explicitly
+with `FORCE_DEPLOY=1 /usr/local/sbin/deploy-cinema-namayesh`.
+Both `.next/server` (ISR pages) and `.next/cache` must be owned by `cinema`.
 The `acl` package provides read-only access to each built release for the
 restricted `cinema` service user; production secrets remain outside releases.
 

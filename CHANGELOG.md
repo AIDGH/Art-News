@@ -27,6 +27,8 @@
 
 ### Changed
 
+- Resolve image uploads from an absolute runtime environment path to avoid Turbopack tracing shared-storage symlinks outside releases. Give ISR outputs writable ownership and suppress automatic rebuilds of a failed revision until a new commit or explicit retry.
+
 - Responsive, cached WebP delivery for public uploaded news/photo images via a constrained runtime image-source route, including files uploaded after deploy. Original downloads and animated GIFs stay intact; failed optimization falls back to the original. Preload the first carousel/photo-album image and keep a single-slide carousel visible.
 
 - Removed the English preparation paragraph; carousel next is now the right arrow, indicators run left to right, and matching slide/swipe direction retains RTL story text. Replaced thin arrows with rounded SVG chevrons in 44px controls.

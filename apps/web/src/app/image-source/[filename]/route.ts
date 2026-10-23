@@ -14,9 +14,15 @@ export async function GET(
   const { filename } = await params;
   const match = uploadedImageFilename.exec(filename);
   if (!match) return new Response(null, { status: 404 });
+  // Keep uploads outside Turbopack's build-time filesystem tracing. Production
+  // uses shared storage outside the release, so its symlink cannot be bundled.
+  const uploadDirectory = process.env.NEWS_UPLOAD_DIRECTORY;
+  if (!uploadDirectory || !path.isAbsolute(uploadDirectory)) {
+    return new Response(null, { status: 503 });
+  }
 
   try {
-    const bytes = await readFile(path.join(process.cwd(), "public", "uploads", filename));
+    const bytes = await readFile(path.join(uploadDirectory, filename));
     const extension = match[1].toLowerCase();
     return new Response(new Uint8Array(bytes), {
       headers: {

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-23 — Fix shared-storage builds and repeated deployment failures
+
+- فضای دیسک و RAM کافی بود؛ دیپلوی d195d38 تقریباً هر دقیقه با خطای symlink خارج root شکست می‌خورد (حدود ۵۵ ثانیه CPU هر تلاش). نسخه فعال 63c725f بود. خطای EACCES نوشتن ISR هم در .next/server دیده شد.
+- image-source از NEWS_UPLOAD_DIRECTORY مطلق زمان اجرا می‌خواند؛ سرویس وب مسیر اشتراکی را مشخص می‌کند. دیپلوی مالکیت server/cache را به cinema می‌دهد و revision خطادار را تا commit جدید یا FORCE_DEPLOY=1 دوباره build نمی‌کند. build محلی، ESLint، bash -n و آزمون بهینه‌سازی عکس موفق شدند.
+
 ## 2026-10-22 — Responsive runtime uploads
 
 - ارسال اصل فایل آپلودی در کارت‌های خانه/آرشیو، اسلایدر، خبر و گالری با NewsImage جایگزین شد. مسیر `/image-source/:filename` فقط نام timestamp/UUID با پسوند عکس مجاز را از uploads می‌خواند و Next خروجی متناسب با اندازه صفحه و WebP را cache می‌کند. این مسیر به فهرست فایل‌های زمان build وابسته نیست؛ فایل اصلی دانلود، GIF و متادیتا حفظ شدند و خطای optimizer به اصل عکس برمی‌گردد.
