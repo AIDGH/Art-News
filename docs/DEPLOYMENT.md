@@ -192,6 +192,11 @@ The test creates and removes only its own temporary upload and verifies new
 uploads, thumbnail dimensions/bytes, cache hits, invalid paths, and original
 file integrity. On 2026-10-22 this passed locally; SSH production timed out,
 so live performance and deployment were not verified during that session.
+On 2026-10-23 revision `56aea92` deployed successfully after switching to the
+runtime environment path. Three live upload variants returned WebP and cache
+HIT on repeat requests; the `cinema` user could write both ISR and image caches.
+Subsequent timer runs completed without rebuilding. See the dated changelog
+for measured sizes and timings.
 
 Runtime uploads live in `/var/lib/cinema-namayesh/uploads`. Application releases
 live under `/srv/cinema-namayesh/releases`, while
