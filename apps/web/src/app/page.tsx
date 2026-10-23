@@ -8,6 +8,7 @@ import { type Article } from "@/lib/news";
 import { fetchArticles, fetchFeaturedArticles, fetchLatestCategoryContent, fetchLatestMediaPostsAsArticles } from "@/lib/api";
 import { siteUrl } from "@/lib/site-url";
 import { HOME_DESCRIPTION } from "@/lib/site-metadata";
+import { getCarouselPreviews } from "@/lib/image-preview";
 
 export const dynamic = "force-dynamic";
 
@@ -73,6 +74,7 @@ export default async function HomePage() {
   const featuredArticles = selectedFeaturedArticles.length > 0
     ? selectedFeaturedArticles
     : uiArticles.slice(0, 4);
+  const carouselPreviews = await getCarouselPreviews(featuredArticles.map((article) => article.imageUrl));
   const sectionArticles = homepageSectionSlugs
     .map((slug) => {
       const latest = latestCategoryContent
@@ -103,7 +105,7 @@ export default async function HomePage() {
       <NewsTicker items={tickerItems} />
 
       {featuredArticles.length > 0 && (
-        <FeaturedNewsCarousel articles={featuredArticles} />
+        <FeaturedNewsCarousel articles={featuredArticles} previews={carouselPreviews} />
       )}
 
       <section className="container promotion-stack promotion-stack-compact" data-nosnippet>

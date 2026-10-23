@@ -13,9 +13,10 @@ import type { Article } from "@/lib/news";
 
 type FeaturedNewsCarouselProps = {
   articles: Article[];
+  previews?: Record<string, string | undefined>;
 };
 
-export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
+export function FeaturedNewsCarousel({ articles, previews = {} }: FeaturedNewsCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [trackPosition, setTrackPosition] = useState(1);
   const [dragOffset, setDragOffset] = useState(0);
@@ -180,6 +181,8 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
                 ? (slideIndex - 1 + articles.length) % articles.length
                 : 0;
             const isCurrent = slideIndex === visiblePosition;
+            const isFirstImage = articleIndex === 0 && slideIndex === (articles.length > 1 ? 1 : 0);
+            const preview = previews[article.imageUrl];
 
             return (
             <article
@@ -187,14 +190,18 @@ export function FeaturedNewsCarousel({ articles }: FeaturedNewsCarouselProps) {
               aria-hidden={!isCurrent}
               dir="rtl"
               key={`${article.slug}-${slideIndex}`}
+              style={preview ? { backgroundImage: `url("${preview}")` } : undefined}
             >
               <Image
                 src={article.imageUrl}
                 alt={article.imageAlt}
                 fill
-                preload={articleIndex === 0 && slideIndex === (articles.length > 1 ? 1 : 0)}
+                preload={isFirstImage}
+                fetchPriority={isFirstImage ? "high" : undefined}
+                placeholder={preview ? "blur" : "empty"}
+                blurDataURL={preview}
                 draggable={false}
-                sizes="(max-width: 820px) 100vw, 1280px"
+                sizes="(max-width: 820px) 100vw, (max-width: 1400px) calc(100vw - 48px), 1280px"
               />
               <div className="featured-carousel-overlay" />
               <Link

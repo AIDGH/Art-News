@@ -1860,6 +1860,8 @@ img {
   min-width: 100%;
   min-height: inherit;
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
 }
 
 .featured-carousel-slide img {

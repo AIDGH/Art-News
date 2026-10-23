@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-23 — First-visit carousel photo preview
+
+- نسخه فعال 9e326ef بهینه‌سازی عکس را داشت، اما دانلود اولین عکس روی مرورگر بدون کش همچنان زمان می‌برد. عکس‌های آپلودی منتخب اکنون preview کم‌حجم ۴۰×۲۴ WebP در HTML و background اسلاید دارند؛ عکس اصلی با blur placeholder و اولویت بالای اولین اسلاید جایگزین می‌شود. صفحه برای تمام عکس‌ها قفل نمی‌شود و نیاز به JS برای دیدن preview نیست. sizes متناسب با عرض واقعی carousel شد.
+- preview با sharp موجود در lockfile (اکنون وابستگی مستقیم وب) از مسیر معتبر NEWS_UPLOAD_DIRECTORY ساخته و در Next هفت روز cache می‌شود. خطای خواندن/پردازش جلوی نمایش صفحه را نمی‌گیرد. build، TypeScript، ESLint و اسکریپت verify-carousel-preview.mjs موفق؛ تست production SSR با API ایزوله و آپلود جدید، تصویر ۳۳۲بایتی داخل HTML قبل از دانلود عکس، preload/high priority و حالت تک‌اسلاید را تأیید کرد. تلاش نصب آفلاین به بررسی شبکه رجیستری کشید و متوقف شد؛ build از همان sharp از قبل نصب‌شده استفاده کرد.
+
 ## 2026-10-23 — Fix shared-storage builds and repeated deployment failures
 
 - فضای دیسک و RAM کافی بود؛ دیپلوی d195d38 تقریباً هر دقیقه با خطای symlink خارج root شکست می‌خورد (حدود ۵۵ ثانیه CPU هر تلاش). نسخه فعال 63c725f بود. خطای EACCES نوشتن ISR هم در .next/server دیده شد.
