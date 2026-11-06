@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   useEffect,
   useRef,
   useState,
-  useSyncExternalStore,
   type CSSProperties,
 } from "react";
 import { createPortal } from "react-dom";
@@ -45,10 +45,6 @@ const menuItems: MenuItem[] = [
   { href: "/english", color: "#3f8e51", label: "English", lang: "en" },
   { href: "/about", color: "#706a61", label: "درباره ما" },
 ];
-
-const subscribeToClient = () => () => undefined;
-const getClientSnapshot = () => true;
-const getServerSnapshot = () => false;
 
 export function DesktopNavigation() {
   const desktopItems = menuItems.filter((item) => item.href !== "/");
@@ -94,11 +90,12 @@ export function DesktopNavigation() {
 }
 
 export function NavigationMenu() {
-  const canUsePortal = useSyncExternalStore(
-    subscribeToClient,
-    getClientSnapshot,
-    getServerSnapshot,
-  );
+  const pathname = usePathname();
+  // A new page always starts with a closed drawer and restores body scrolling.
+  return <NavigationDrawer key={pathname} />;
+}
+
+function NavigationDrawer() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCinemaOpen, setIsCinemaOpen] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -130,13 +127,19 @@ export function NavigationMenu() {
       }
     };
 
-    document.addEventListener("pointerdown", handlePointerDown);
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const handleBreakpointChange = () => {
+      if (desktop.matches) setIsOpen(false);
+    };
+    document.addEventListener("pointerdown", handlePointerDown, true);
     document.addEventListener("keydown", handleKeyDown);
+    desktop.addEventListener("change", handleBreakpointChange);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("pointerdown", handlePointerDown, true);
       document.removeEventListener("keydown", handleKeyDown);
+      desktop.removeEventListener("change", handleBreakpointChange);
     };
   }, [isOpen]);
 
@@ -171,9 +174,9 @@ export function NavigationMenu() {
         />
       </button>
 
-      {canUsePortal
+      {isOpen
         ? createPortal(
-          <div data-nosnippet>
+          <div className="site-menu-layer" data-nosnippet>
             <button
               type="button"
               aria-label="بستن منو با کلیک روی پس‌زمینه"
@@ -210,7 +213,7 @@ export function NavigationMenu() {
                   type="button"
                   aria-label="بستن منو"
                   onClick={closeMenu}
-                  className="w-10 h-10 flex items-center justify-center rounded-full border border-[var(--line-dark)] text-[var(--ink)] hover:bg-[var(--ink)] hover:text-white hover:border-[var(--ink)] transition-colors text-2xl leading-none cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--accent)] shrink-0"
+                  className="site-menu-close w-11 h-11 flex items-center justify-center rounded-full border border-[var(--line-dark)] text-[var(--ink)] hover:bg-[var(--ink)] hover:text-white hover:border-[var(--ink)] transition-colors leading-none cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--accent)] shrink-0"
                 >
                   ×
                 </button>

@@ -27,6 +27,8 @@
 
 ### Changed
 
+- Keep long nonbreaking article text within mobile columns; close and unmount the drawer on outside taps, route changes and desktop resizing, with a larger 32px close glyph.
+
 - Inline cached 40×24 photo previews in carousel HTML to eliminate the black first-visit image gap. Prioritize the initial full-size photo and size responsive downloads to the actual carousel width.
 
 - Resolve image uploads from an absolute runtime environment path to avoid Turbopack tracing shared-storage symlinks outside releases. Give ISR outputs writable ownership and suppress automatic rebuilds of a failed revision until a new commit or explicit retry.
