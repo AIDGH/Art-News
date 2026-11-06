@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-06 — Restore smooth drawer motion
+
+- mount/unmount شرطی اصلاح قبلی، transition باز/بسته‌شدن را قطع کرده بود. portal پس از hydration پایدار است؛ وضعیت بسته با inert، pointer-events:none، overflow:hidden و visibility با تأخیر۳۰۰ms غیرفعال می‌شود تا حرکت پنل و fade پس‌زمینه در هر دو جهت تمام شوند. reset هنگام تغییر مسیر و breakpoint، لمس بیرون و ضربدر۳۲px حفظ شدند.
+- TypeScript/ESLint موفق؛ مرورگر در عرض۳۹۰، موقعیت میانی ورود x≈84.8 تا80 و خروج x≈383.5 تا390، transition۳۰۰ms، visibility:hidden پس از خروج، inert فوری، بسته‌شدن با لمس بیرون و آزادشدن اسکرول را تأیید کرد.
+
 ## 2026-11-06 — Mobile article overflow and drawer dismissal
 
 - main پیش از تغییر پول شد و به‌روز بود. خبر موتمن در API HTML ساده و معتبر داشت؛ مرورگر روی موبایل390px سرریز481px و متن بدنه442px نشان داد. زنجیره فاصله‌های غیرقابل‌شکستن با overflow-wrap:anywhere، min-width:0 و ستون mobile minmax(0,1fr) در محدوده خبر مهار شد. متن یا داده خبر تغییر نکرد.

@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type CSSProperties,
 } from "react";
 import { createPortal } from "react-dom";
@@ -45,6 +46,10 @@ const menuItems: MenuItem[] = [
   { href: "/english", color: "#3f8e51", label: "English", lang: "en" },
   { href: "/about", color: "#706a61", label: "درباره ما" },
 ];
+
+const subscribeToClient = () => () => undefined;
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export function DesktopNavigation() {
   const desktopItems = menuItems.filter((item) => item.href !== "/");
@@ -96,6 +101,11 @@ export function NavigationMenu() {
 }
 
 function NavigationDrawer() {
+  const canUsePortal = useSyncExternalStore(
+    subscribeToClient,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [isCinemaOpen, setIsCinemaOpen] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -174,9 +184,15 @@ function NavigationDrawer() {
         />
       </button>
 
-      {isOpen
+      {canUsePortal
         ? createPortal(
-          <div className="site-menu-layer" data-nosnippet>
+          <div
+            className="site-menu-layer"
+            data-state={isOpen ? "open" : "closed"}
+            aria-hidden={!isOpen}
+            inert={!isOpen}
+            data-nosnippet
+          >
             <button
               type="button"
               aria-label="بستن منو با کلیک روی پس‌زمینه"

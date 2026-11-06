@@ -1335,6 +1335,16 @@ img {
   position: fixed;
   inset: 0;
   z-index: 60;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 300ms;
+}
+
+.site-menu-layer[data-state="open"] {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
 }
 
 .site-menu-close {

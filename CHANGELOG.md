@@ -27,6 +27,8 @@
 
 ### Changed
 
+- Restored the mobile drawer's 300ms slide/fade on both opening and closing, keeping the closed layer inert and hidden after its transition.
+
 - Keep long nonbreaking article text within mobile columns; close and unmount the drawer on outside taps, route changes and desktop resizing, with a larger 32px close glyph.
 
 - Inline cached 40×24 photo previews in carousel HTML to eliminate the black first-visit image gap. Prioritize the initial full-size photo and size responsive downloads to the actual carousel width.
