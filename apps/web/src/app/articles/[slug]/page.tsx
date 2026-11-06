@@ -13,6 +13,11 @@ type ArticlePageProps = {
   params: Promise<{ slug: string }>;
 };
 
+// Pasted nonbreaking spaces should wrap between words, preserving Persian ZWNJ.
+function readableSpacing(text: string) {
+  return text.replace(/\u00a0|&nbsp;|&#160;|&#x0*a0;/gi, " ");
+}
+
 function ImageDownload({ url, label }: { url: string; label: string }) {
   return (
     <a
@@ -95,7 +100,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     <div
       key={block.id}
       className="article-html-body"
-      dangerouslySetInnerHTML={{ __html: block.text ?? "" }}
+      dangerouslySetInnerHTML={{ __html: readableSpacing(block.text ?? "") }}
     />
     : <div className={`article-inline-images${block.images.length === 1 ? " is-single" : ""}`} key={block.id}>
       {block.images.map(({ media }, index) => <figure key={index}>
@@ -150,8 +155,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             >
               {article.category.title}
             </Link> : null}
-            <h1>{article.title}</h1>
-            {article.lead ? <p className="article-lead">{article.lead}</p> : null}
+            <h1>{readableSpacing(article.title)}</h1>
+            {article.lead ? <p className="article-lead">{readableSpacing(article.lead)}</p> : null}
             <div className="article-byline">
               <span>{article.publishedLabel}</span>
             </div>
@@ -163,7 +168,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="article-body">
               <div
                 className="article-html-body"
-                dangerouslySetInnerHTML={{ __html: article.body }}
+                dangerouslySetInnerHTML={{ __html: readableSpacing(article.body) }}
               />
               {!isPhotoAlbum ? contentBlocks : null}
               {article.tags && article.tags.length > 0 ? (
