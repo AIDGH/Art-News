@@ -85,6 +85,37 @@ export class AdminApiError extends Error {
   }
 }
 
+function errorMessage(status: number, json: { message?: string | string[] }) {
+  if (status === 413) return "حجم فایل بیش از حد مجاز است؛ تصویر تا ۸ و ویدیو تا ۳۰ مگابایت مجاز است.";
+  if (status === 504 || status === 408) return "ارسال فایل بیش از حد طول کشید؛ اتصال اینترنت را بررسی و دوباره تلاش کنید.";
+  return Array.isArray(json.message) ? json.message.join("، ") : json.message || "انجام عملیات ممکن نشد";
+}
+
+export function adminUpload<T>(path: string, body: FormData, onProgress: (percent: number) => void): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open("POST", `/api/v1${path}`);
+    request.withCredentials = true;
+    request.timeout = 10 * 60 * 1000;
+    request.upload.onprogress = (event) => {
+      if (event.lengthComputable) onProgress(Math.round(event.loaded / event.total * 100));
+    };
+    request.onload = () => {
+      let json;
+      try { json = JSON.parse(request.responseText); } catch { json = {}; }
+      if (request.status < 200 || request.status >= 300) {
+        reject(new AdminApiError(errorMessage(request.status, json), request.status));
+      } else if (!json.data) {
+        reject(new Error("پاسخ بارگذاری فایل معتبر نبود؛ دوباره تلاش کنید."));
+      } else resolve(json as T);
+    };
+    request.onerror = () => reject(new Error("ارتباط هنگام بارگذاری فایل قطع شد؛ اتصال اینترنت را بررسی کنید."));
+    request.ontimeout = () => reject(new Error("مهلت بارگذاری تمام شد؛ اتصال اینترنت را بررسی و دوباره تلاش کنید."));
+    request.onabort = () => reject(new Error("بارگذاری فایل متوقف شد."));
+    request.send(body);
+  });
+}
+
 export async function adminFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api/v1${path}`, {
     ...init,
@@ -96,9 +127,7 @@ export async function adminFetch<T>(path: string, init?: RequestInit): Promise<T
   });
   const json = (await response.json().catch(() => ({}))) as { message?: string | string[] };
   if (!response.ok) {
-    const message = Array.isArray(json.message)
-      ? json.message.join("، ")
-      : json.message || "انجام عملیات ممکن نشد";
+    const message = errorMessage(response.status, json);
     throw new AdminApiError(message, response.status);
   }
   return json as T;

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { adminFetch, type AdminAdvertisement, type MediaAsset } from "@/lib/admin-api";
 import { MediaUploader } from "@/components/admin/media-uploader";
 import { DisplayOrderEditor } from "@/components/admin/display-order-editor";
@@ -22,6 +22,9 @@ export default function AdvertisementsPage() {
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [editing, setEditing] = useState<string | null>(null);
@@ -44,9 +47,15 @@ export default function AdvertisementsPage() {
     setEditing(ad?.id ?? null); setFormOpen(true); setError(""); setNotice("");
     setMedia(ad?.media ?? null); setAlt(ad?.media.alt ?? "");
     setForm(ad ? { title: ad.title, text: ad.text ?? "", targetUrl: ad.targetUrl ?? "", placement: ad.placement, enabled: ad.enabled, startsAt: localDate(ad.startsAt), endsAt: localDate(ad.endsAt) } : emptyForm);
+    requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      titleRef.current?.focus({ preventScroll: true });
+    });
   };
   const save = async (event: FormEvent) => {
-    event.preventDefault(); setBusy(true); setError(""); setNotice("");
+    event.preventDefault();
+    if (busy || uploading) return;
+    setBusy(true); setError(""); setNotice("");
     try {
       if (!media) throw new Error("فایل تبلیغ را انتخاب کنید.");
       if (form.startsAt && form.endsAt && new Date(form.endsAt) <= new Date(form.startsAt)) throw new Error("زمان پایان باید بعد از شروع باشد.");
@@ -77,14 +86,15 @@ export default function AdvertisementsPage() {
   };
 
   return <div className="admin-page">
-    <div className="admin-page-heading"><div><span>مدیریت نمایش</span><h1>تبلیغات</h1><p>تصویر، گیف یا ویدیو را همراه لینک و زمان نمایش ثبت کنید.</p></div><button className="admin-primary-button" disabled={busy} onClick={() => edit()}>＋ تبلیغ جدید</button></div>
+    <div className="admin-page-heading"><div><span>مدیریت نمایش</span><h1>تبلیغات</h1><p>تصویر، گیف یا ویدیو را همراه لینک و زمان نمایش ثبت کنید.</p></div><button className="admin-primary-button" disabled={busy || uploading} onClick={() => edit()}>＋ تبلیغ جدید</button></div>
     {error ? <div className="admin-alert is-error">{error}</div> : null}
     <DisplayOrderEditor title="چینش تبلیغات" path="/editorial/advertisements/display-order" hint="تمام تبلیغات با وضعیت و جایگاه‌شان نمایش داده می‌شوند؛ فقط تبلیغات فعالِ هر جایگاه در سایت دیده می‌شوند. تبلیغ جدید به انتهای فهرست اضافه می‌شود." onSaved={reload} />
     {notice ? <div className="admin-alert is-success">{notice}</div> : null}
-    {formOpen ? <form className="admin-card admin-ad-form" onSubmit={save}>
+    {formOpen ? <form ref={formRef} className="admin-card admin-ad-form" onSubmit={save}>
+      <fieldset disabled={busy || uploading}>
       <h2>{editing ? "ویرایش تبلیغ" : "تبلیغ جدید"}</h2>
-      <label className="admin-field"><span>عنوان تبلیغ</span><input required minLength={2} maxLength={160} value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} /></label>
-      <MediaUploader allowVideo cropAspect={3 / 1} value={media} alt={alt} credit="" onChange={(value) => { setMedia(value); setAlt(value.alt); }} />
+      <label className="admin-field"><span>عنوان تبلیغ</span><input ref={titleRef} required minLength={2} maxLength={160} value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} /></label>
+      <MediaUploader key={editing ?? "new"} allowVideo cropAspect={3 / 1} value={media} alt={alt} credit="" onUploadingChange={setUploading} onChange={(value) => { setMedia(value); setAlt(value.alt); }} />
       <p className="admin-field-note">تصویر و گیف تا ۸ مگابایت؛ ویدیوی MP4 یا WebM تا ۳۰ مگابایت.</p>
       <label className="admin-field"><span>توضیح فایل برای دسترس‌پذیری</span><input value={alt} onChange={(event) => setAlt(event.target.value)} placeholder="در صورت خالی‌بودن از عنوان استفاده می‌شود" /></label>
       <div className="admin-field-grid">
@@ -95,7 +105,8 @@ export default function AdvertisementsPage() {
       </div>
       <label className="admin-field"><span>نوشتهٔ همراه (اختیاری)</span><textarea rows={3} maxLength={1200} value={form.text} onChange={(event) => setForm({ ...form, text: event.target.value })} /></label>
       <label className="admin-check"><input type="checkbox" checked={form.enabled} onChange={(event) => setForm({ ...form, enabled: event.target.checked })} /><span>نمایش تبلیغ در بازهٔ تعیین‌شده فعال باشد</span></label>
-      <div className="admin-block-actions"><button className="admin-primary-button" type="submit" disabled={busy}>{busy ? "در حال ذخیره…" : "ذخیره تبلیغ"}</button><button className="admin-secondary-button" type="button" disabled={busy} onClick={() => setFormOpen(false)}>بستن فرم</button></div>
+      <div className="admin-block-actions"><button className="admin-primary-button" type="submit" disabled={busy || uploading}>{uploading ? "منتظر پایان بارگذاری فایل…" : busy ? "در حال ذخیره…" : "ذخیره تبلیغ"}</button><button className="admin-secondary-button" type="button" disabled={busy || uploading} onClick={() => setFormOpen(false)}>بستن فرم</button></div>
+      </fieldset>
     </form> : null}
     <div className="admin-filter-bar admin-ad-filter"><select aria-label="فیلتر وضعیت تبلیغات" value={filter} onChange={(event) => { setFilter(event.target.value); setLoading(true); }}><option value="">همه تبلیغات</option><option value="active">فعال</option><option value="inactive">غیرفعال، زمان‌بندی‌شده و پایان‌یافته</option></select><button className="admin-secondary-button" onClick={reload}>به‌روزرسانی</button></div>
     {loading ? <div className="admin-empty">در حال دریافت تبلیغات…</div> : items.length === 0 ? <div className="admin-empty">تبلیغی در این بخش نیست.</div> : <div className="admin-ad-list">{items.map((ad) => <article className="admin-card admin-ad-item" key={ad.id}>
@@ -104,7 +115,7 @@ export default function AdvertisementsPage() {
         <p>{placements[ad.placement]}</p><small>شروع: {ad.startsAt ? new Date(ad.startsAt).toLocaleString("fa-IR") : "فوری"} · پایان: {ad.endsAt ? new Date(ad.endsAt).toLocaleString("fa-IR") : "بدون پایان"}</small>
         {ad.text ? <p>{ad.text}</p> : null}
         {ad.targetUrl ? <a href={ad.targetUrl} target="_blank" rel="noopener noreferrer" className="admin-ad-url">{ad.targetUrl}</a> : null}
-        <div className="admin-block-actions"><button type="button" disabled={busy} onClick={() => edit(ad)}>ویرایش</button>{ad.effectiveStatus !== "ACTIVE" ? <button type="button" disabled={busy} onClick={() => void action(ad, "activate")}>فعال‌سازی اکنون</button> : null}{ad.enabled ? <button type="button" disabled={busy} onClick={() => void action(ad, "disable")}>غیرفعال‌سازی</button> : null}<button type="button" disabled={busy} className="admin-danger-button" onClick={() => void action(ad, "delete")}>حذف</button></div>
+        <div className="admin-block-actions"><button type="button" disabled={busy || uploading} onClick={() => edit(ad)}>ویرایش</button>{ad.effectiveStatus !== "ACTIVE" ? <button type="button" disabled={busy || uploading} onClick={() => void action(ad, "activate")}>فعال‌سازی اکنون</button> : null}{ad.enabled ? <button type="button" disabled={busy || uploading} onClick={() => void action(ad, "disable")}>غیرفعال‌سازی</button> : null}<button type="button" disabled={busy || uploading} className="admin-danger-button" onClick={() => void action(ad, "delete")}>حذف</button></div>
       </div>
     </article>)}</div>}
   </div>;

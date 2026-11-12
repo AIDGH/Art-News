@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
-import { adminFetch, type MediaAsset } from "@/lib/admin-api";
+import { adminFetch, adminUpload, type MediaAsset } from "@/lib/admin-api";
+import { mediaFileType } from "@/lib/media-file";
 import { ImageCropModal } from "./image-crop-modal";
+import { AdminVideoPreview } from "./video-preview";
 
 type MediaUploaderProps = {
   value: MediaAsset | null;
@@ -19,12 +21,25 @@ type MediaUploaderProps = {
 export function MediaUploader({ value, alt, credit, onChange, allowVideo = false, onUploadingChange, cropAspect }: MediaUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const uploadingRef = useRef(false);
+  const previewRef = useRef<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState("");
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [cropFile, setCropFile] = useState<File | null>(null);
   const [library, setLibrary] = useState<MediaAsset[]>([]);
+
+  useEffect(() => () => {
+    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+  }, []);
+
+  const clearPreview = () => {
+    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+    previewRef.current = null;
+    setPreview(null);
+  };
 
   useEffect(() => {
     if (!libraryOpen || library.length > 0) return;
@@ -34,9 +49,10 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
   }, [library.length, libraryOpen, allowVideo]);
 
   const validate = (file: File) => {
-    const video = ["video/mp4", "video/webm"].includes(file.type);
-    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type) && !(allowVideo && video)) {
-      setError(allowVideo ? "تصویر، گیف یا ویدیوی MP4/WebM انتخاب کنید." : "فقط فایل تصویری انتخاب کنید.");
+    const type = mediaFileType(file);
+    const video = type?.startsWith("video/");
+    if (!type || (video && !allowVideo)) {
+      setError(allowVideo ? "این فرمت پشتیبانی نمی‌شود؛ تصویر، گیف یا ویدیوی MP4/WebM انتخاب کنید. فایل MOV را ابتدا به MP4 تبدیل کنید." : "فقط فایل تصویری انتخاب کنید؛ ویدیو را در بخش عکس و ویدیو و نوع «فیلم» بارگذاری کنید.");
       return false;
     }
     if (file.size > (video ? 30 : 8) * 1024 * 1024) {
@@ -51,6 +67,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
     if (!validate(file)) return;
     uploadingRef.current = true;
     setUploading(true);
+    setProgress(0);
     onUploadingChange?.(true);
     setError("");
     const body = new FormData();
@@ -58,12 +75,13 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
     body.append("alt", alt);
     body.append("credit", credit);
     try {
-      const { data } = await adminFetch<{ data: MediaAsset }>("/editorial/media", { method: "POST", body });
+      const { data } = await adminUpload<{ data: MediaAsset }>("/editorial/media", body, setProgress);
       onChange(data);
       setLibrary((current) => [data, ...current]);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "آپلود تصویر انجام نشد");
+      setError(caught instanceof Error ? caught.message : "بارگذاری فایل انجام نشد");
     } finally {
+      clearPreview();
       uploadingRef.current = false;
       setUploading(false);
       onUploadingChange?.(false);
@@ -76,11 +94,19 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
     if (uploadingRef.current) return;
     setError("");
     if (!validate(file)) return;
-    if (cropAspect && ["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-      setCropFile(file);
+    const type = mediaFileType(file)!;
+    const normalized = file.type === type ? file : new File([file], file.name, { type, lastModified: file.lastModified });
+    clearPreview();
+    if (type.startsWith("video/")) {
+      const url = URL.createObjectURL(normalized);
+      previewRef.current = url;
+      setPreview(url);
+    }
+    if (cropAspect && ["image/jpeg", "image/png", "image/webp"].includes(type)) {
+      setCropFile(normalized);
       return;
     }
-    void upload(file);
+    void upload(normalized);
   };
 
   const fileChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +141,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
 
   return (
     <div className="admin-media-control">
-      <input ref={inputRef} type="file" accept={`image/jpeg,image/png,image/webp,image/gif${allowVideo ? ",video/mp4,video/webm" : ""}`} onChange={fileChanged} hidden />
+      <input ref={inputRef} type="file" accept={`image/jpeg,image/png,image/webp,image/gif${allowVideo ? ",video/mp4,video/webm,video/x-m4v,.mp4,.m4v,.webm" : ""}`} onChange={fileChanged} hidden />
       <div
         className={`admin-dropzone${isDragging ? " is-dragging" : ""}`}
         onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }}
@@ -128,10 +154,10 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
         }}
         tabIndex={0}
       >
-        {value ? (
+        {value || preview ? (
           <div className="admin-cover-preview">
-            {value.mimeType.startsWith("video/") ? <video src={value.url} controls playsInline preload="metadata" /> : <Image src={value.url} alt={alt || value.alt || "تصویر خبر"} fill unoptimized sizes="(max-width: 800px) 100vw, 640px" />}
-            <span>برای جایگزینی، فایل تازه را اینجا رها کنید</span>
+            {preview || value?.mimeType.startsWith("video/") ? <AdminVideoPreview key={preview ?? value!.url} src={preview ?? value!.url} /> : <Image src={value!.url} alt={alt || value!.alt || "تصویر خبر"} fill unoptimized sizes="(max-width: 800px) 100vw, 640px" />}
+            {!preview ? <span>برای جایگزینی، فایل تازه را اینجا رها کنید</span> : null}
           </div>
         ) : (
           <div className="admin-dropzone-empty"><strong>{allowVideo ? "تصویر، گیف یا ویدیو را اینجا رها کنید" : "تصویر را اینجا رها کنید"}</strong><span>یا از دستگاه، گالری و کلیپ‌بورد انتخاب کنید</span></div>
@@ -142,7 +168,7 @@ export function MediaUploader({ value, alt, credit, onChange, allowVideo = false
         <button type="button" onClick={() => void pasteFromClipboard()} disabled={uploading}>چسباندن از کلیپ‌بورد</button>
         <button type="button" onClick={() => setLibraryOpen((current) => !current)} disabled={uploading}>{allowVideo ? "گالری فایل‌ها" : "گالری تصاویر"}</button>
       </div>
-      {uploading ? <p className="admin-field-note" role="status">در حال بارگذاری فایل…</p> : null}
+      {uploading ? <div role="status"><progress max={100} value={progress} aria-label="پیشرفت بارگذاری فایل" style={{ width: "100%" }} /><p className="admin-field-note">{progress === 100 ? "فایل ارسال شد؛ در حال ثبت…" : `در حال بارگذاری فایل… ${progress.toLocaleString("fa-IR")}٪`}</p></div> : null}
       {error ? <div className="admin-alert is-error">{error}</div> : null}
       {libraryOpen ? (
         <div className="admin-media-library">

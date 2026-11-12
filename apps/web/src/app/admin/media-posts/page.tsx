@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MediaUploader } from "@/components/admin/media-uploader";
+import { AdminVideoPreview } from "@/components/admin/video-preview";
 import { adminFetch, type MediaAsset } from "@/lib/admin-api";
 import type { MediaPost, MediaPostPage } from "@/lib/media-posts";
 import "@/components/media-gallery.css";
@@ -107,7 +108,7 @@ export default function MediaPostsPage() {
         <h3>فایل‌های محتوا ({media.length.toLocaleString("fa-IR")} از ۷)</h3>
         <p className="admin-field-note">تصویر یا گیف تا ۸ مگابایت؛ ویدیوی MP4/WebM تا ۳۰ مگابایت. ترتیب زیر همان ترتیب ورق‌زدن در سایت است.</p>
         <ol className="admin-media-post-items">{media.map((asset, index) => <li key={asset.id}>
-          <div className="admin-media-post-thumb">{asset.mimeType.startsWith("video/") ? <video src={asset.url} controls playsInline preload="metadata" /> : <Image src={asset.url} alt={asset.alt || form.title} width={120} height={100} unoptimized />}</div>
+          <div className="admin-media-post-thumb">{asset.mimeType.startsWith("video/") ? <AdminVideoPreview key={asset.url} src={asset.url} /> : <Image src={asset.url} alt={asset.alt || form.title} width={120} height={100} unoptimized />}</div>
           <div><strong>{(index + 1).toLocaleString("fa-IR")} · {asset.mimeType.startsWith("video/") ? "ویدیو" : "عکس"}</strong><div className="admin-block-actions">
             <button type="button" disabled={index === 0} onClick={() => move(index, -1)}>بالاتر</button><button type="button" disabled={index === media.length - 1} onClick={() => move(index, 1)}>پایین‌تر</button>
             {asset.mimeType.startsWith("image/") ? <button type="button" onClick={() => setCover(asset)}>{cover?.id === asset.id ? "کاور انتخاب‌شده" : "انتخاب به‌عنوان کاور"}</button> : null}
@@ -117,6 +118,7 @@ export default function MediaPostsPage() {
         {media.length < 7 ? <MediaUploader key={`${pickerKey}-${form.kind}`} allowVideo={form.kind === "VIDEOS"} value={null} alt={form.title} credit="" onChange={add} onUploadingChange={setUploading} /> : null}
         <h3>تصویر کاور</h3>
         <p className="admin-field-note">در گرید سایت نمایش داده می‌شود؛ می‌توانید از عکس‌های بالا انتخاب کنید یا کاور جدا آپلود کنید.</p>
+        {form.kind === "VIDEOS" ? <p className="admin-field-note">ویدیو را در کادر «فایل‌های محتوا» بارگذاری کنید؛ این کادر فقط برای عکس کاور است و برای انتشار باید یک عکس کاور هم انتخاب شود.</p> : null}
         <MediaUploader value={cover} alt={form.title} credit="" onChange={setCover} onUploadingChange={setUploading} />
         <div className="admin-block-actions"><button className="admin-primary-button" type="submit">{busy ? "در حال ذخیره…" : "ذخیره محتوا"}</button><button className="admin-secondary-button" type="button" onClick={() => setOpen(false)}>بستن فرم</button></div>
       </fieldset>

@@ -16,6 +16,7 @@ import { ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { SessionAuthGuard } from "../auth/session-auth.guard";
 import { UpdateMediaDto } from "./dto/update-media.dto";
 import { MediaService } from "./media.service";
+import { mediaMimeType } from "./media-type";
 
 type UploadedImage = {
   buffer: Buffer;
@@ -52,8 +53,9 @@ export class MediaController {
     FileInterceptor("file", {
       limits: { fileSize: 30 * 1024 * 1024 },
       fileFilter: (_request, file, callback) => {
-        const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif", "video/mp4", "video/webm"];
-        const isAllowed = allowed.includes(file.mimetype);
+        const type = mediaMimeType(file.mimetype, file.originalname);
+        const isAllowed = Boolean(type);
+        if (type) file.mimetype = type;
         callback(
           isAllowed
             ? null

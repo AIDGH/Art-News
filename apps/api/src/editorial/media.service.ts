@@ -5,6 +5,7 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { ConfigService } from "@nestjs/config";
 import type { EnvironmentVariables } from "../config/environment";
 import { PrismaService } from "../database/prisma.service";
+import { mediaMimeType } from "./media-type";
 
 type UploadedImage = {
   buffer: Buffer;
@@ -37,6 +38,9 @@ export class MediaService {
   }
 
   async uploadImage(file: UploadedImage, alt = "", credit = "") {
+    const type = mediaMimeType(file.mimetype, file.originalname);
+    if (!type) throw new BadRequestException("فرمت فایل پشتیبانی نمی‌شود؛ ویدیو باید MP4 یا WebM باشد");
+    file = { ...file, mimetype: type };
     const video = file.mimetype.startsWith("video/");
     if (!extensions[file.mimetype] || file.size > (video ? 30 : 8) * 1024 * 1024) {
       throw new BadRequestException(video ? "حجم ویدیو باید حداکثر ۳۰ مگابایت باشد" : "حجم تصویر باید حداکثر ۸ مگابایت باشد");

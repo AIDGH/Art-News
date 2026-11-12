@@ -27,6 +27,9 @@
 
 ### Changed
 
+- Scroll/focus the advertisement editor when opened, reset the picker for each ad, and prevent saving or switching targets during upload. Normalize generic mobile MP4/M4V file types while retaining server signature and size validation; show upload progress and actionable network/413 errors.
+- Show an immediate local video preview during upload and explain playback failures. Make article/editor links visibly blue and underlined.
+
 - Restored the mobile drawer's 300ms slide/fade on both opening and closing, keeping the closed layer inert and hidden after its transition.
 
 - Keep long nonbreaking article text within mobile columns; close and unmount the drawer on outside taps, route changes and desktop resizing, with a larger 32px close glyph.
